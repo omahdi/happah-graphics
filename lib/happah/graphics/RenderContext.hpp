@@ -6,6 +6,7 @@
 #pragma once
 
 #include <happah/Happah.h>
+#include <happah/geometries/LoopBoxSplineMesh.h>
 #include <happah/geometries/SurfaceSplineBEZ.h>
 #include <happah/geometries/TriangleMesh.h>
 #include <happah/math/Space.h>
@@ -30,6 +31,9 @@ private:
      Buffer<Point4D> m_vertices;
 
 };//RenderContext
+
+template<class Vertex>
+RenderContext make_render_context(const LoopBoxSplineMesh<Vertex>& mesh) { return { mesh.getControlPoints(), mesh.getIndices() }; }
  
 template<class Vertex>
 RenderContext make_render_context(const TriangleMesh<Vertex>& mesh) { return { mesh.getVertices(), mesh.getIndices() }; }
