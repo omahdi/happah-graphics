@@ -68,6 +68,8 @@ void bind(const Buffer<T>& buffer, GLuint index, GLenum target = GL_SHADER_STORA
 template<class T>
 Buffer<T> make_buffer(const std::vector<T>& ts, GLenum usage = GL_STATIC_DRAW);
 
+Buffer<Point4D> make_buffer(const std::vector<Point3D>& vertices, GLenum usage = GL_STATIC_DRAW);
+
 Buffer<Point4D> make_buffer(const std::vector<VertexP3>& vertices, GLenum usage = GL_STATIC_DRAW);
 
 template<class T, class First, class... Rest>
