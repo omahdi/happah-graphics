@@ -5,5 +5,5 @@
 
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = lib
-EXTRA_DIST = autogen.sh
+EXTRA_DIST = bootstrap
 
