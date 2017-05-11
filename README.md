@@ -5,7 +5,7 @@
 New developers who wish to contribute to the project can get started by executing the following commands on an Ubuntu 16.04.2 machine, assuming happah-core has already been installed:
 
 ```
-mkdir -p ${HOME}/Workspace/{bin,include,lib}
+mkdir ${HOME}/Workspace
 cd ${HOME}/Workspace
 git clone http://github.com/happah-graphics/happah-graphics.git
 cd happah-graphics
