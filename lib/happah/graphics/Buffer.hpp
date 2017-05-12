@@ -18,49 +18,7 @@ namespace happah {
 //DECLARATIONS
 
 template<class T>
-class Buffer {
-public:
-     Buffer(hpuint n, GLenum usage = GL_STATIC_DRAW)
-          : m_size(n) {
-          glCreateBuffers(1, &m_id);
-          allocate(usage);
-     }
-
-     Buffer(const T* ts, hpuint n, GLenum usage = GL_STATIC_DRAW) 
-          : m_size(n) {
-          glCreateBuffers(1, &m_id);
-          allocate(usage, ts);
-     }
-
-     Buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW)
-          : m_size(0) {
-          glCreateBuffers(1, &m_id);
-          for(auto& arg : args) m_size += std::get<1>(arg);
-          allocate(usage);
-          //TODO: more efficient with glMapBuffer?
-          auto offset = 0u;
-          for(auto& arg : args) {
-               const T* ts;
-               hpuint n;
-               std::tie(ts, n) = arg;
-               write(ts, n, offset);
-               offset += n;
-          }
-     }
-
-     ~Buffer() { glDeleteBuffers(1, &m_id); }
-
-     GLuint getId() const { return m_id; }
-
-     hpuint getSize() const { return m_size; }
-
-private:
-     GLuint m_id;
-     hpuint m_size;
-
-     void allocate(GLenum usage, const T* ts = NULL) { glNamedBufferData(m_id, sizeof(T) * m_size, ts, usage); }
-
-};
+class Buffer;
 
 template<typename T>
 void bind(const Buffer<T>& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_BUFFER);
@@ -97,6 +55,51 @@ namespace detail {
      };
 
 }//namespace detail
+
+template<class T>
+class Buffer {
+public:
+     Buffer(hpuint n, GLenum usage = GL_STATIC_DRAW)
+          : m_size(n) {
+          glCreateBuffers(1, &m_id);
+          allocate(usage);
+     }
+
+     Buffer(const T* ts, hpuint n, GLenum usage = GL_STATIC_DRAW) 
+          : m_size(n) {
+          glCreateBuffers(1, &m_id);
+          allocate(usage, ts);
+     }
+
+     Buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW)
+          : m_size(0) {
+          glCreateBuffers(1, &m_id);
+          for(auto& arg : args) m_size += std::get<1>(arg);
+          allocate(usage);
+          //TODO: more efficient with glMapBuffer?
+          auto offset = 0u;
+          for(auto& arg : args) {
+               const T* ts;
+               hpuint n;
+               std::tie(ts, n) = arg;
+               write(*this, ts, n, offset);
+               offset += n;
+          }
+     }
+
+     ~Buffer() { glDeleteBuffers(1, &m_id); }
+
+     GLuint getId() const { return m_id; }
+
+     hpuint getSize() const { return m_size; }
+
+private:
+     GLuint m_id;
+     hpuint m_size;
+
+     void allocate(GLenum usage, const T* ts = NULL) { glNamedBufferData(m_id, sizeof(T) * m_size, ts, usage); }
+
+};
 
 //DEFINITIONS
 

@@ -19,8 +19,10 @@ namespace happah {
 class RenderContext {
 public:
      template<class Vertex>
-     RenderContext(const std::vector<Vertex>& vertices, const happah::Indices& indices)
+     RenderContext(const std::vector<Vertex>& vertices, const Indices& indices)
           : m_indices(make_buffer(indices)), m_vertices(make_buffer(vertices)) {}
+
+     RenderContext(hpuint nVertices, const Indices& indices);
 
      const Buffer<hpuint>& getIndices() const;
 

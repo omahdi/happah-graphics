@@ -84,7 +84,7 @@ void SimpleVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_project
 
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
-     message << "Error in shader(";
+     message << "Error in shader('";
      message << shader.getPath();
      message << "'):\n";
      message << make_log(shader);

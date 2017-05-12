@@ -18,6 +18,9 @@ GLuint Program::getId() const { return m_id; }
 
 const std::string& Program::getName() const { return m_name; }
 
+ComputeProgram::ComputeProgram(std::string name)
+     : Program(std::move(name)) {}
+
 RenderProgram::RenderProgram(std::string name, GLenum mode, GLsizei patchSize)
      : Program(std::move(name)), m_mode(mode), m_patchSize(patchSize) {}
 
@@ -25,11 +28,16 @@ GLenum RenderProgram::getMode() const { return m_mode; }
 
 GLsizei RenderProgram::getPatchSize() const { return m_patchSize; }
 
-void activate(const Program& program) { glUseProgram(program.getId()); }
+void activate(const ComputeProgram& program) { glUseProgram(program.getId()); }
 
 void activate(const RenderProgram& program) {
-     activate(static_cast<const Program&>(program));
+     glUseProgram(program.getId());
      glPatchParameteri(GL_PATCH_VERTICES, program.getPatchSize());
+}
+
+void execute(const ComputeProgram& program, hpuint nx, hpuint ny, hpuint nz) {
+     glDispatchCompute(nx, ny, nz);
+     assert(glGetError() == GL_NO_ERROR);
 }
 
 void execute(const RenderProgram& program, hpuint n, hpuint offset) {
@@ -38,9 +46,15 @@ void execute(const RenderProgram& program, hpuint n, hpuint offset) {
      assert(glGetError() == GL_NO_ERROR);
 }
 
+ComputeProgram make_compute_program(std::string name, const ComputeShader& shader) {
+     auto program = ComputeProgram(std::move(name));
+     detail::build_program(program, shader);
+     return program;
+}
+
 std::logic_error make_error(const Program& program) {
      auto message = std::stringstream();
-     message << "Error in program(";
+     message << "Error in program('";
      message << program.getName();
      message << "'):\n";
      message << make_log(program);
@@ -55,7 +69,7 @@ std::string make_log(const Program& program) {
      return log;
 }
 
-void render(RenderProgram& program, VertexArray& array, const RenderContext& context) {
+void render(const RenderProgram& program, VertexArray& array, const RenderContext& context) {
      bind(array, context.getVertices(), context.getIndices());
      execute(program, context.getIndices().getSize() / program.getPatchSize());
 }
