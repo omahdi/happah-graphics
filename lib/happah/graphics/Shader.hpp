@@ -125,6 +125,20 @@ private:
      Uniform<hpmat4x4> m_projectionMatrix;
 
 };
+     
+class SolidWireframeFragmentShader : public FragmentShader {
+public:
+     SolidWireframeFragmentShader();
+     void setEdgeColor(const hpcolor& color);
+     void setEdgeWidth(hpreal width);
+     void setLight(const Point3D& light);
+private:
+     Uniform<hpcolor> m_edgeColor;
+     Uniform<hpreal> m_edgeWidth;
+     Uniform<Point3D> m_light;
+};
+     
+SolidWireframeFragmentShader make_swf_fragment_shader();
 
 std::logic_error make_error(const Shader& shader);
 

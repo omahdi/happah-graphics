@@ -108,6 +108,15 @@ SimpleFragmentShader make_simple_fragment_shader() { return {}; }
 SimpleVertexShader make_simple_vertex_shader() { return {}; }
 
 TessellationEvaluationShader make_tessellation_evaluation_shader(std::string path) { return { std::move(path) }; }
+     
+
+SolidWireframeFragmentShader::SolidWireframeFragmentShader() : 
+     FragmentShader("shaders/solid-wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001),  m_light(5002) {}
+void SolidWireframeFragmentShader::setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
+void SolidWireframeFragmentShader::setEdgeWidth(hpreal width) { m_edgeWidth = width; }
+void SolidWireframeFragmentShader::setLight(const Point3D& light) { m_light = light; }
+
+SolidWireframeFragmentShader make_swf_fragment_shader() { return {}; }
 
 }//namespace happah
 

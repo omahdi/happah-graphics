@@ -1,6 +1,7 @@
-#Hedwig Amberg
-#Implementation of "Solid Wireframe" white paper
-#TODO: so far only general case
+#version 400
+//Hedwig Amberg
+//Implementation of "Solid Wireframe" white paper
+//TODO: so far only general case
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
