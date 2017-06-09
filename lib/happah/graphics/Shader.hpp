@@ -125,20 +125,6 @@ private:
      Uniform<hpmat4x4> m_projectionMatrix;
 
 };
-     
-class SolidWireframeFragmentShader : public FragmentShader {
-public:
-     SolidWireframeFragmentShader();
-     void setEdgeColor(const hpcolor& color);
-     void setEdgeWidth(hpreal width);
-     void setLight(const Point3D& light);
-private:
-     Uniform<hpcolor> m_edgeColor;
-     Uniform<hpreal> m_edgeWidth;
-     Uniform<Point3D> m_light;
-};
-     
-SolidWireframeFragmentShader make_swf_fragment_shader();
 
 std::logic_error make_error(const Shader& shader);
 
@@ -154,5 +140,25 @@ SimpleVertexShader make_simple_vertex_shader();
 
 TessellationEvaluationShader make_tessellation_evaluation_shader(std::string path);
 
+//Hedwig Amberg - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
+//Distributed under the Boost Software License, Version 1.0.
+//(See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+     
+class SolidWireframeFragmentShader : public FragmentShader {
+public:
+     SolidWireframeFragmentShader();
+     void setModelColor(const hpcolor& color);
+     void setEdgeColor(const hpcolor& color);
+     void setEdgeWidth(hpreal width);
+     void setLight(const Point3D& light);
+private:
+     Uniform<hpcolor> m_modelColor;
+     Uniform<hpcolor> m_edgeColor;
+     Uniform<hpreal> m_edgeWidth;
+     Uniform<Point3D> m_light;
+};
+     
+SolidWireframeFragmentShader make_swf_fragment_shader();
+     
 }//namespace happah
 

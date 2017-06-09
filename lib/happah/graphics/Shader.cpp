@@ -109,9 +109,13 @@ SimpleVertexShader make_simple_vertex_shader() { return {}; }
 
 TessellationEvaluationShader make_tessellation_evaluation_shader(std::string path) { return { std::move(path) }; }
      
-
+//Hedwig Amberg - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
+//Distributed under the Boost Software License, Version 1.0.
+//(See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+     
 SolidWireframeFragmentShader::SolidWireframeFragmentShader() : 
-     FragmentShader("shaders/solid-wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001),  m_light(5002) {}
+     FragmentShader("shaders/solid-wireframe.f.glsl"), m_modelColor(5000),  m_edgeColor(5001), m_edgeWidth(5002),  m_light(5003) {}
+void SolidWireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
 void SolidWireframeFragmentShader::setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
 void SolidWireframeFragmentShader::setEdgeWidth(hpreal width) { m_edgeWidth = width; }
 void SolidWireframeFragmentShader::setLight(const Point3D& light) { m_light = light; }

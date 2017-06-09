@@ -1,7 +1,9 @@
-#version 400
-//Hedwig Amberg
+//Hedwig Amberg - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
+//Distributed under the Boost Software License, Version 1.0.
+//(See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 //Implementation of "Solid Wireframe" white paper
 //TODO: so far only general case
+#version 400
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
@@ -21,11 +23,11 @@ void main() {
      vec4 v1 = phm_in[1].position;
      vec4 v2 = phm_in[2].position;
      
-     float e0 = distance((vec3) v0, (vec3) v1);
-     float e1 = distance((vec3) v1, (vec3) v2);
-     float e2 = distance((vec3) v2, (vec3) v0);
+     float e0 = distance(v0.xyz, v1.xyz);
+     float e1 = distance(v1.xyz, v2.xyz);
+     float e2 = distance(v2.xyz, v0.xyz);
      float s = 0.5 * (e0 + e1 + e2);
-     folat t = sqrt(s * (s - e0) * (s - e1) * (s - e2));
+     float t = sqrt(s * (s - e0) * (s - e1) * (s - e2));
      float h0 = (2.0 / e0) * t;
      float h1 = (2.0 / e1) * t;
      float h2 = (2.0 / e2) * t;
