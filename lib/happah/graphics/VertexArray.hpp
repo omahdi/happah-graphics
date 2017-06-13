@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <array>
 #include <happah/Happah.h>
 #include <happah/math/Space.h>
 
@@ -15,26 +16,31 @@ namespace happah {
 
 //DECLARATIONS
 
+enum class Type {
+    FLOAT 
+};
+
 class Attribute {
+     static constexpr std::array<hpuint, 1> SIZE = { sizeof(GLfloat) };
+     static constexpr std::array<GLenum, 1> TYPE = { GL_FLOAT };
+
 public:
-     Attribute(GLuint id);
+     Attribute(GLuint id, GLint dimension, Type type);
+
+     GLint getDimension() const;
 
      GLuint getId() const;
 
-     virtual GLuint getSize() const = 0;
+     GLuint getSize() const;
+
+     GLenum getType() const;
 
 private:
+     GLint m_dimension;
      GLuint m_id;
+     Type m_type;
 
-};
-
-class Position : public Attribute {
-public:
-     Position(GLuint id);
-
-     virtual GLuint getSize() const;
-
-};//class Position
+};//Attribute
 
 class VertexArray {
 public:
@@ -47,21 +53,25 @@ public:
 private:
      GLuint m_id;
 
-};//class VertexArray
+};//VertexArray
 
 void activate(const VertexArray& array);
 
 void bind(const VertexArray& array, const Buffer<Point4D>& vertices, const Buffer<hpuint>& indices);
+
+Attribute make_attribute(GLuint id, GLint dimension, Type type);
+
+VertexArray make_vertex_array();
 
 template<class... Attributes>
 VertexArray make_vertex_array(const Attributes&... attributes);
 
 namespace detail {
 
-void describe(const VertexArray& array, GLuint offset, const Position& position);
+void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
 
-template<class Attribute, class... Attributes>
-void describe(const VertexArray& array, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
+template<class... Attributes>
+void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
 
 }//namespace detail
 
@@ -70,16 +80,16 @@ void describe(const VertexArray& array, GLuint offset, const Attribute& attribut
 template<class... Attributes>
 VertexArray make_vertex_array(const Attributes&... attributes) {
      auto array = VertexArray();
-     detail::describe(array, 0, attributes...);
+     detail::describe(array, 0, 0, attributes...);
      return array;
 }
 
 namespace detail {
 
-template<class Attribute, class... Attributes>
-void describe(const VertexArray& array, GLuint offset, const Attribute& attribute, const Attributes&... attributes) {
-     describe(array, offset, attribute);
-     describe(array, offset + attribute.getSize(), attributes...);
+template<class... Attributes>
+void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes) {
+     describe(array, target, offset, attribute);
+     describe(array, target, offset + attribute.getSize(), attributes...);
 }
 
 }
