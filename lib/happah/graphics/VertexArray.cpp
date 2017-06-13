@@ -7,8 +7,14 @@
 
 namespace happah {
 
-constexpr std::array<hpuint, 1> Attribute::SIZE;
-constexpr std::array<GLenum, 1> Attribute::TYPE;
+Type::Type(GLenum id, GLuint size)
+     : m_id(id), m_size(size) {}
+
+GLenum Type::getId() const { return m_id; }
+
+GLuint Type::getSize() const { return m_size; }
+
+const Type Types::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
 
 Attribute::Attribute(GLuint id, GLint dimension, Type type)
      : m_dimension(dimension), m_id(id), m_type(type) {}
@@ -17,9 +23,9 @@ GLint Attribute::getDimension() const { return m_dimension; }
 
 GLuint Attribute::getId() const { return m_id; }
 
-GLuint Attribute::getSize() const { return m_dimension * SIZE[static_cast<int>(m_type)]; }
+GLuint Attribute::getSize() const { return m_dimension * m_type.getSize(); }
 
-GLenum Attribute::getType() const { return TYPE[static_cast<int>(m_type)]; }
+Type Attribute::getType() const { return m_type; }
 
 VertexArray::VertexArray()
      : m_id([]() -> GLuint { GLuint id; glCreateVertexArrays(1, &id); return id; }()) {}
@@ -45,7 +51,7 @@ void describe(const VertexArray& array, GLuint target, GLuint offset, const Attr
      auto id0 = array.getId();
      auto id1 = attribute.getId();
      glEnableVertexArrayAttrib(id0, id1);
-     glVertexArrayAttribFormat(id0, id1, attribute.getDimension(), attribute.getType(), GL_FALSE, offset);
+     glVertexArrayAttribFormat(id0, id1, attribute.getDimension(), attribute.getType().getId(), GL_FALSE, offset);
      glVertexArrayAttribBinding(id0, id1, target);
 }
 

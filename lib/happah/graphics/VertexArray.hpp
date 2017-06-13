@@ -16,14 +16,26 @@ namespace happah {
 
 //DECLARATIONS
 
-enum class Type {
-    FLOAT 
-};
+class Type {
+public:
+     Type(GLenum id, GLuint size);
+
+     GLenum getId() const;
+
+     GLuint getSize() const;
+
+private:
+     GLenum m_id;
+     GLuint m_size;
+
+};//Type
+
+struct Types {
+     static const Type FLOAT;
+
+};//Types
 
 class Attribute {
-     static constexpr std::array<hpuint, 1> SIZE = { sizeof(GLfloat) };
-     static constexpr std::array<GLenum, 1> TYPE = { GL_FLOAT };
-
 public:
      Attribute(GLuint id, GLint dimension, Type type);
 
@@ -33,7 +45,7 @@ public:
 
      GLuint getSize() const;
 
-     GLenum getType() const;
+     Type getType() const;
 
 private:
      GLint m_dimension;
