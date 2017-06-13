@@ -23,19 +23,17 @@ void main() {
      float w = 0.5 * edgeWidth;
      
      float range = 0.5 * w; //TODO: auf Pixel beziehen
-     float opacity;
+     float alpha;
      
-     if(d <= w - range){
-          opacity= 1.0;
-     }else if(d <= w + range){
+     if(d <= w - range) alpha = 1.0;
+     else if(d <= w + range) {
           float x = (d - w + range) / range; 
-          opacity = pow(2.0, -2.0 * x * x);
-     }else{ 
-          discard;
-          //opacity = 0.0;
-     }
+          alpha = pow(2.0, -2.0 * x * x);
+     } else alpha = 0.0;
      
      float ambientCoefficient = 0.4;
      float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), light));
-     color = vec4((ambientCoefficient + diffuseCoefficient) * edgeColor.rgb, opacity);
+     vec3 temp = alpha * edgeColor.rgb + (1.0 - alpha) * modelColor.rgb;
+     color = vec4((ambientCoefficient + diffuseCoefficient) * temp, 1.0);
 }
+
