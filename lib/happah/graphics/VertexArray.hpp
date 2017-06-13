@@ -69,6 +69,9 @@ private:
 
 void activate(const VertexArray& array);
 
+template<class T>
+void bind(const VertexArray& array, GLuint target, const Buffer<T>& ts, GLuint offset = 0);
+
 void bind(const VertexArray& array, const Buffer<Point4D>& vertices, const Buffer<hpuint>& indices);
 
 Attribute make_attribute(GLuint id, GLint dimension, Type type);
@@ -88,6 +91,9 @@ void describe(const VertexArray& array, GLuint target, GLuint offset, const Attr
 }//namespace detail
 
 //DEFINITIONS
+
+template<class T>
+void bind(const VertexArray& array, GLuint target, const Buffer<T>& ts, GLuint offset) { glVertexArrayVertexBuffer(array.getId(), target, ts.getId(), offset, sizeof(T)); }
 
 template<class... Attributes>
 VertexArray make_vertex_array(const Attributes&... attributes) {

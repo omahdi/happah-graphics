@@ -37,7 +37,7 @@ GLuint VertexArray::getId() const { return m_id; }
 void activate(const VertexArray& array) { glBindVertexArray(array.getId()); }
 
 void bind(const VertexArray& array, const Buffer<Point4D>& vertices, const Buffer<hpuint>& indices) {
-     glVertexArrayVertexBuffer(array.getId(), 0, vertices.getId(), 0, sizeof(Point4D));
+     bind(array, 0, vertices);
      glVertexArrayElementBuffer(array.getId(), indices.getId());
 }
 
