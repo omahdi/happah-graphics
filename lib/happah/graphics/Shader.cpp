@@ -87,7 +87,7 @@ void SimpleVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelVie
 void SimpleVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
 WireframeFragmentShader::WireframeFragmentShader() : 
-     FragmentShader("shaders/solid-wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
+     FragmentShader("shaders/wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
 
 void WireframeFragmentShader::setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
 
