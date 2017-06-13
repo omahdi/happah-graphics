@@ -1,7 +1,11 @@
 // Copyright 2017
-//   Pawel Herman - Karlsruhe Institute of Technology - pherman@ira.uka.de
+//   Pawel Herman   - Karlsruhe Institute of Technology - pherman@ira.uka.de
+//   Hedwig Amberg  - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+// 2017.06 - Hedwig Amberg    - Added wireframe fragment shader.
+// 2017.05 - Pawel Herman     - Initial commit.
 
 #include <happah/Happah.h>
 #include <sstream>
@@ -69,7 +73,7 @@ void HighlightLinesFragmentShader::setBeam(const Point3D& origin, const Vector3D
 void HighlightLinesFragmentShader::setLight(const Point3D& light) { m_light = light; }
 
 SimpleFragmentShader::SimpleFragmentShader()
-     : FragmentShader("shaders/simple.f.glsl"), m_light(5001), m_modelColor(5000) {}
+     : FragmentShader("shaders/simple.f.glsl"), m_light(5000), m_modelColor(5001) {}
 
 void SimpleFragmentShader::setLight(const Point3D& light) { m_light = light; }
 
@@ -81,6 +85,17 @@ SimpleVertexShader::SimpleVertexShader()
 void SimpleVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
 
 void SimpleVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
+WireframeFragmentShader::WireframeFragmentShader() : 
+     FragmentShader("shaders/solid-wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
+
+void WireframeFragmentShader::setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
+
+void WireframeFragmentShader::setEdgeWidth(hpreal width) { m_edgeWidth = width; }
+
+void WireframeFragmentShader::setLight(const Point3D& light) { m_light = light; }
+
+void WireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
 
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
@@ -109,18 +124,7 @@ SimpleVertexShader make_simple_vertex_shader() { return {}; }
 
 TessellationEvaluationShader make_tessellation_evaluation_shader(std::string path) { return { std::move(path) }; }
      
-//Hedwig Amberg - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
-//Distributed under the Boost Software License, Version 1.0.
-//(See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
-     
-SolidWireframeFragmentShader::SolidWireframeFragmentShader() : 
-     FragmentShader("shaders/solid-wireframe.f.glsl"), m_modelColor(5000),  m_edgeColor(5001), m_edgeWidth(5002),  m_light(5003) {}
-void SolidWireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
-void SolidWireframeFragmentShader::setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
-void SolidWireframeFragmentShader::setEdgeWidth(hpreal width) { m_edgeWidth = width; }
-void SolidWireframeFragmentShader::setLight(const Point3D& light) { m_light = light; }
-
-SolidWireframeFragmentShader make_swf_fragment_shader() { return {}; }
+WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
 
 }//namespace happah
 

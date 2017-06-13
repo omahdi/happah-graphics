@@ -1,7 +1,8 @@
-//Hedwig Amberg - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
-//Distributed under the Boost Software License, Version 1.0.
-//(See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
-//Implementation of "Solid Wireframe" white paper
+// Copyright 2017
+//   Hedwig Amberg  - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #version 430
 
 in Vertex {
@@ -10,10 +11,10 @@ in Vertex {
      vec4 position;
 };
 
-layout(location = 5000) uniform vec4 modelColor;
-layout(location = 5001) uniform vec4 edgeColor;
-layout(location = 5002) uniform float edgeWidth;
-layout(location = 5003) uniform vec3 light;
+layout(location = 5000) uniform vec4 edgeColor;
+layout(location = 5001) uniform float edgeWidth;
+layout(location = 5002) uniform vec3 light;
+layout(location = 5003) uniform vec4 modelColor;
 
 out vec4 color;
 
@@ -30,8 +31,8 @@ void main() {
           float x = (d - w + range) / range; 
           opacity = pow(2.0, -2.0 * x * x);
      }else{ 
-          //discard;
-          opacity = 0.0;
+          discard;
+          //opacity = 0.0;
      }
      
      float ambientCoefficient = 0.4;

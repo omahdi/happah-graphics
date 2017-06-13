@@ -5,8 +5,8 @@ in Vertex {
      vec4 position;
 };
 
-layout(location = 5000) uniform vec4 modelColor;
-layout(location = 5001) uniform vec3 light;
+layout(location = 5000) uniform vec3 light;
+layout(location = 5001) uniform vec4 modelColor;
 
 out vec4 color;
 

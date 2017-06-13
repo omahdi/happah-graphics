@@ -1,8 +1,10 @@
-//Hedwig Amberg - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
-//Distributed under the Boost Software License, Version 1.0.
-//(See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
-//Implementation of "Solid Wireframe" white paper
+// Copyright 2017
+//   Hedwig Amberg  - Karlsruhe Institute of Technology - hedwigdorothea@gmail.com
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 //TODO: so far only general case
+
 #version 400
 
 layout(triangles) in;
