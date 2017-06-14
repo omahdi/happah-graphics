@@ -69,40 +69,52 @@ private:
 
 void activate(const VertexArray& array);
 
+//Bind buffer to target.
 template<class T>
-void bind(const VertexArray& array, GLuint target, const Buffer<T>& ts, GLuint offset = 0);
+void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer<T>& buffer);
 
-void bind(const VertexArray& array, const Buffer<Point4D>& vertices, const Buffer<hpuint>& indices);
+template<class T>
+void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer);
+
+//Bind ith buffer to target + (i - 1).
+template<class T, class... U>
+void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers);
+
+//Bind ith buffer to (i - 1).
+template<class... T>
+void bind(const VertexArray& array, const Buffer<T>&... buffers);
+
+void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
+
+void describe(const VertexArray& array, GLuint target, const Attribute& attribute);
+
+template<class... Attributes>
+void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
 
 Attribute make_attribute(GLuint id, GLint dimension, Type type);
 
 VertexArray make_vertex_array();
 
+//Make interleaved vertex array.
 template<class... Attributes>
 VertexArray make_vertex_array(const Attributes&... attributes);
-
-namespace detail {
-
-void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
-
-template<class... Attributes>
-void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
-
-}//namespace detail
 
 //DEFINITIONS
 
 template<class T>
-void bind(const VertexArray& array, GLuint target, const Buffer<T>& ts, GLuint offset) { glVertexArrayVertexBuffer(array.getId(), target, ts.getId(), offset, sizeof(T)); }
+void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer<T>& buffer) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, sizeof(T)); }
 
-template<class... Attributes>
-VertexArray make_vertex_array(const Attributes&... attributes) {
-     auto array = VertexArray();
-     detail::describe(array, 0, 0, attributes...);
-     return array;
+template<class T>
+void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer) { bind(array, target, 0, buffer); }
+
+template<class T, class... U>
+void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers) {
+     bind(array, target, buffer);
+     bind(array, target + 1, buffers...);
 }
 
-namespace detail {
+template<class... T>
+void bind(const VertexArray& array, const Buffer<T>&... buffers) { bind(array, 0, buffers...); }
 
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes) {
@@ -110,6 +122,11 @@ void describe(const VertexArray& array, GLuint target, GLuint offset, const Attr
      describe(array, target, offset + attribute.getSize(), attributes...);
 }
 
+template<class... Attributes>
+VertexArray make_vertex_array(const Attributes&... attributes) {
+     auto array = VertexArray();
+     describe(array, 0, 0, attributes...);
+     return array;
 }
 
 }//namespace happah

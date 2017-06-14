@@ -8,7 +8,6 @@ libhappah_graphics_la_SOURCES = \
      happah/graphics/Buffer.cpp \
      happah/graphics/glad.c \
      happah/graphics/Program.cpp \
-     happah/graphics/RenderContext.cpp \
      happah/graphics/Shader.cpp \
      happah/graphics/Uniform.cpp \
      happah/graphics/VertexArray.cpp \
@@ -18,7 +17,6 @@ nobase_include_HEADERS = \
      happah/graphics/Buffer.hpp \
      happah/graphics/glad.h \
      happah/graphics/Program.hpp \
-     happah/graphics/RenderContext.hpp \
      happah/graphics/Shader.hpp \
      happah/graphics/Uniform.hpp \
      happah/graphics/VertexArray.hpp \

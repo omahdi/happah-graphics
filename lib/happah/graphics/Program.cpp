@@ -69,11 +69,6 @@ std::string make_log(const Program& program) {
      return log;
 }
 
-void render(const RenderProgram& program, VertexArray& array, const RenderContext& context) {
-     bind(array, context.getVertices(), context.getIndices());
-     execute(program, context.getIndices().getSize() / program.getPatchSize());
-}
-
 namespace detail {
 
 void attach(const Program& program, const Shader& shader) { glAttachShader(program.getId(), shader.getId()); }

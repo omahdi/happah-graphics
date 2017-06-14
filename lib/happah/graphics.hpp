@@ -6,7 +6,6 @@
 #include "happah/graphics/Buffer.hpp"
 #include "happah/graphics/glad.h"
 #include "happah/graphics/Program.hpp"
-#include "happah/graphics/RenderContext.hpp"
 #include "happah/graphics/Shader.hpp"
 #include "happah/graphics/Uniform.hpp"
 #include "happah/graphics/VertexArray.hpp"

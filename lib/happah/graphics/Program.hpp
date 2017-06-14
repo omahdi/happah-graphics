@@ -8,7 +8,6 @@
 #include <happah/Happah.h>
 #include <stdexcept>
 
-#include "happah/graphics/RenderContext.hpp"
 #include "happah/graphics/Shader.hpp"
 #include "happah/graphics/Uniform.hpp"
 #include "happah/graphics/VertexArray.hpp"
@@ -31,13 +30,13 @@ private:
      GLuint m_id;
      std::string m_name;
 
-};//class Program
+};//Program
 
 class ComputeProgram : public Program {
 public:
      ComputeProgram(std::string name);
 
-};//class ComputeProgram
+};//ComputeProgram
 
 class RenderProgram : public Program {
 public:
@@ -51,7 +50,7 @@ private:
      GLenum m_mode;
      GLsizei m_patchSize;
 
-};//class RenderProgram
+};//RenderProgram
 
 void activate(const ComputeProgram& program);
 
@@ -76,7 +75,8 @@ RenderProgram make_triangles_program(std::string name, const Shaders&... shaders
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
 
-void render(const RenderProgram& program, VertexArray& array, const RenderContext& context);
+template<class... T>
+void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices);
 
 namespace detail {
 
@@ -113,6 +113,13 @@ Uniform<T> make_uniform(const Program& program, std::string name) {
      auto location = glGetUniformLocation(program.getId(), name.c_str());
      if(location < 0) throw std::logic_error(std::string("Failed to find uniform ") + name + ".");
      return { location };
+}
+
+template<class... T>
+void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices) {
+     bind(array, vertices...);
+     glVertexArrayElementBuffer(array.getId(), indices.getId());
+     execute(program, indices.getSize() / program.getPatchSize());
 }
 
 namespace detail {

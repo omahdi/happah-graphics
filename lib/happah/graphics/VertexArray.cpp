@@ -36,17 +36,6 @@ GLuint VertexArray::getId() const { return m_id; }
 
 void activate(const VertexArray& array) { glBindVertexArray(array.getId()); }
 
-void bind(const VertexArray& array, const Buffer<Point4D>& vertices, const Buffer<hpuint>& indices) {
-     bind(array, 0, vertices);
-     glVertexArrayElementBuffer(array.getId(), indices.getId());
-}
-
-Attribute make_attribute(GLuint id, GLint dimension, Type type) { return { id, dimension, type }; }
-
-VertexArray make_vertex_array() { return {}; }
-
-namespace detail {
-
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute) {
      auto id0 = array.getId();
      auto id1 = attribute.getId();
@@ -55,7 +44,11 @@ void describe(const VertexArray& array, GLuint target, GLuint offset, const Attr
      glVertexArrayAttribBinding(id0, id1, target);
 }
 
-}//namespace detail
+void describe(const VertexArray& array, GLuint target, const Attribute& attribute) { describe(array, target, 0, attribute); }
+
+Attribute make_attribute(GLuint id, GLint dimension, Type type) { return { id, dimension, type }; }
+
+VertexArray make_vertex_array() { return {}; }
 
 }//namespace happah
 
