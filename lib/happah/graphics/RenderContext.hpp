@@ -16,6 +16,10 @@ enum class GeometryType { ARRAY, MESH };
 
 class PatchType {
 public:
+     static const PatchType LOOP_BOX_SPLINE;
+     static const PatchType QUINTIC;
+     static const PatchType TRIANGLE;
+
      PatchType(GLenum id, GLuint size);
 
      GLenum getId() const;
@@ -27,13 +31,6 @@ private:
      GLuint m_size;
 
 };//PatchType
-
-struct PatchTypes {
-     static const PatchType LOOP_BOX_SPLINE;
-     static const PatchType QUINTIC;
-     static const PatchType TRIANGLE;
-
-};//PatchTypes
 
 template<GeometryType>
 class RenderContext;

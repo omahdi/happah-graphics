@@ -28,13 +28,13 @@ void bind(const Buffer& buffer, GLuint index, GLenum target) { glBindBufferBase(
 Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage) { return { n, type, stride, usage }; }
 
 Buffer make_buffer(const Indices& indices, GLenum usage) {
-     auto buffer = make_buffer(indices.size(), DataTypes::UNSIGNED_INT, 1, usage);
+     auto buffer = make_buffer(indices.size(), DataType::UNSIGNED_INT, 1, usage);
      write(buffer, indices);
      return buffer;
 }
 
 Buffer make_buffer(const std::vector<Point4D>& points, GLenum usage) {
-     auto buffer = make_buffer(points.size() << 2, DataTypes::FLOAT, 4, usage);
+     auto buffer = make_buffer(points.size() << 2, DataType::FLOAT, 4, usage);
      write(buffer, points);
      return buffer;
 }

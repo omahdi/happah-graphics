@@ -7,16 +7,16 @@
 
 namespace happah {
 
+const PatchType PatchType::LOOP_BOX_SPLINE = { GL_PATCHES, 12 };
+const PatchType PatchType::QUINTIC = { GL_PATCHES, 21 };
+const PatchType PatchType::TRIANGLE = { GL_TRIANGLES, 3 };
+
 PatchType::PatchType(GLenum id, GLuint size)
      : m_id(id), m_size(size) {}
 
 GLenum PatchType::getId() const { return m_id; }
 
 GLuint PatchType::getSize() const { return m_size; }
-
-const PatchType PatchTypes::LOOP_BOX_SPLINE = { GL_PATCHES, 12 };
-const PatchType PatchTypes::QUINTIC = { GL_PATCHES, 21 };
-const PatchType PatchTypes::TRIANGLE = { GL_TRIANGLES, 3 };
 
 RenderContext<GeometryType::ARRAY>::RenderContext(const VertexArray& array, const PatchType& type)
      : m_array(array), m_type(type) {}

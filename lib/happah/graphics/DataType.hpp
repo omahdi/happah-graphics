@@ -13,6 +13,9 @@ namespace happah {
 
 class DataType {
 public:
+     static const DataType FLOAT;
+     static const DataType UNSIGNED_INT;
+
      DataType(GLenum id, GLuint size);
 
      GLenum getId() const;
@@ -24,12 +27,6 @@ private:
      GLuint m_size;
 
 };//Type
-
-struct DataTypes {
-     static const DataType FLOAT;
-     static const DataType UNSIGNED_INT;
-
-};//Types
 
 }//namespace happah
 
