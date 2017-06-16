@@ -51,6 +51,9 @@ private:
 
 void activate(const VertexArray& array);
 
+void activate(const VertexArray& array, const Buffer& indices);
+
+//TODO: rename bind to activate?
 //Bind buffer to target.
 void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer& buffer);
 

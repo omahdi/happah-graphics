@@ -15,7 +15,6 @@ GLenum Type::getId() const { return m_id; }
 GLuint Type::getSize() const { return m_size; }
 
 const Type Types::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
-
 const Type Types::UNSIGNED_INT = { GL_UNSIGNED_INT, sizeof(GLuint) };
 
 }//namespace happah

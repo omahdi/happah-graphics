@@ -16,6 +16,51 @@ namespace happah {
 
 //DECLARATIONS
 
+enum class GeometryType { ARRAY, MESH };
+
+class PatchType {
+public:
+     PatchType(GLenum id, GLuint size);
+
+     GLenum getId() const;
+
+     GLuint getSize() const;
+
+private:
+     GLenum m_id;
+     GLuint m_size;
+
+};//PatchType
+
+struct PatchTypes {
+     static const PatchType TRIANGLE;
+     static const PatchType QUINTIC;
+
+};//PatchTypes
+
+template<GeometryType>
+class RenderContext;
+
+template<>
+class RenderContext<GeometryType::MESH> {
+public:
+     RenderContext(const VertexArray& array, const Buffer& indices, const PatchType& type);
+
+     const Buffer& getIndices() const;
+
+     const PatchType& getType() const;
+
+     const VertexArray& getVertexArray() const;
+
+private:
+     const VertexArray& m_array;
+     const Buffer& m_indices;
+     const PatchType& m_type;
+
+};//RenderContext<GeometryType::MESH>
+
+RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type);
+
 class Program {
 public:
      Program(std::string name);
@@ -42,19 +87,11 @@ class RenderProgram : public Program {
 public:
      RenderProgram(std::string name, GLenum mode, GLsizei patchSize);
 
-     GLenum getMode() const;
-
-     GLsizei getPatchSize() const;
-
-private:
-     GLenum m_mode;
-     GLsizei m_patchSize;
-
 };//RenderProgram
 
 void activate(const Program& program);
 
-void activate(const Program& program, hpuint n);
+void activate(const Program& program, hpuint patchSize);
 
 void attach(const Program& program, const Shader& shader);
 
@@ -71,7 +108,7 @@ void detach(const Program& program, const Shader& shader, const Shaders&... shad
 
 void execute(const ComputeProgram& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
 
-void execute(const RenderProgram& program, hpuint n, hpuint offset = 0);
+void execute(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
 
 void link(const Program& program);
 
@@ -90,8 +127,9 @@ RenderProgram make_triangles_program(std::string name, const Shaders&... shaders
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
 
-//template<class... T>
-//void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices);
+void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
+
+void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context);
 
 namespace detail {
 
