@@ -33,13 +33,29 @@ private:
 };//PatchType
 
 struct PatchTypes {
-     static const PatchType TRIANGLE;
+     static const PatchType LOOP_BOX_SPLINE;
      static const PatchType QUINTIC;
+     static const PatchType TRIANGLE;
 
 };//PatchTypes
 
 template<GeometryType>
 class RenderContext;
+
+template<>
+class RenderContext<GeometryType::ARRAY> {
+public:
+     RenderContext(const VertexArray& array, const PatchType& type);
+
+     const PatchType& getType() const;
+
+     const VertexArray& getVertexArray() const;
+
+private:
+     const VertexArray& m_array;
+     const PatchType& m_type;
+
+};//RenderContext<GeometryType::ARRAY>
 
 template<>
 class RenderContext<GeometryType::MESH> {
@@ -58,6 +74,8 @@ private:
      const PatchType& m_type;
 
 };//RenderContext<GeometryType::MESH>
+
+RenderContext<GeometryType::ARRAY> make_render_context(const VertexArray& array, const PatchType& type);
 
 RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type);
 
@@ -108,6 +126,8 @@ void detach(const Program& program, const Shader& shader, const Shaders&... shad
 
 void execute(const ComputeProgram& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
 
+void execute(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
+
 void execute(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
 
 void link(const Program& program);
@@ -126,6 +146,8 @@ RenderProgram make_triangles_program(std::string name, const Shaders&... shaders
 
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
+
+void render(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
 
 void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
 

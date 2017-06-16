@@ -16,8 +16,16 @@ GLenum PatchType::getId() const { return m_id; }
 
 GLuint PatchType::getSize() const { return m_size; }
 
-const PatchType PatchTypes::TRIANGLE = { GL_TRIANGLES, 3 };
+const PatchType PatchTypes::LOOP_BOX_SPLINE = { GL_PATCHES, 12 };
 const PatchType PatchTypes::QUINTIC = { GL_PATCHES, 21 };
+const PatchType PatchTypes::TRIANGLE = { GL_TRIANGLES, 3 };
+
+RenderContext<GeometryType::ARRAY>::RenderContext(const VertexArray& array, const PatchType& type)
+     : m_array(array), m_type(type) {}
+
+const PatchType& RenderContext<GeometryType::ARRAY>::getType() const { return m_type; }
+
+const VertexArray& RenderContext<GeometryType::ARRAY>::getVertexArray() const { return m_array; }
 
 RenderContext<GeometryType::MESH>::RenderContext(const VertexArray& array, const Buffer& indices, const PatchType& type)
      : m_array(array), m_indices(indices), m_type(type) {}
@@ -27,6 +35,8 @@ const Buffer& RenderContext<GeometryType::MESH>::getIndices() const { return m_i
 const PatchType& RenderContext<GeometryType::MESH>::getType() const { return m_type; }
 
 const VertexArray& RenderContext<GeometryType::MESH>::getVertexArray() const { return m_array; }
+
+RenderContext<GeometryType::ARRAY> make_render_context(const VertexArray& array, const PatchType& type) { return { array, type }; }
 
 RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type) { return { array, indices, type }; }
 
@@ -61,9 +71,18 @@ void execute(const ComputeProgram& program, hpuint nx, hpuint ny, hpuint nz) {
      assert(glGetError() == GL_NO_ERROR);
 }
 
+void execute(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) {
+     auto mode = context.getType().getId();
+     auto patchSize = context.getType().getSize();
+     glDrawArrays(mode, patchSize * offset, patchSize * n);
+     assert(glGetError() == GL_NO_ERROR);
+}
+
 void execute(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
-     offset *= context.getType().getSize() * Types::UNSIGNED_INT.getSize();
-     glDrawElements(context.getType().getId(), context.getType().getSize() * n, Types::UNSIGNED_INT.getId(), reinterpret_cast<void*>(offset));
+     auto mode = context.getType().getId();
+     auto patchSize = context.getType().getSize();
+     offset *= patchSize * Types::UNSIGNED_INT.getSize();
+     glDrawElements(mode, patchSize * n, Types::UNSIGNED_INT.getId(), reinterpret_cast<void*>(offset));
      assert(glGetError() == GL_NO_ERROR);
 }
 
@@ -96,6 +115,8 @@ std::string make_log(const Program& program) {
      glGetProgramInfoLog(program.getId(), length, &length, &log[0]);
      return log;
 }
+
+void render(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) { execute(program, context, n, offset); }
 
 void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
      activate(context.getVertexArray(), context.getIndices());
