@@ -18,7 +18,27 @@ namespace happah {
 
 //DECLARATIONS
 
-class Buffer;
+class Buffer {
+public:
+     Buffer(hpuint n, Type type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
+
+     ~Buffer();
+
+     GLuint getId() const;
+
+     hpuint getSize() const;
+
+     GLsizei getStride() const;
+
+     const Type& getType() const;
+
+private:
+     GLuint m_id;
+     hpuint m_size;
+     GLsizei m_stride;
+     Type m_type;
+
+};//Buffer
 
 void bind(const Buffer& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_BUFFER);
 
@@ -65,32 +85,6 @@ void write(const Buffer& buffer, const std::vector<T>& ts, hpuint offset = 0);
 }//namespace detail*/
 
 //DEFINITIONS
-
-class Buffer {
-public:
-     Buffer(hpuint n, Type type, GLsizei stride, GLenum usage = GL_STATIC_DRAW)
-          : m_size(n), m_stride(stride), m_type(std::move(type)) {
-          glCreateBuffers(1, &m_id);
-          glNamedBufferData(m_id, m_size * m_type.getSize(), NULL, usage);
-     }
-
-     ~Buffer() { glDeleteBuffers(1, &m_id); }
-
-     GLuint getId() const { return m_id; }
-
-     hpuint getSize() const { return m_size; }
-
-     GLsizei getStride() const { return m_stride; }
-
-     const Type& getType() const { return m_type; }
-
-private:
-     GLuint m_id;
-     hpuint m_size;
-     GLsizei m_stride;
-     Type m_type;
-
-};//Buffer
 
 /*template<class T>
 Buffer make_buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW) {
