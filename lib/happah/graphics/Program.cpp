@@ -28,11 +28,11 @@ GLenum RenderProgram::getMode() const { return m_mode; }
 
 GLsizei RenderProgram::getPatchSize() const { return m_patchSize; }
 
-void activate(const ComputeProgram& program) { glUseProgram(program.getId()); }
+void activate(const Program& program) { glUseProgram(program.getId()); }
 
-void activate(const RenderProgram& program) {
+void activate(const Program& program, hpuint n) {
      glUseProgram(program.getId());
-     glPatchParameteri(GL_PATCH_VERTICES, program.getPatchSize());
+     glPatchParameteri(GL_PATCH_VERTICES, n);
 }
 
 void execute(const ComputeProgram& program, hpuint nx, hpuint ny, hpuint nz) {

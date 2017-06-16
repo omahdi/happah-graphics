@@ -52,9 +52,9 @@ private:
 
 };//RenderProgram
 
-void activate(const ComputeProgram& program);
+void activate(const Program& program);
 
-void activate(const RenderProgram& program);
+void activate(const Program& program, hpuint n);
 
 void execute(const ComputeProgram& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
 
