@@ -6,6 +6,7 @@
 lib_LTLIBRARIES = libhappah-graphics.la
 libhappah_graphics_la_SOURCES = \
      happah/graphics/Buffer.cpp \
+     happah/graphics/DataType.cpp \
      happah/graphics/glad.c \
      happah/graphics/Program.cpp \
      happah/graphics/Shader.cpp \
@@ -15,6 +16,7 @@ libhappah_graphics_la_SOURCES = \
 nobase_include_HEADERS = \
      happah/graphics.hpp \
      happah/graphics/Buffer.hpp \
+     happah/graphics/DataType.hpp \
      happah/graphics/glad.h \
      happah/graphics/Program.hpp \
      happah/graphics/Shader.hpp \

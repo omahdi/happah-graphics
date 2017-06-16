@@ -10,30 +10,12 @@
 #include <happah/math/Space.h>
 
 #include "happah/graphics/Buffer.hpp"
+#include "happah/graphics/DataType.hpp"
 #include "happah/graphics/glad.h"
 
 namespace happah {
 
 //DECLARATIONS
-
-class Type {
-public:
-     Type(GLenum id, GLuint size);
-
-     GLenum getId() const;
-
-     GLuint getSize() const;
-
-private:
-     GLenum m_id;
-     GLuint m_size;
-
-};//Type
-
-struct Types {
-     static const Type FLOAT;
-
-};//Types
 
 class Attribute {
 public:
@@ -70,19 +52,19 @@ private:
 void activate(const VertexArray& array);
 
 //Bind buffer to target.
-template<class T>
-void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer<T>& buffer);
+void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer& buffer);
 
-template<class T>
-void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer);
+void bind(const VertexArray& array, GLuint target, const Buffer& buffer);
+
+void bind(const VertexArray& array, const Buffer& buffer);
 
 //Bind ith buffer to target + (i - 1).
-template<class T, class... U>
-void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers);
+//template<class... Buffers>
+//void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers);
 
 //Bind ith buffer to (i - 1).
-template<class... T>
-void bind(const VertexArray& array, const Buffer<T>&... buffers);
+//template<class... T>
+//void bind(const VertexArray& array, const Buffer<T>&... buffers);
 
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
 
@@ -101,20 +83,14 @@ VertexArray make_vertex_array(const Attributes&... attributes);
 
 //DEFINITIONS
 
-template<class T>
-void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer<T>& buffer) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, sizeof(T)); }
-
-template<class T>
-void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer) { bind(array, target, 0, buffer); }
-
-template<class T, class... U>
+/*template<class T, class... U>
 void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers) {
      bind(array, target, buffer);
      bind(array, target + 1, buffers...);
 }
 
 template<class... T>
-void bind(const VertexArray& array, const Buffer<T>&... buffers) { bind(array, 0, buffers...); }
+void bind(const VertexArray& array, const Buffer<T>&... buffers) { bind(array, 0, buffers...); }*/
 
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes) {

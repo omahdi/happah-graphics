@@ -11,35 +11,43 @@
 #include <tuple>
 #include <vector>
 
+#include "happah/graphics/DataType.hpp"
 #include "happah/graphics/glad.h"
 
 namespace happah {
 
 //DECLARATIONS
 
-template<class T>
 class Buffer;
 
-template<typename T>
-void bind(const Buffer<T>& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_BUFFER);
+void bind(const Buffer& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_BUFFER);
+
+//template<class T>
+//Buffer make_buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(hpuint n, Type type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const Indices& indices, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<Point4D>& points, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<Point3D>& points, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage = GL_STATIC_DRAW);
+
+//template<class T, class First, class... Rest>
+//Buffer<T> make_buffer(First&& first, Rest&&... rest);
 
 template<class T>
-Buffer<T> make_buffer(const std::vector<T>& ts, GLenum usage = GL_STATIC_DRAW);
-
-Buffer<Point4D> make_buffer(const std::vector<Point3D>& vertices, GLenum usage = GL_STATIC_DRAW);
-
-Buffer<Point4D> make_buffer(const std::vector<VertexP3>& vertices, GLenum usage = GL_STATIC_DRAW);
-
-template<class T, class First, class... Rest>
-Buffer<T> make_buffer(First&& first, Rest&&... rest);
+void write(const Buffer& buffer, const T* ts, hpuint n, hpuint offset = 0);
 
 template<class T>
-void write(const Buffer<T>& buffer, const T* ts, hpuint n, hpuint offset = 0);
+void write(const Buffer& buffer, const std::vector<T>& ts, hpuint offset = 0);
 
 //template<class T, class... Arg>
 //Buffer<T> make_buffer(Arg&&... args) { return {{make_raw_array(args)...}, GL_STATIC_DRAW}; }
 
-namespace detail {
+/*namespace detail {
 
      template<class T>
      std::tuple<const T*, hpuint> make_raw_array(const std::vector<T>& ts);
@@ -54,37 +62,16 @@ namespace detail {
           static Buffer<T> call(GLenum usage, Arg&&... args) { return {{make_raw_array(args)...}, usage}; }
      };
 
-}//namespace detail
+}//namespace detail*/
 
-template<class T>
+//DEFINITIONS
+
 class Buffer {
 public:
-     Buffer(hpuint n, GLenum usage = GL_STATIC_DRAW)
-          : m_size(n) {
+     Buffer(hpuint n, Type type, GLsizei stride, GLenum usage = GL_STATIC_DRAW)
+          : m_size(n), m_stride(stride), m_type(std::move(type)) {
           glCreateBuffers(1, &m_id);
-          allocate(usage);
-     }
-
-     Buffer(const T* ts, hpuint n, GLenum usage = GL_STATIC_DRAW) 
-          : m_size(n) {
-          glCreateBuffers(1, &m_id);
-          allocate(usage, ts);
-     }
-
-     Buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW)
-          : m_size(0) {
-          glCreateBuffers(1, &m_id);
-          for(auto& arg : args) m_size += std::get<1>(arg);
-          allocate(usage);
-          //TODO: more efficient with glMapBuffer?
-          auto offset = 0u;
-          for(auto& arg : args) {
-               const T* ts;
-               hpuint n;
-               std::tie(ts, n) = arg;
-               write(*this, ts, n, offset);
-               offset += n;
-          }
+          glNamedBufferData(m_id, m_size * m_type.getSize(), NULL, usage);
      }
 
      ~Buffer() { glDeleteBuffers(1, &m_id); }
@@ -93,34 +80,49 @@ public:
 
      hpuint getSize() const { return m_size; }
 
+     GLsizei getStride() const { return m_stride; }
+
+     const Type& getType() const { return m_type; }
+
 private:
      GLuint m_id;
      hpuint m_size;
+     GLsizei m_stride;
+     Type m_type;
 
-     void allocate(GLenum usage, const T* ts = NULL) { glNamedBufferData(m_id, sizeof(T) * m_size, ts, usage); }
+};//Buffer
 
-};
+/*template<class T>
+Buffer make_buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW) {
+     auto n = 0u;
+     for(auto& arg : args) n += std::get<1>(arg);
+     //TODO: more efficient with glMapBuffer?
+     auto offset = 0u;
+     for(auto& arg : args) {
+          const T* ts;
+          hpuint n;
+          std::tie(ts, n) = arg;
+          write(*this, ts, n, offset);
+          offset += n;
+     }
 
-//DEFINITIONS
+}*/
 
-template<typename T>
-void bind(const Buffer<T>& buffer, GLuint index, GLenum target) { glBindBufferBase(target, index, buffer.getId()); }
+//template<class T, class First, class... Rest>
+//Buffer<T> make_buffer(First&& first, Rest&&... rest) { return detail::do_make_buffer<T, First, Rest...>::call(std::forward<First>(first), std::forward<Rest>(rest)...); }
 
 template<class T>
-Buffer<T> make_buffer(const std::vector<T>& ts, GLenum usage) { return { ts.data(), (hpuint)ts.size(), usage }; }
-
-template<class T, class First, class... Rest>
-Buffer<T> make_buffer(First&& first, Rest&&... rest) { return detail::do_make_buffer<T, First, Rest...>::call(std::forward<First>(first), std::forward<Rest>(rest)...); }
+void write(const Buffer& buffer, const T* ts, hpuint n, hpuint offset) { glNamedBufferSubData(buffer.getId(), sizeof(T) * offset, sizeof(T) * n, ts); }
 
 template<class T>
-void write(const Buffer<T>& buffer, const T* ts, hpuint n, hpuint offset) { glNamedBufferSubData(buffer.getId(), sizeof(T) * offset, sizeof(T) * n, ts); }
+void write(const Buffer& buffer, const std::vector<T>& ts, hpuint offset) { write(buffer, ts.data(), ts.size(), offset); }
 
-namespace detail {
+/*namespace detail {
 
      template<class T>
      std::tuple<const T*, hpuint> make_raw_array(const std::vector<T>& ts) { return std::make_tuple(ts.data(), ts.size()); }
 
-}//namespace detail
+}//namespace detail*/
 
 }//namespace happah
 

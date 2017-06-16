@@ -75,8 +75,8 @@ RenderProgram make_triangles_program(std::string name, const Shaders&... shaders
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
 
-template<class... T>
-void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices);
+//template<class... T>
+//void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices);
 
 namespace detail {
 
@@ -115,12 +115,12 @@ Uniform<T> make_uniform(const Program& program, std::string name) {
      return { location };
 }
 
-template<class... T>
+/*template<class... T>
 void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices) {
      bind(array, vertices...);
      glVertexArrayElementBuffer(array.getId(), indices.getId());
      execute(program, indices.getSize() / program.getPatchSize());
-}
+}*/
 
 namespace detail {
 

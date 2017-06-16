@@ -7,17 +7,8 @@
 
 namespace happah {
 
-Type::Type(GLenum id, GLuint size)
-     : m_id(id), m_size(size) {}
-
-GLenum Type::getId() const { return m_id; }
-
-GLuint Type::getSize() const { return m_size; }
-
-const Type Types::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
-
 Attribute::Attribute(GLuint id, GLint dimension, Type type)
-     : m_dimension(dimension), m_id(id), m_type(type) {}
+     : m_dimension(dimension), m_id(id), m_type(std::move(type)) {}
 
 GLint Attribute::getDimension() const { return m_dimension; }
 
@@ -27,14 +18,19 @@ GLuint Attribute::getSize() const { return m_dimension * m_type.getSize(); }
 
 Type Attribute::getType() const { return m_type; }
 
-VertexArray::VertexArray()
-     : m_id([]() -> GLuint { GLuint id; glCreateVertexArrays(1, &id); return id; }()) {}
+VertexArray::VertexArray() { glCreateVertexArrays(1, &m_id); }
 
 VertexArray::~VertexArray() { glDeleteVertexArrays(1, &m_id); }
 
 GLuint VertexArray::getId() const { return m_id; }
 
 void activate(const VertexArray& array) { glBindVertexArray(array.getId()); }
+
+void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer& buffer) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, buffer.getStride() * buffer.getType().getSize()); }
+
+void bind(const VertexArray& array, GLuint target, const Buffer& buffer) { bind(array, target, 0, buffer); }
+
+void bind(const VertexArray& array, const Buffer& buffer) { bind(array, 0, buffer); }
 
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute) {
      auto id0 = array.getId();
