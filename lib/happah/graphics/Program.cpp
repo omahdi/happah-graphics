@@ -44,8 +44,8 @@ void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& c
 void execute(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
      auto mode = context.getType().getId();
      auto patchSize = context.getType().getSize();
-     offset *= patchSize * Types::UNSIGNED_INT.getSize();
-     glDrawElements(mode, patchSize * n, Types::UNSIGNED_INT.getId(), reinterpret_cast<void*>(offset));
+     offset *= patchSize * DataTypes::UNSIGNED_INT.getSize();
+     glDrawElements(mode, patchSize * n, DataTypes::UNSIGNED_INT.getId(), reinterpret_cast<void*>(offset));
      assert(glGetError() == GL_NO_ERROR);
 }
 

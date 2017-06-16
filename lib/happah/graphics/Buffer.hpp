@@ -20,7 +20,7 @@ namespace happah {
 
 class Buffer {
 public:
-     Buffer(hpuint n, Type type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
+     Buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
 
      ~Buffer();
 
@@ -30,13 +30,13 @@ public:
 
      GLsizei getStride() const;
 
-     const Type& getType() const;
+     const DataType& getType() const;
 
 private:
      GLuint m_id;
      hpuint m_size;
      GLsizei m_stride;
-     Type m_type;
+     const DataType& m_type;
 
 };//Buffer
 
@@ -45,7 +45,7 @@ void bind(const Buffer& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_
 //template<class T>
 //Buffer make_buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW);
 
-Buffer make_buffer(hpuint n, Type type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
+Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const Indices& indices, GLenum usage = GL_STATIC_DRAW);
 

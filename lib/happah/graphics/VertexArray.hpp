@@ -19,7 +19,7 @@ namespace happah {
 
 class Attribute {
 public:
-     Attribute(GLuint id, GLint dimension, Type type);
+     Attribute(GLuint id, GLint dimension, const DataType& type);
 
      GLint getDimension() const;
 
@@ -27,12 +27,12 @@ public:
 
      GLuint getSize() const;
 
-     Type getType() const;
+     const DataType& getType() const;
 
 private:
      GLint m_dimension;
      GLuint m_id;
-     Type m_type;
+     const DataType& m_type;
 
 };//Attribute
 
@@ -76,7 +76,7 @@ void describe(const VertexArray& array, GLuint target, const Attribute& attribut
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
 
-Attribute make_attribute(GLuint id, GLint dimension, Type type);
+Attribute make_attribute(GLuint id, GLint dimension, const DataType& type);
 
 VertexArray make_vertex_array();
 

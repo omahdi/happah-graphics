@@ -7,7 +7,7 @@
 
 namespace happah {
 
-Buffer::Buffer(hpuint n, Type type, GLsizei stride, GLenum usage)
+Buffer::Buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage)
      : m_size(n), m_stride(stride), m_type(std::move(type)) {
      glCreateBuffers(1, &m_id);
      glNamedBufferData(m_id, m_size * m_type.getSize(), NULL, usage);
@@ -21,20 +21,20 @@ hpuint Buffer::getSize() const { return m_size; }
 
 GLsizei Buffer::getStride() const { return m_stride; }
 
-const Type& Buffer::getType() const { return m_type; }
+const DataType& Buffer::getType() const { return m_type; }
 
 void bind(const Buffer& buffer, GLuint index, GLenum target) { glBindBufferBase(target, index, buffer.getId()); }
 
-Buffer make_buffer(hpuint n, Type type, GLsizei stride, GLenum usage) { return { n, std::move(type), stride, usage }; }
+Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage) { return { n, type, stride, usage }; }
 
 Buffer make_buffer(const Indices& indices, GLenum usage) {
-     auto buffer = make_buffer(indices.size(), Types::UNSIGNED_INT, 1, usage);
+     auto buffer = make_buffer(indices.size(), DataTypes::UNSIGNED_INT, 1, usage);
      write(buffer, indices);
      return buffer;
 }
 
 Buffer make_buffer(const std::vector<Point4D>& points, GLenum usage) {
-     auto buffer = make_buffer(points.size() << 2, Types::FLOAT, 4, usage);
+     auto buffer = make_buffer(points.size() << 2, DataTypes::FLOAT, 4, usage);
      write(buffer, points);
      return buffer;
 }

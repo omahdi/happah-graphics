@@ -11,9 +11,9 @@ namespace happah {
 
 //DECLARATIONS
 
-class Type {
+class DataType {
 public:
-     Type(GLenum id, GLuint size);
+     DataType(GLenum id, GLuint size);
 
      GLenum getId() const;
 
@@ -25,9 +25,9 @@ private:
 
 };//Type
 
-struct Types {
-     static const Type FLOAT;
-     static const Type UNSIGNED_INT;
+struct DataTypes {
+     static const DataType FLOAT;
+     static const DataType UNSIGNED_INT;
 
 };//Types
 

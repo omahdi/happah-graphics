@@ -7,15 +7,15 @@
 
 namespace happah {
 
-Type::Type(GLenum id, GLuint size)
+DataType::DataType(GLenum id, GLuint size)
      : m_id(id), m_size(size) {}
 
-GLenum Type::getId() const { return m_id; }
+GLenum DataType::getId() const { return m_id; }
 
-GLuint Type::getSize() const { return m_size; }
+GLuint DataType::getSize() const { return m_size; }
 
-const Type Types::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
-const Type Types::UNSIGNED_INT = { GL_UNSIGNED_INT, sizeof(GLuint) };
+const DataType DataTypes::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
+const DataType DataTypes::UNSIGNED_INT = { GL_UNSIGNED_INT, sizeof(GLuint) };
 
 }//namespace happah
 
