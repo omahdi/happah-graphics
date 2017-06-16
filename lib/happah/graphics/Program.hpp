@@ -8,76 +8,12 @@
 #include <happah/Happah.h>
 #include <stdexcept>
 
+#include "happah/graphics/RenderContext.hpp"
 #include "happah/graphics/Shader.hpp"
 #include "happah/graphics/Uniform.hpp"
 #include "happah/graphics/VertexArray.hpp"
 
 namespace happah {
-
-//DECLARATIONS
-
-enum class GeometryType { ARRAY, MESH };
-
-class PatchType {
-public:
-     PatchType(GLenum id, GLuint size);
-
-     GLenum getId() const;
-
-     GLuint getSize() const;
-
-private:
-     GLenum m_id;
-     GLuint m_size;
-
-};//PatchType
-
-struct PatchTypes {
-     static const PatchType LOOP_BOX_SPLINE;
-     static const PatchType QUINTIC;
-     static const PatchType TRIANGLE;
-
-};//PatchTypes
-
-template<GeometryType>
-class RenderContext;
-
-template<>
-class RenderContext<GeometryType::ARRAY> {
-public:
-     RenderContext(const VertexArray& array, const PatchType& type);
-
-     const PatchType& getType() const;
-
-     const VertexArray& getVertexArray() const;
-
-private:
-     const VertexArray& m_array;
-     const PatchType& m_type;
-
-};//RenderContext<GeometryType::ARRAY>
-
-template<>
-class RenderContext<GeometryType::MESH> {
-public:
-     RenderContext(const VertexArray& array, const Buffer& indices, const PatchType& type);
-
-     const Buffer& getIndices() const;
-
-     const PatchType& getType() const;
-
-     const VertexArray& getVertexArray() const;
-
-private:
-     const VertexArray& m_array;
-     const Buffer& m_indices;
-     const PatchType& m_type;
-
-};//RenderContext<GeometryType::MESH>
-
-RenderContext<GeometryType::ARRAY> make_render_context(const VertexArray& array, const PatchType& type);
-
-RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type);
 
 class Program {
 public:
@@ -97,7 +33,7 @@ private:
 
 void activate(const Program& program);
 
-void activate(const Program& program, hpuint patchSize);
+void activate(const Program& program, const PatchType& type);
 
 void attach(const Program& program, const Shader& shader);
 
