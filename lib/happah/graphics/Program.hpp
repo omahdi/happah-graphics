@@ -56,9 +56,24 @@ void activate(const Program& program);
 
 void activate(const Program& program, hpuint n);
 
+void attach(const Program& program, const Shader& shader);
+
+template<class... Shaders>
+void attach(const Program& program, const Shader& shader, const Shaders&... shaders);
+
+template<class... Shaders>
+void build_program(const Program& program, const Shaders&... shaders);
+
+void detach(const Program& program, const Shader& shader);
+
+template<class... Shaders>
+void detach(const Program& program, const Shader& shader, const Shaders&... shaders);
+
 void execute(const ComputeProgram& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
 
 void execute(const RenderProgram& program, hpuint n, hpuint offset = 0);
+
+void link(const Program& program);
 
 std::logic_error make_error(const Program& program);
 
@@ -80,27 +95,31 @@ Uniform<T> make_uniform(const Program& program, std::string name);
 
 namespace detail {
 
-void link(const Program& program);
-
-void attach(const Program& program, const Shader& shader);
-
-template<class... Shaders>
-void attach(const Program& program, const Shader& shader, const Shaders&... shaders);
-
-template<class... Shaders>
-void build_program(const Program& program, const Shaders&... shaders);
-
-void detach(const Program& program, const Shader& shader);
-
-template<class... Shaders>
-void detach(const Program& program, const Shader& shader, const Shaders&... shaders);
-
 template<class... Shaders>
 RenderProgram make_program(std::string name, GLenum mode, int patchSize, const Shaders&... shaders);
 
 }//namespace detail
 
 //DEFINITIONS
+
+template<class... Shaders>
+void attach(const Program& program, const Shader& shader, const Shaders&... shaders) {
+     attach(program, shader);
+     attach(program, shaders...);
+}
+
+template<class... Shaders>
+void build_program(const Program& program, const Shaders&... shaders) {
+     attach(program, shaders...);
+     link(program);
+     detach(program, shaders...);
+}
+
+template<class... Shaders>
+void detach(const Program& program, const Shader& shader, const Shaders&... shaders) {
+     detach(program, shader);
+     detach(program, shaders...);
+}
 
 template<class... Shaders>
 RenderProgram make_patches_program(std::string name, int patchSize, const Shaders&... shaders) { return detail::make_program(std::move(name), GL_PATCHES, patchSize, shaders...); }
@@ -123,25 +142,6 @@ void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuin
 }*/
 
 namespace detail {
-
-template<class... Shaders>
-void attach(const Program& program, const Shader& shader, const Shaders&... shaders) {
-     attach(program, shader);
-     attach(program, shaders...);
-}
-
-template<class... Shaders>
-void build_program(const Program& program, const Shaders&... shaders) {
-     detail::attach(program, shaders...);
-     detail::link(program);
-     detail::detach(program, shaders...);
-}
-
-template<class... Shaders>
-void detach(const Program& program, const Shader& shader, const Shaders&... shaders) {
-     detach(program, shader);
-     detach(program, shaders...);
-}
 
 template<class... Shaders>
 RenderProgram make_program(std::string name, GLenum mode, int patchSize, const Shaders&... shaders) {

@@ -35,6 +35,10 @@ void activate(const Program& program, hpuint n) {
      glPatchParameteri(GL_PATCH_VERTICES, n);
 }
 
+void attach(const Program& program, const Shader& shader) { glAttachShader(program.getId(), shader.getId()); }
+
+void detach(const Program& program, const Shader& shader) { glDetachShader(program.getId(), shader.getId()); }
+
 void execute(const ComputeProgram& program, hpuint nx, hpuint ny, hpuint nz) {
      glDispatchCompute(nx, ny, nz);
      assert(glGetError() == GL_NO_ERROR);
@@ -46,9 +50,16 @@ void execute(const RenderProgram& program, hpuint n, hpuint offset) {
      assert(glGetError() == GL_NO_ERROR);
 }
 
+void link(const Program& program) {
+     auto status = GLint();
+     glLinkProgram(program.getId());
+     glGetProgramiv(program.getId(), GL_LINK_STATUS, &status);
+     if(status == GL_FALSE) throw make_error(program);
+}
+
 ComputeProgram make_compute_program(std::string name, const Shader& shader) {
      auto program = ComputeProgram(std::move(name));
-     detail::build_program(program, shader);
+     build_program(program, shader);
      return program;
 }
 
@@ -68,21 +79,6 @@ std::string make_log(const Program& program) {
      glGetProgramInfoLog(program.getId(), length, &length, &log[0]);
      return log;
 }
-
-namespace detail {
-
-void attach(const Program& program, const Shader& shader) { glAttachShader(program.getId(), shader.getId()); }
-
-void detach(const Program& program, const Shader& shader) { glDetachShader(program.getId(), shader.getId()); }
-
-void link(const Program& program) {
-     auto status = GLint();
-     glLinkProgram(program.getId());
-     glGetProgramiv(program.getId(), GL_LINK_STATUS, &status);
-     if(status == GL_FALSE) throw make_error(program);
-}
-
-}//namespace detail
 
 }//namespace happah
 
