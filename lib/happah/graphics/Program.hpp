@@ -64,7 +64,7 @@ std::logic_error make_error(const Program& program);
 
 std::string make_log(const Program& program);
 
-ComputeProgram make_compute_program(std::string name, const ComputeShader& shader);
+ComputeProgram make_compute_program(std::string name, const Shader& shader);
 
 template<class... Shaders>
 RenderProgram make_patches_program(std::string name, int patchSize, const Shaders&... shaders);

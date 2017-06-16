@@ -38,24 +38,6 @@ private:
 
 };
 
-class ComputeShader : public Shader {
-public:
-     ComputeShader(std::string path);
-
-};
-
-class FragmentShader : public Shader {
-public:
-     FragmentShader(std::string path);
-
-};
-
-class GeometryShader : public Shader {
-public:
-     GeometryShader(std::string path);
-
-};
-
 class TessellationControlShader : public Shader {
 public:
      TessellationControlShader(std::string path);
@@ -66,19 +48,7 @@ public:
 
 };
 
-class TessellationEvaluationShader : public Shader {
-public:
-     TessellationEvaluationShader(std::string path);
-
-};
-
-class VertexShader : public Shader {
-public:
-     VertexShader(std::string path);
-
-};
-
-class HighlightLinesFragmentShader : public FragmentShader {
+class HighlightLinesFragmentShader : public Shader {
 public:
      HighlightLinesFragmentShader();
 
@@ -102,7 +72,7 @@ private:
 
 };
 
-class SimpleFragmentShader : public FragmentShader {
+class SimpleFragmentShader : public Shader {
 public:
      SimpleFragmentShader();
 
@@ -116,7 +86,7 @@ private:
 
 };
 
-class SimpleVertexShader : public VertexShader {
+class SimpleVertexShader : public Shader {
 public:
      SimpleVertexShader();
 
@@ -130,7 +100,7 @@ private:
 
 };
 
-class WireframeFragmentShader : public FragmentShader {
+class WireframeFragmentShader : public Shader {
 public:
      WireframeFragmentShader();
 
@@ -152,7 +122,7 @@ private:
      
 std::logic_error make_error(const Shader& shader);
 
-GeometryShader make_geometry_shader(std::string path);
+Shader make_geometry_shader(std::string path);
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader();
 
@@ -162,7 +132,7 @@ SimpleFragmentShader make_simple_fragment_shader();
 
 SimpleVertexShader make_simple_vertex_shader();
 
-TessellationEvaluationShader make_tessellation_evaluation_shader(std::string path);
+Shader make_tessellation_evaluation_shader(std::string path);
 
 WireframeFragmentShader make_wireframe_fragment_shader();
      

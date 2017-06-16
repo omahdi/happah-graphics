@@ -46,7 +46,7 @@ void execute(const RenderProgram& program, hpuint n, hpuint offset) {
      assert(glGetError() == GL_NO_ERROR);
 }
 
-ComputeProgram make_compute_program(std::string name, const ComputeShader& shader) {
+ComputeProgram make_compute_program(std::string name, const Shader& shader) {
      auto program = ComputeProgram(std::move(name));
      detail::build_program(program, shader);
      return program;

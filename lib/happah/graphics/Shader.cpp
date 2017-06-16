@@ -34,15 +34,6 @@ const std::string& Shader::getPath() const { return m_path; }
 
 GLuint Shader::getType() const { return m_type; }
 
-ComputeShader::ComputeShader(std::string path)
-     : Shader(GL_COMPUTE_SHADER, std::move(path)) {}
-
-FragmentShader::FragmentShader(std::string path)
-     : Shader(GL_FRAGMENT_SHADER, std::move(path)) {}
-
-GeometryShader::GeometryShader(std::string path)
-     : Shader(GL_GEOMETRY_SHADER, std::move(path)) {}
-
 TessellationControlShader::TessellationControlShader(std::string path)
      : Shader(GL_TESS_CONTROL_SHADER, std::move(path)) {}
 
@@ -50,14 +41,8 @@ void TessellationControlShader::setInnerTessellationLevel(const std::array<float
 
 void TessellationControlShader::setOuterTessellationLevel(const std::array<float, 4>& level) { glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, level.data()); }
 
-TessellationEvaluationShader::TessellationEvaluationShader(std::string path)
-     : Shader(GL_TESS_EVALUATION_SHADER, std::move(path)) {}
-
-VertexShader::VertexShader(std::string path)
-     : Shader(GL_VERTEX_SHADER, std::move(path)) {}
-
 HighlightLinesFragmentShader::HighlightLinesFragmentShader()
-     : FragmentShader("shaders/highlight-lines.f.glsl"), m_bandColor0(5000), m_bandColor1(5001), m_bandWidth(5002), m_beamDirection(5003), m_beamOrigin(5004), m_light(5005) {}
+     : Shader(GL_FRAGMENT_SHADER, "shaders/highlight-lines.f.glsl"), m_bandColor0(5000), m_bandColor1(5001), m_bandWidth(5002), m_beamDirection(5003), m_beamOrigin(5004), m_light(5005) {}
 
 void HighlightLinesFragmentShader::setBandColor0(const hpcolor& color) { m_bandColor0 = color; }
 
@@ -73,21 +58,21 @@ void HighlightLinesFragmentShader::setBeam(const Point3D& origin, const Vector3D
 void HighlightLinesFragmentShader::setLight(const Point3D& light) { m_light = light; }
 
 SimpleFragmentShader::SimpleFragmentShader()
-     : FragmentShader("shaders/simple.f.glsl"), m_light(5000), m_modelColor(5001) {}
+     : Shader(GL_FRAGMENT_SHADER, "shaders/simple.f.glsl"), m_light(5000), m_modelColor(5001) {}
 
 void SimpleFragmentShader::setLight(const Point3D& light) { m_light = light; }
 
 void SimpleFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
 
 SimpleVertexShader::SimpleVertexShader()
-     : VertexShader("shaders/simple.v.glsl"), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
+     : Shader(GL_VERTEX_SHADER, "shaders/simple.v.glsl"), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
 
 void SimpleVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
 
 void SimpleVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
-WireframeFragmentShader::WireframeFragmentShader() : 
-     FragmentShader("shaders/wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
+WireframeFragmentShader::WireframeFragmentShader()
+     : Shader(GL_FRAGMENT_SHADER, "shaders/wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
 
 void WireframeFragmentShader::setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
 
@@ -106,7 +91,7 @@ std::logic_error make_error(const Shader& shader) {
      return std::logic_error(message.str());
 }
 
-GeometryShader make_geometry_shader(std::string path) { return { std::move(path) }; }
+Shader make_geometry_shader(std::string path) { return { GL_GEOMETRY_SHADER, std::move(path) }; }
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
@@ -122,7 +107,7 @@ SimpleFragmentShader make_simple_fragment_shader() { return {}; }
 
 SimpleVertexShader make_simple_vertex_shader() { return {}; }
 
-TessellationEvaluationShader make_tessellation_evaluation_shader(std::string path) { return { std::move(path) }; }
+Shader make_tessellation_evaluation_shader(std::string path) { return { GL_TESS_EVALUATION_SHADER, std::move(path) }; }
      
 WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
 
