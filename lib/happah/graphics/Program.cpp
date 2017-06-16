@@ -49,12 +49,6 @@ GLuint Program::getId() const { return m_id; }
 
 const std::string& Program::getName() const { return m_name; }
 
-ComputeProgram::ComputeProgram(std::string name)
-     : Program(std::move(name)) {}
-
-RenderProgram::RenderProgram(std::string name, GLenum mode, GLsizei patchSize)
-     : Program(std::move(name)) {}
-
 void activate(const Program& program) { glUseProgram(program.getId()); }
 
 void activate(const Program& program, hpuint patchSize) {
@@ -66,19 +60,19 @@ void attach(const Program& program, const Shader& shader) { glAttachShader(progr
 
 void detach(const Program& program, const Shader& shader) { glDetachShader(program.getId(), shader.getId()); }
 
-void execute(const ComputeProgram& program, hpuint nx, hpuint ny, hpuint nz) {
+void execute(const Program& program, hpuint nx, hpuint ny, hpuint nz) {
      glDispatchCompute(nx, ny, nz);
      assert(glGetError() == GL_NO_ERROR);
 }
 
-void execute(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) {
+void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) {
      auto mode = context.getType().getId();
      auto patchSize = context.getType().getSize();
      glDrawArrays(mode, patchSize * offset, patchSize * n);
      assert(glGetError() == GL_NO_ERROR);
 }
 
-void execute(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
+void execute(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
      auto mode = context.getType().getId();
      auto patchSize = context.getType().getSize();
      offset *= patchSize * Types::UNSIGNED_INT.getSize();
@@ -93,11 +87,7 @@ void link(const Program& program) {
      if(status == GL_FALSE) throw make_error(program);
 }
 
-ComputeProgram make_compute_program(std::string name, const Shader& shader) {
-     auto program = ComputeProgram(std::move(name));
-     build_program(program, shader);
-     return program;
-}
+Program make_program(std::string name) { return { std::move(name) }; }
 
 std::logic_error make_error(const Program& program) {
      auto message = std::stringstream();
@@ -116,14 +106,14 @@ std::string make_log(const Program& program) {
      return log;
 }
 
-void render(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) { execute(program, context, n, offset); }
+void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) { execute(program, context, n, offset); }
 
-void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
+void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
      activate(context.getVertexArray(), context.getIndices());
      execute(program, context, n, offset);
 }
 
-void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context) { render(program, context, context.getIndices().getSize() / context.getType().getSize()); }
+void render(const Program& program, const RenderContext<GeometryType::MESH>& context) { render(program, context, context.getIndices().getSize() / context.getType().getSize()); }
 
 }//namespace happah
 

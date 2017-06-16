@@ -95,18 +95,6 @@ private:
 
 };//Program
 
-class ComputeProgram : public Program {
-public:
-     ComputeProgram(std::string name);
-
-};//ComputeProgram
-
-class RenderProgram : public Program {
-public:
-     RenderProgram(std::string name, GLenum mode, GLsizei patchSize);
-
-};//RenderProgram
-
 void activate(const Program& program);
 
 void activate(const Program& program, hpuint patchSize);
@@ -124,11 +112,11 @@ void detach(const Program& program, const Shader& shader);
 template<class... Shaders>
 void detach(const Program& program, const Shader& shader, const Shaders&... shaders);
 
-void execute(const ComputeProgram& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
+void execute(const Program& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
 
-void execute(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
+void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
 
-void execute(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
+void execute(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
 
 void link(const Program& program);
 
@@ -136,29 +124,19 @@ std::logic_error make_error(const Program& program);
 
 std::string make_log(const Program& program);
 
-ComputeProgram make_compute_program(std::string name, const Shader& shader);
+Program make_program(std::string name);
 
 template<class... Shaders>
-RenderProgram make_patches_program(std::string name, int patchSize, const Shaders&... shaders);
-
-template<class... Shaders>
-RenderProgram make_triangles_program(std::string name, const Shaders&... shaders);
+Program make_program(std::string name, const Shaders&... shaders);
 
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
 
-void render(const RenderProgram& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
+void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
 
-void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
+void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
 
-void render(const RenderProgram& program, const RenderContext<GeometryType::MESH>& context);
-
-namespace detail {
-
-template<class... Shaders>
-RenderProgram make_program(std::string name, GLenum mode, int patchSize, const Shaders&... shaders);
-
-}//namespace detail
+void render(const Program& program, const RenderContext<GeometryType::MESH>& context);
 
 //DEFINITIONS
 
@@ -182,10 +160,11 @@ void detach(const Program& program, const Shader& shader, const Shaders&... shad
 }
 
 template<class... Shaders>
-RenderProgram make_patches_program(std::string name, int patchSize, const Shaders&... shaders) { return detail::make_program(std::move(name), GL_PATCHES, patchSize, shaders...); }
-
-template<class... Shaders>
-RenderProgram make_triangles_program(std::string name, const Shaders&... shaders) { return detail::make_program(std::move(name), GL_TRIANGLES, 3, shaders...); }
+Program make_program(std::string name, const Shaders&... shaders) {
+     auto program = make_program(std::move(name));
+     build_program(program, shaders...);
+     return program;
+}
 
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name) {
@@ -193,24 +172,6 @@ Uniform<T> make_uniform(const Program& program, std::string name) {
      if(location < 0) throw std::logic_error(std::string("Failed to find uniform ") + name + ".");
      return { location };
 }
-
-/*template<class... T>
-void render(const RenderProgram& program, VertexArray& array, const Buffer<hpuint>& indices, const Buffer<T>&... vertices) {
-     bind(array, vertices...);
-     glVertexArrayElementBuffer(array.getId(), indices.getId());
-     execute(program, indices.getSize() / program.getPatchSize());
-}*/
-
-namespace detail {
-
-template<class... Shaders>
-RenderProgram make_program(std::string name, GLenum mode, int patchSize, const Shaders&... shaders) {
-     auto program = RenderProgram(std::move(name), mode, patchSize);
-     build_program(program, shaders...);
-     return program;
-}
-
-}//namespace detail
 
 }//namespace happah
 
