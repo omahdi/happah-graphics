@@ -59,20 +59,15 @@ void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer& 
 
 void bind(const VertexArray& array, GLuint target, const Buffer& buffer);
 
-void bind(const VertexArray& array, const Buffer& buffer);
-
 //Bind ith buffer to target + (i - 1).
 //template<class... Buffers>
 //void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers);
-
-//Bind ith buffer to (i - 1).
-//template<class... T>
-//void bind(const VertexArray& array, const Buffer<T>&... buffers);
 
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
 
 void describe(const VertexArray& array, GLuint target, const Attribute& attribute);
 
+//Describe interleaved vertex array.
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
 
@@ -80,32 +75,18 @@ Attribute make_attribute(GLuint id, GLint dimension, const DataType& type);
 
 VertexArray make_vertex_array();
 
-//Make interleaved vertex array.
-template<class... Attributes>
-VertexArray make_vertex_array(const Attributes&... attributes);
-
 //DEFINITIONS
 
 /*template<class T, class... U>
 void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers) {
      bind(array, target, buffer);
      bind(array, target + 1, buffers...);
-}
-
-template<class... T>
-void bind(const VertexArray& array, const Buffer<T>&... buffers) { bind(array, 0, buffers...); }*/
+}*/
 
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes) {
      describe(array, target, offset, attribute);
      describe(array, target, offset + attribute.getSize(), attributes...);
-}
-
-template<class... Attributes>
-VertexArray make_vertex_array(const Attributes&... attributes) {
-     auto array = VertexArray();
-     describe(array, 0, 0, attributes...);
-     return array;
 }
 
 }//namespace happah

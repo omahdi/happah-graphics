@@ -20,7 +20,7 @@ namespace happah {
 
 class Buffer {
 public:
-     Buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
+     Buffer(hpuint n, const DataType& type, GLsizei stride = 0, GLenum usage = GL_STATIC_DRAW);
 
      ~Buffer();
 
@@ -45,7 +45,7 @@ void bind(const Buffer& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_
 //template<class T>
 //Buffer make_buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW);
 
-Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage = GL_STATIC_DRAW);
+Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride = 0, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const Indices& indices, GLenum usage = GL_STATIC_DRAW);
 
@@ -57,6 +57,8 @@ Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage = GL_STAT
 
 //template<class T, class First, class... Rest>
 //Buffer<T> make_buffer(First&& first, Rest&&... rest);
+
+hpuint size(const Buffer& buffer);
 
 template<class T>
 void write(const Buffer& buffer, const T* ts, hpuint n, hpuint offset = 0);

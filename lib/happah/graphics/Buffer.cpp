@@ -28,7 +28,7 @@ void bind(const Buffer& buffer, GLuint index, GLenum target) { glBindBufferBase(
 Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage) { return { n, type, stride, usage }; }
 
 Buffer make_buffer(const Indices& indices, GLenum usage) {
-     auto buffer = make_buffer(indices.size(), DataType::UNSIGNED_INT, 1, usage);
+     auto buffer = make_buffer(indices.size(), DataType::UNSIGNED_INT, 0, usage);
      write(buffer, indices);
      return buffer;
 }
@@ -54,6 +54,8 @@ Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage) {
      for(auto& vertex : vertices) temp.emplace_back(vertex.position, 1.0f);
      return make_buffer(temp, usage);
 }
+
+hpuint size(const Buffer& buffer) { return buffer.getSize(); }
 
 }//namespace happah
 
