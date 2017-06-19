@@ -9,7 +9,6 @@
 #include <happah/Happah.h>
 #include <happah/math/Space.h>
 
-#include "happah/graphics/Buffer.hpp"
 #include "happah/graphics/DataType.hpp"
 #include "happah/graphics/glad.h"
 
@@ -51,18 +50,6 @@ private:
 
 void activate(const VertexArray& array);
 
-void activate(const VertexArray& array, const Buffer& indices);
-
-//TODO: rename bind to activate?
-//Bind buffer to target.
-void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer& buffer);
-
-void bind(const VertexArray& array, GLuint target, const Buffer& buffer);
-
-//Bind ith buffer to target + (i - 1).
-//template<class... Buffers>
-//void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers);
-
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
 
 void describe(const VertexArray& array, GLuint target, const Attribute& attribute);
@@ -76,12 +63,6 @@ Attribute make_attribute(GLuint id, GLint dimension, const DataType& type);
 VertexArray make_vertex_array();
 
 //DEFINITIONS
-
-/*template<class T, class... U>
-void bind(const VertexArray& array, GLuint target, const Buffer<T>& buffer, const Buffer<U>&... buffers) {
-     bind(array, target, buffer);
-     bind(array, target + 1, buffers...);
-}*/
 
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes) {

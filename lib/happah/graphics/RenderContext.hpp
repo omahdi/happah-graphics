@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "happah/graphics/Buffer.hpp"
 #include "happah/graphics/glad.h"
 #include "happah/graphics/VertexArray.hpp"
 

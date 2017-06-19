@@ -13,6 +13,7 @@
 
 #include "happah/graphics/DataType.hpp"
 #include "happah/graphics/glad.h"
+#include "happah/graphics/VertexArray.hpp"
 
 namespace happah {
 
@@ -40,7 +41,13 @@ private:
 
 };//Buffer
 
-void bind(const Buffer& buffer, GLuint index, GLenum target = GL_SHADER_STORAGE_BUFFER);
+void activate(const Buffer& indices, const VertexArray& array);
+
+void activate(const Buffer& buffer, const VertexArray& array, GLuint target, GLuint offset);
+
+void activate(const Buffer& buffer, const VertexArray& array, GLuint target);
+
+void activate(const Buffer& buffer, GLuint target, GLenum type = GL_SHADER_STORAGE_BUFFER);
 
 //template<class T>
 //Buffer make_buffer(std::initializer_list<std::tuple<const T*, hpuint> > args, GLenum usage = GL_STATIC_DRAW);

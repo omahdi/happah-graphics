@@ -23,7 +23,13 @@ GLsizei Buffer::getStride() const { return m_stride; }
 
 const DataType& Buffer::getType() const { return m_type; }
 
-void bind(const Buffer& buffer, GLuint index, GLenum target) { glBindBufferBase(target, index, buffer.getId()); }
+void activate(const Buffer& indices, const VertexArray& array) { glVertexArrayElementBuffer(array.getId(), indices.getId()); }
+
+void activate(const Buffer& buffer, const VertexArray& array, GLuint target, GLuint offset) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, buffer.getStride() * buffer.getType().getSize()); }
+
+void activate(const Buffer& buffer, const VertexArray& array, GLuint target) { activate(buffer, array, target, 0); }
+
+void activate(const Buffer& buffer, GLuint target, GLenum type) { glBindBufferBase(type, target, buffer.getId()); }
 
 Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage) { return { n, type, stride, usage }; }
 

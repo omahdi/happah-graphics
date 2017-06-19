@@ -78,7 +78,7 @@ std::string make_log(const Program& program) {
 void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) { execute(program, context, n, offset); }
 
 void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
-     activate(context.getVertexArray(), context.getIndices());
+     activate(context.getIndices(), context.getVertexArray());
      execute(program, context, n, offset);
 }
 

@@ -26,14 +26,6 @@ GLuint VertexArray::getId() const { return m_id; }
 
 void activate(const VertexArray& array) { glBindVertexArray(array.getId()); }
 
-void activate(const VertexArray& array, const Buffer& indices) { glVertexArrayElementBuffer(array.getId(), indices.getId()); }
-
-void bind(const VertexArray& array, GLuint target, GLuint offset, const Buffer& buffer) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, buffer.getStride() * buffer.getType().getSize()); }
-
-void bind(const VertexArray& array, GLuint target, const Buffer& buffer) { bind(array, target, 0, buffer); }
-
-void bind(const VertexArray& array, const Buffer& buffer) { bind(array, 0, buffer); }
-
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute) {
      auto id0 = array.getId();
      auto id1 = attribute.getId();
