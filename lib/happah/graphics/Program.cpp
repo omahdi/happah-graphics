@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include "happah/graphics/Program.hpp"
+#include "happah/graphics/CheckGLError.hpp"
 
 namespace happah {
 
@@ -31,14 +32,14 @@ void detach(const Program& program, const Shader& shader) { glDetachShader(progr
 
 void execute(const Program& program, hpuint nx, hpuint ny, hpuint nz) {
      glDispatchCompute(nx, ny, nz);
-     assert(glGetError() == GL_NO_ERROR);
+     CHECK_GL_ERROR();
 }
 
 void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) {
      auto mode = context.getType().getId();
      auto patchSize = context.getType().getSize();
      glDrawArrays(mode, patchSize * offset, patchSize * n);
-     assert(glGetError() == GL_NO_ERROR);
+     CHECK_GL_ERROR();
 }
 
 void execute(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
@@ -46,7 +47,7 @@ void execute(const Program& program, const RenderContext<GeometryType::MESH>& co
      auto patchSize = context.getType().getSize();
      offset *= patchSize * DataType::UNSIGNED_INT.getSize();
      glDrawElements(mode, patchSize * n, DataType::UNSIGNED_INT.getId(), reinterpret_cast<void*>(offset));
-     assert(glGetError() == GL_NO_ERROR);
+     CHECK_GL_ERROR();
 }
 
 void link(const Program& program) {
@@ -79,6 +80,7 @@ void render(const Program& program, const RenderContext<GeometryType::ARRAY>& co
 
 void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
      activate(context.getIndices(), context.getVertexArray());
+     CHECK_GL_ERROR();
      execute(program, context, n, offset);
 }
 

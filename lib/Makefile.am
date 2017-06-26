@@ -17,6 +17,7 @@ libhappah_graphics_la_SOURCES = \
 nobase_include_HEADERS = \
      happah/graphics.hpp \
      happah/graphics/Buffer.hpp \
+     happah/graphics/CheckGLError.hpp \
      happah/graphics/DataType.hpp \
      happah/graphics/glad.h \
      happah/graphics/Program.hpp \
