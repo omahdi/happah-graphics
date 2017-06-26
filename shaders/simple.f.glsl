@@ -12,7 +12,7 @@ out vec4 color;
 
 void main() {
      float ambientCoefficient = 0.4;
-     float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz / normal.w), light));
+     float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), light));
      color = vec4((ambientCoefficient + diffuseCoefficient) * modelColor.rgb, modelColor.a);
 }
 

@@ -19,6 +19,7 @@ class PatchType {
 public:
      static const PatchType LOOP_BOX_SPLINE;
      static const PatchType QUINTIC;
+     static const PatchType POINT;
      static const PatchType TRIANGLE;
 
      PatchType(GLenum id, GLuint size);

@@ -71,6 +71,24 @@ void SimpleVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelVie
 
 void SimpleVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
+SphereImpostorFragmentShader::SphereImpostorFragmentShader()
+     : Shader(GL_FRAGMENT_SHADER, "shaders/sphere-impostor.f.glsl"), m_light(5000), m_modelColor(5001), m_projectionMatrix(1001), m_radius(4001) {}
+
+void SphereImpostorFragmentShader::setLight(const Point3D& light) { m_light = light; }
+
+void SphereImpostorFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
+
+void SphereImpostorFragmentShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
+void SphereImpostorFragmentShader::setRadius(hpreal radius) { m_radius = radius; }
+
+SphereImpostorGeometryShader::SphereImpostorGeometryShader()
+     : Shader(GL_GEOMETRY_SHADER, "shaders/sphere-impostor.g.glsl"), m_projectionMatrix(1001), m_radius(4001) {}
+
+void SphereImpostorGeometryShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
+void SphereImpostorGeometryShader::setRadius(hpreal radius) { m_radius = radius; }
+
 WireframeFragmentShader::WireframeFragmentShader()
      : Shader(GL_FRAGMENT_SHADER, "shaders/wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
 
@@ -106,6 +124,10 @@ std::string make_log(const Shader& shader) {
 SimpleFragmentShader make_simple_fragment_shader() { return {}; }
 
 SimpleVertexShader make_simple_vertex_shader() { return {}; }
+
+SphereImpostorFragmentShader make_sphere_impostor_fragment_shader() { return {}; }
+
+SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {}; }
 
 Shader make_tessellation_evaluation_shader(std::string path) { return { GL_TESS_EVALUATION_SHADER, std::move(path) }; }
      

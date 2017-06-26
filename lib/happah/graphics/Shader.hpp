@@ -36,7 +36,7 @@ private:
      std::string m_path;
      GLuint m_type;
 
-};
+};//Shader
 
 class TessellationControlShader : public Shader {
 public:
@@ -46,7 +46,7 @@ public:
 
      static void setOuterTessellationLevel(const std::array<float, 4>& level);
 
-};
+};//TessellationControlShader
 
 class HighlightLinesFragmentShader : public Shader {
 public:
@@ -70,7 +70,7 @@ private:
      Uniform<Point3D> m_beamOrigin;
      Uniform<Point3D> m_light;
 
-};
+};//HighlightLinesFragmentShader
 
 class SimpleFragmentShader : public Shader {
 public:
@@ -84,7 +84,7 @@ private:
      Uniform<Point3D> m_light;
      Uniform<hpcolor> m_modelColor;
 
-};
+};//SimpleFragmentShader
 
 class SimpleVertexShader : public Shader {
 public:
@@ -98,7 +98,41 @@ private:
      Uniform<hpmat4x4> m_modelViewMatrix;
      Uniform<hpmat4x4> m_projectionMatrix;
 
-};
+};//SimpleVertexShader
+
+class SphereImpostorFragmentShader : public Shader {
+public:
+     SphereImpostorFragmentShader();
+
+     void setLight(const Point3D& light);
+
+     void setModelColor(const hpcolor& color);
+
+     void setProjectionMatrix(const hpmat4x4& matrix);
+
+     void setRadius(hpreal radius);
+
+private:
+     Uniform<Point3D> m_light;
+     Uniform<hpcolor> m_modelColor;
+     Uniform<hpmat4x4> m_projectionMatrix;
+     Uniform<hpreal> m_radius;
+
+};//SphereImpostorFragmentShader
+
+class SphereImpostorGeometryShader : public Shader {
+public:
+     SphereImpostorGeometryShader();
+
+     void setProjectionMatrix(const hpmat4x4& matrix);
+
+     void setRadius(hpreal radius);
+
+private:
+     Uniform<hpmat4x4> m_projectionMatrix;
+     Uniform<hpreal> m_radius;
+
+};//SphereImpostorGeometryShader
 
 class WireframeFragmentShader : public Shader {
 public:
@@ -118,7 +152,7 @@ private:
      Uniform<Point3D> m_light;
      Uniform<hpcolor> m_modelColor;
 
-};
+};//WireframeFragmentShader
      
 std::logic_error make_error(const Shader& shader);
 
@@ -131,6 +165,10 @@ std::string make_log(const Shader& shader);
 SimpleFragmentShader make_simple_fragment_shader();
 
 SimpleVertexShader make_simple_vertex_shader();
+
+SphereImpostorFragmentShader make_sphere_impostor_fragment_shader();
+
+SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
 
 Shader make_tessellation_evaluation_shader(std::string path);
 
