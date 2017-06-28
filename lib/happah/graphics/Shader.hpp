@@ -154,6 +154,20 @@ private:
 
 };//WireframeFragmentShader
      
+class WireframeVertexShader : public Shader {
+public:
+     WireframeVertexShader();
+
+     void setModelViewMatrix(const hpmat4x4& matrix);
+
+     void setProjectionMatrix(const hpmat4x4& matrix);
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix;
+     Uniform<hpmat4x4> m_projectionMatrix;
+
+};//SimpleVertexShader
+
 std::logic_error make_error(const Shader& shader);
 
 Shader make_geometry_shader(std::string path);
@@ -173,6 +187,8 @@ SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
 Shader make_tessellation_evaluation_shader(std::string path);
 
 WireframeFragmentShader make_wireframe_fragment_shader();
+     
+WireframeVertexShader make_wireframe_vertex_shader();
      
 }//namespace happah
 

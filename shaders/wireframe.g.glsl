@@ -11,11 +11,15 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
 in Vertex {
+     vec4 edgeColor;
      vec4 position;
 } phm_in[];
 
 out Vertex {
      noperspective vec3 dis;
+     flat vec4 edgeColor0;
+     flat vec4 edgeColor1;
+     flat vec4 edgeColor2;
      vec4 normal;
      vec4 position;
 } phm_out;
@@ -52,6 +56,9 @@ void main() {
      EmitVertex();
 
      phm_out.dis = vec3(h0, 0, 0);
+     phm_out.edgeColor0 = phm_in[0].edgeColor;
+     phm_out.edgeColor1 = phm_in[1].edgeColor;
+     phm_out.edgeColor2 = phm_in[2].edgeColor;
      phm_out.normal = normal;
      phm_out.position = v2;
      gl_Position = gl_in[2].gl_Position;

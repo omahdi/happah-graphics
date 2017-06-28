@@ -100,6 +100,13 @@ void WireframeFragmentShader::setLight(const Point3D& light) { m_light = light; 
 
 void WireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
 
+WireframeVertexShader::WireframeVertexShader()
+     : Shader(GL_VERTEX_SHADER, "shaders/wireframe.v.glsl"), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
+
+void WireframeVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
+
+void WireframeVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
      message << "Error in shader('";
@@ -133,5 +140,7 @@ Shader make_tessellation_evaluation_shader(std::string path) { return { GL_TESS_
      
 WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
 
+WireframeVertexShader make_wireframe_vertex_shader() { return {}; }
+     
 }//namespace happah
 
