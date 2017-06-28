@@ -3,15 +3,21 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// 2017.06 - Pawel Herman     - Added edge color.
+// 2017.06 - Hedwig Amberg    - Initial commit.
+
 #version 430
 
 in Vertex {
      noperspective vec3 dis;
+     vec4 normal;
+     vec4 position;
+};
+
+in Triangle {
      flat vec4 edgeColor0;
      flat vec4 edgeColor1;
      flat vec4 edgeColor2;
-     vec4 normal;
-     vec4 position;
 };
 
 layout(location = 5000) uniform vec4 edgeColor;
