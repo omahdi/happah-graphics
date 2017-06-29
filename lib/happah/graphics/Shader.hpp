@@ -168,6 +168,63 @@ private:
 
 };//SimpleVertexShader
 
+class CheckerboardFragmentShader : public Shader {
+public:
+     CheckerboardFragmentShader() : Shader(GL_FRAGMENT_SHADER, "shaders/checkerboard.f.glsl") { }
+     ~CheckerboardFragmentShader() { }
+
+     void setColors(hpcolor a, hpcolor b) {
+          m_color0 = a;
+          m_color1 = b;
+     }
+
+     void setPeriod(hpvec2 d) {
+          m_period = d;
+     }
+
+     void setLight(const Point3D& light) {
+          m_light = light;
+     }
+
+private:
+     Uniform<hpcolor> m_color0    {5000};
+     Uniform<hpcolor> m_color1    {5001};
+     Uniform<hpvec2> m_period     {5002};
+     Uniform<Point3D> m_light     {5003};
+};//CheckerboardFragmentShader
+
+class CheckerboardGeometryShader : public Shader {
+public:
+     CheckerboardGeometryShader() : Shader(GL_GEOMETRY_SHADER, "shaders/checkerboard.g.glsl") { }
+     ~CheckerboardGeometryShader() { }
+
+     void set_values() const { }
+};//CheckerboardGeometryShader
+
+class CheckerboardVertexShader : public Shader {
+public:
+     CheckerboardVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/checkerboard.v.glsl") { }
+     ~CheckerboardVertexShader() { }
+
+     void setModelViewMatrix(hpmat4x4 matrix) {
+          m_modelViewMatrix = matrix;
+     }
+
+     void setProjectionMatrix(hpmat4x4 matrix) {
+          m_projectionMatrix = matrix;
+     }
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix  {1000};
+     Uniform<hpmat4x4> m_projectionMatrix {1001};
+};//CheckerboardVertexShader
+
+CheckerboardFragmentShader make_checkerboard_fragment_shader();
+
+CheckerboardGeometryShader make_checkerboard_geometry_shader();
+
+CheckerboardVertexShader make_checkerboard_vertex_shader();
+
 std::logic_error make_error(const Shader& shader);
 
 Shader make_geometry_shader(std::string path);

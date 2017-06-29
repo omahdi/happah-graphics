@@ -107,6 +107,12 @@ void WireframeVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_model
 
 void WireframeVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
+CheckerboardFragmentShader make_checkerboard_fragment_shader() { return {}; }
+
+CheckerboardGeometryShader make_checkerboard_geometry_shader() { return {}; }
+
+CheckerboardVertexShader make_checkerboard_vertex_shader() { return {}; }
+
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
      message << "Error in shader('";

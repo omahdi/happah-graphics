@@ -29,6 +29,12 @@ void Uniform<hpmat4x4>::operator=(hpmat4x4 value) {
 }
 
 template<>
+void Uniform<hpvec2>::operator=(hpvec2 value) {
+     m_value = std::move(value);
+     glUniform2fv(m_location, 1, glm::value_ptr(m_value));
+}
+
+template<>
 void Uniform<hpvec3>::operator=(hpvec3 value) {
      m_value = std::move(value);
      glUniform3fv(m_location, 1, glm::value_ptr(m_value));
