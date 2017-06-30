@@ -3,6 +3,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// 2017.06 - Hedwig Amberg    - added colored vertices for better path appearance.
+
 #version 430
 
 layout(location = 0) in vec4 position;

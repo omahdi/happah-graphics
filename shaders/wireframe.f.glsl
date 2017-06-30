@@ -4,7 +4,9 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.06 - Pawel Herman     - Added edge color.
-// 2017.06 - Hedwig Amberg    - Initial commit.
+// 2017.06 - Hedwig Amberg    - added colored vertices for better path appearance.
+
+//TODO: range auf Pixel beziehen ~2 Pixel antialiasing
 
 #version 430
 
@@ -35,7 +37,7 @@ void main() {
      float d = min(dis.x, min(dis.y, dis.z));
      color = (dis.y < dis.z) ? ((dis.x < dis.y) ? edgeColor0 : edgeColor1) : ((dis.x < dis.z) ? edgeColor0 : edgeColor2);
      float w = 0.5 * edgeWidth;
-     float range = 0.1 * w; //TODO: auf Pixel beziehen
+     float range = 0.1 * w;
      float alpha = 1.0;
      
      if(d <= w - range) alpha = 1.0;
@@ -45,7 +47,7 @@ void main() {
      } else alpha = 0.0;
      
      float vertexRange0 = maxheights.y - dis.y;
-     float vertexRange1 = maxheights.z - dis.z; // distance(position.xyz, v1.xyz); // vdis.y / cos(0.5 * angles.y);
+     float vertexRange1 = maxheights.z - dis.z;
      float vertexRange2 = maxheights.x - dis.x;
      float vertd = min(vertexRange0, min(vertexRange1, vertexRange2));
      vec4 vertexColor = vec4(0,0,0,0);

@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.06 - Pawel Herman     - Added edge color.
-// 2017.06 - Hedwig Amberg    - Initial commit.
+// 2017.06 - Hedwig Amberg    - added colored vertices for better path appearance.
 
 //TODO: so far only general case
 
