@@ -14,8 +14,9 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
 in Vertex {
-     vec4 edgeColor;
      vec4 position;
+     vec4 edgeColor;
+     vec4 vertexColor;
 } vertex_in[];
 
 out Vertex {
@@ -28,6 +29,10 @@ out Triangle {
      flat vec4 edgeColor0;
      flat vec4 edgeColor1;
      flat vec4 edgeColor2;
+     flat vec4 vertexColor0;
+     flat vec4 vertexColor1;
+     flat vec4 vertexColor2;
+     flat vec3 maxheights;
 } triangle_out;
 
 void main() {
@@ -65,6 +70,10 @@ void main() {
      triangle_out.edgeColor0 = vertex_in[0].edgeColor;
      triangle_out.edgeColor1 = vertex_in[1].edgeColor;
      triangle_out.edgeColor2 = vertex_in[2].edgeColor;
+     triangle_out.vertexColor0 = vertex_in[0].vertexColor;
+     triangle_out.vertexColor1 = vertex_in[1].vertexColor;
+     triangle_out.vertexColor2 = vertex_in[2].vertexColor;
+     triangle_out.maxheights = vec3(h0, h1, h2);
      vertex_out.normal = normal;
      vertex_out.position = v2;
      gl_Position = gl_in[2].gl_Position;
