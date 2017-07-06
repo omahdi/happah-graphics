@@ -1,14 +1,14 @@
 #version 430
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec3 hyp_uv;
+layout(location = 1) in vec2 hyp_uv;
 
 layout(location = 1000) uniform mat4x4 modelViewMatrix;
 layout(location = 1001) uniform mat4x4 projectionMatrix;
 
 out Vertex {
      vec4 position;
-     vec3 hyp_uv;
+     vec2 hyp_uv;
 } vertex_out;
 
 void main() {
