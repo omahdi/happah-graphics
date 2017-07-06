@@ -4,8 +4,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// 2017.06 - Hedwig Amberg    - Added wireframe fragment shader.
 // 2017.05 - Pawel Herman     - Initial commit.
+// 2017.07 - Hedwig Amberg    - rename new shader version, add old version with original name.
 
 #pragma once
 
@@ -47,6 +47,37 @@ public:
      static void setOuterTessellationLevel(const std::array<float, 4>& level);
 
 };//TessellationControlShader
+     
+class EdgeFragmentShader : public Shader {
+public:
+     EdgeFragmentShader();
+
+     void setEdgeWidth(hpreal width);
+
+     void setLight(const Point3D& light);
+
+     void setModelColor(const hpcolor& color);
+
+private:
+     Uniform<hpreal> m_edgeWidth;
+     Uniform<Point3D> m_light;
+     Uniform<hpcolor> m_modelColor;
+
+};//WireframeFragmentShader
+     
+class EdgeVertexShader : public Shader {
+public:
+     EdgeVertexShader();
+
+     void setModelViewMatrix(const hpmat4x4& matrix);
+
+     void setProjectionMatrix(const hpmat4x4& matrix);
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix;
+     Uniform<hpmat4x4> m_projectionMatrix;
+
+};//EdgeVertexShader
 
 class HighlightLinesFragmentShader : public Shader {
 public:
@@ -153,21 +184,11 @@ private:
      Uniform<hpcolor> m_modelColor;
 
 };//WireframeFragmentShader
+
+EdgeVertexShader make_edge_vertex_shader();
      
-class WireframeVertexShader : public Shader {
-public:
-     WireframeVertexShader();
-
-     void setModelViewMatrix(const hpmat4x4& matrix);
-
-     void setProjectionMatrix(const hpmat4x4& matrix);
-
-private:
-     Uniform<hpmat4x4> m_modelViewMatrix;
-     Uniform<hpmat4x4> m_projectionMatrix;
-
-};//SimpleVertexShader
-
+EdgeFragmentShader make_edge_fragment_shader();
+     
 std::logic_error make_error(const Shader& shader);
 
 Shader make_geometry_shader(std::string path);
@@ -187,8 +208,6 @@ SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
 Shader make_tessellation_evaluation_shader(std::string path);
 
 WireframeFragmentShader make_wireframe_fragment_shader();
-     
-WireframeVertexShader make_wireframe_vertex_shader();
      
 }//namespace happah
 

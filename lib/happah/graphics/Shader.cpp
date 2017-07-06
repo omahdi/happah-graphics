@@ -4,8 +4,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// 2017.06 - Hedwig Amberg    - Added wireframe fragment shader.
 // 2017.05 - Pawel Herman     - Initial commit.
+// 2017.07 - Hedwig Amberg    - rename new shader version, add old version with original name.
 
 #include <happah/Happah.h>
 #include <sstream>
@@ -41,6 +41,22 @@ void TessellationControlShader::setInnerTessellationLevel(const std::array<float
 
 void TessellationControlShader::setOuterTessellationLevel(const std::array<float, 4>& level) { glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, level.data()); }
 
+EdgeFragmentShader::EdgeFragmentShader()
+     : Shader(GL_FRAGMENT_SHADER, "shaders/edge.f.glsl"), m_edgeWidth(5000), m_light(5001), m_modelColor(5002) {}
+
+void EdgeFragmentShader::setEdgeWidth(hpreal width) { m_edgeWidth = width; }
+
+void EdgeFragmentShader::setLight(const Point3D& light) { m_light = light; }
+
+void EdgeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
+     
+EdgeVertexShader::EdgeVertexShader()
+     : Shader(GL_VERTEX_SHADER, "shaders/edge.v.glsl"), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
+
+void EdgeVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
+
+void EdgeVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+     
 HighlightLinesFragmentShader::HighlightLinesFragmentShader()
      : Shader(GL_FRAGMENT_SHADER, "shaders/highlight-lines.f.glsl"), m_bandColor0(5000), m_bandColor1(5001), m_bandWidth(5002), m_beamDirection(5003), m_beamOrigin(5004), m_light(5005) {}
 
@@ -100,13 +116,6 @@ void WireframeFragmentShader::setLight(const Point3D& light) { m_light = light; 
 
 void WireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
 
-WireframeVertexShader::WireframeVertexShader()
-     : Shader(GL_VERTEX_SHADER, "shaders/wireframe.v.glsl"), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
-
-void WireframeVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
-
-void WireframeVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
-
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
      message << "Error in shader('";
@@ -118,6 +127,10 @@ std::logic_error make_error(const Shader& shader) {
 
 Shader make_geometry_shader(std::string path) { return { GL_GEOMETRY_SHADER, std::move(path) }; }
 
+EdgeFragmentShader make_edge_fragment_shader() { return {}; }
+     
+EdgeVertexShader make_edge_vertex_shader() { return {}; }
+     
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
 std::string make_log(const Shader& shader) {
@@ -139,8 +152,6 @@ SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {};
 Shader make_tessellation_evaluation_shader(std::string path) { return { GL_TESS_EVALUATION_SHADER, std::move(path) }; }
      
 WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
-
-WireframeVertexShader make_wireframe_vertex_shader() { return {}; }
      
 }//namespace happah
 
