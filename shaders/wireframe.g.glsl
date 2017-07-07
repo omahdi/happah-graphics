@@ -15,8 +15,7 @@ layout(triangle_strip, max_vertices = 3) out;
 
 in Vertex {
      vec4 position;
-     vec4 edgeColor;
-     vec4 vertexColor;
+     int edgeFlag;
 } vertex_in[];
 
 out Vertex {
@@ -28,18 +27,14 @@ out Vertex {
 out Triangle {
      flat vec4 edgeColor0;
      flat vec4 edgeColor1;
-     flat vec4 edgeColor2;
-     flat vec4 vertexColor0;
-     flat vec4 vertexColor1;
-     flat vec4 vertexColor2;
-     flat vec3 maxheights;
+     flat ivec3 edgeFlag;
 } triangle_out;
 
 void main() {
      vec4 v0 = vertex_in[0].position;
      vec4 v1 = vertex_in[1].position;
      vec4 v2 = vertex_in[2].position;
-     
+
      float e0 = distance(v0.xyz, v1.xyz);
      float e1 = distance(v1.xyz, v2.xyz);
      float e2 = distance(v2.xyz, v0.xyz);
@@ -48,12 +43,12 @@ void main() {
      float h0 = (2.0 / e0) * t;
      float h1 = (2.0 / e1) * t;
      float h2 = (2.0 / e2) * t;
-     
+
      vec3 w0 = v0.xyz / v0.w;
      vec3 w1 = v1.xyz / v1.w;
      vec3 w2 = v2.xyz / v2.w;
      vec4 normal = vec4(normalize(cross(w2 - w1, w0 - w1)), 1.0);
-     
+
      vertex_out.dis = vec3(0, h1, 0);
      vertex_out.normal = normal;
      vertex_out.position = v0;
@@ -67,17 +62,17 @@ void main() {
      EmitVertex();
 
      vertex_out.dis = vec3(h0, 0, 0);
-     triangle_out.edgeColor0 = vertex_in[0].edgeColor;
-     triangle_out.edgeColor1 = vertex_in[1].edgeColor;
-     triangle_out.edgeColor2 = vertex_in[2].edgeColor;
-     triangle_out.vertexColor0 = vertex_in[0].vertexColor;
-     triangle_out.vertexColor1 = vertex_in[1].vertexColor;
-     triangle_out.vertexColor2 = vertex_in[2].vertexColor;
-     triangle_out.maxheights = vec3(h0, h1, h2);
      vertex_out.normal = normal;
      vertex_out.position = v2;
      gl_Position = gl_in[2].gl_Position;
+     //triangle_out.edgeColor0 = vertex_in[0].edgeColor;
+     //triangle_out.edgeColor1 = vertex_in[1].edgeColor;
+     triangle_out.edgeColor0 = vec4(0.4, 0.4, 0.4, 1.0);
+     triangle_out.edgeColor1 = vec4(1.0, 0.1, 0.1, 1.0);
+     triangle_out.edgeFlag.x = vertex_in[0].edgeFlag;
+     triangle_out.edgeFlag.y = vertex_in[1].edgeFlag;
+     triangle_out.edgeFlag.z = vertex_in[2].edgeFlag;
      EmitVertex();
-     
+
      EndPrimitive();
 }
