@@ -33,9 +33,9 @@ void main() {
      // compute distance of point given by barycentric coordinates (u,v,w)
      // from vertices (1,0,0) and (0,0,1), respectively.
      float t0 = 2*barycentric.y*barycentric.z;
-     float dist0 = sqrt(dot(vec3(-t0, t+b2.z, t+b2.y), abc2));
+     float dist0 = sqrt(dot(vec3(-t0, t0+b2.z, t0+b2.y), abc2));
      float t1 = 2*barycentric.x*barycentric.y;
-     float dist1 = sqrt(dot(vec3(t+b2.y, t+b2.x, -t1), abc2));
+     float dist1 = sqrt(dot(vec3(t1+b2.y, t1+b2.x, -t1), abc2));
      // TODO
 
      vec2 co = 2.0*fract(hyp_uv/u_period);
