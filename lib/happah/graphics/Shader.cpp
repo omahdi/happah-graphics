@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.05 - Pawel Herman     - Initial commit.
-// 2017.07 - Hedwig Amberg    - rename new shader version, add old version with original name.
+// 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
 
 #include <happah/Happah.h>
 #include <sstream>
@@ -105,6 +105,18 @@ void SphereImpostorGeometryShader::setProjectionMatrix(const hpmat4x4& matrix) {
 
 void SphereImpostorGeometryShader::setRadius(hpreal radius) { m_radius = radius; }
 
+TrianglesFragmentShader::TrianglesFragmentShader()
+     : Shader(GL_FRAGMENT_SHADER, "shaders/triangles.f.glsl"), m_light(5000) {}
+
+void TrianglesFragmentShader::setLight(const Point3D& light) { m_light = light; }
+     
+TrianglesVertexShader::TrianglesVertexShader()
+     : Shader(GL_VERTEX_SHADER, "shaders/triangles.v.glsl"), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
+
+void TrianglesVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
+
+void TrianglesVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
 WireframeFragmentShader::WireframeFragmentShader()
      : Shader(GL_FRAGMENT_SHADER, "shaders/wireframe.f.glsl"), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
 
@@ -150,6 +162,10 @@ SphereImpostorFragmentShader make_sphere_impostor_fragment_shader() { return {};
 SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {}; }
 
 Shader make_tessellation_evaluation_shader(std::string path) { return { GL_TESS_EVALUATION_SHADER, std::move(path) }; }
+
+TrianglesFragmentShader make_triangles_fragment_shader() { return {}; }
+     
+TrianglesVertexShader make_triangles_vertex_shader() { return {}; }
      
 WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
      

@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.05 - Pawel Herman     - Initial commit.
-// 2017.07 - Hedwig Amberg    - rename new shader version, add old version with original name.
+// 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
 
 #pragma once
 
@@ -63,7 +63,7 @@ private:
      Uniform<Point3D> m_light;
      Uniform<hpcolor> m_modelColor;
 
-};//WireframeFragmentShader
+};//EdgeFragmentShader
      
 class EdgeVertexShader : public Shader {
 public:
@@ -165,6 +165,31 @@ private:
 
 };//SphereImpostorGeometryShader
 
+class TrianglesFragmentShader : public Shader {
+public:
+     TrianglesFragmentShader();
+
+     void setLight(const Point3D& light);
+
+private:
+     Uniform<Point3D> m_light;
+
+};//TrianglesFragmentShader
+     
+class TrianglesVertexShader : public Shader {
+public:
+     TrianglesVertexShader();
+
+     void setModelViewMatrix(const hpmat4x4& matrix);
+
+     void setProjectionMatrix(const hpmat4x4& matrix);
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix;
+     Uniform<hpmat4x4> m_projectionMatrix;
+
+};//TrianglesVertexShader
+
 class WireframeFragmentShader : public Shader {
 public:
      WireframeFragmentShader();
@@ -206,6 +231,10 @@ SphereImpostorFragmentShader make_sphere_impostor_fragment_shader();
 SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
 
 Shader make_tessellation_evaluation_shader(std::string path);
+
+TrianglesVertexShader make_triangles_vertex_shader();
+     
+TrianglesFragmentShader make_triangles_fragment_shader();
 
 WireframeFragmentShader make_wireframe_fragment_shader();
      
