@@ -50,7 +50,8 @@ void main() {
      vertex_out.position = v2;
      vertex_out.barycentric = vec3(0.0, 0.0, 1.0);
      vertex_out.hyp_uv = vertex_in[2].hyp_uv;
-     triangle_out.abc2 = vec3(length2(w2-w1), length2(w2-w0), length2(w1-w0));
+     vec3 va = w2-w1, vb = w0-w2, vc = w1-w0;
+     triangle_out.abc2 = vec3(dot(va, va), dot(vb, vb), dot(vc, vc));
      triangle_out.normal = normal;
      gl_Position = gl_in[2].gl_Position;
      EmitVertex();

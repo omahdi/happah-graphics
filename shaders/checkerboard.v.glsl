@@ -13,6 +13,6 @@ out Vertex {
 
 void main() {
      vertex_out.position = modelViewMatrix * position;
-     vertex_out.hyp_uv = hyp_uv.xyz;
+     vertex_out.hyp_uv = hyp_uv.xy;
      gl_Position = projectionMatrix * vertex_out.position;
 }

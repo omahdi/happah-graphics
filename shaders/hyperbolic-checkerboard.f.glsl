@@ -29,13 +29,13 @@ const float c_tr = 0.05;
 void main() {
      const float ambientCoefficient = 0.4;
      float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), u_light));
-     const vec3 b2 = vec3(barycentric.u*barycentric.u, barycentric.v*barycentric.v, barycentric.w*barycentric.w);
+     const vec3 b2 = vec3(barycentric.x*barycentric.x, barycentric.y*barycentric.y, barycentric.z*barycentric.z);
      // compute distance of point given by barycentric coordinates (u,v,w)
      // from vertices (1,0,0) and (0,0,1), respectively.
-     float t0 = 2*barycentric.v*barycentric.w;
-     float dist0 = sqrt(dot(vec3(-t0, t+b2.w, t+b2.v), abc2));
-     float t1 = 2*barycentric.u*barycentric.v;
-     float dist1 = sqrt(dot(vec3(t+b2.v, t+b2.u, -t1), abc2));
+     float t0 = 2*barycentric.y*barycentric.z;
+     float dist0 = sqrt(dot(vec3(-t0, t+b2.z, t+b2.y), abc2));
+     float t1 = 2*barycentric.x*barycentric.y;
+     float dist1 = sqrt(dot(vec3(t+b2.y, t+b2.x, -t1), abc2));
      // TODO
 
      vec2 co = 2.0*fract(hyp_uv/u_period);
