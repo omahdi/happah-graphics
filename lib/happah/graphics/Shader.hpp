@@ -19,7 +19,24 @@
 
 namespace happah {
 
-class Shader;
+class Shader {
+public:
+     Shader(GLuint type, std::string path);
+
+     ~Shader();
+
+     GLuint getId() const;
+
+     const std::string& getPath() const;
+
+     GLuint getType() const;
+
+private:
+     GLuint m_id;
+     std::string m_path;
+     GLuint m_type;
+
+};//Shader
 
 class EuclideanCheckerboardFragmentShader : public Shader {
 public:
@@ -100,25 +117,6 @@ private:
      Uniform<hpmat4x4> m_modelViewMatrix  {1000};
      Uniform<hpmat4x4> m_projectionMatrix {1001};
 };//HyperbolicCheckerboardVertexShader
-
-class Shader {
-public:
-     Shader(GLuint type, std::string path);
-
-     ~Shader();
-
-     GLuint getId() const;
-
-     const std::string& getPath() const;
-
-     GLuint getType() const;
-
-private:
-     GLuint m_id;
-     std::string m_path;
-     GLuint m_type;
-
-};//Shader
 
 class TessellationControlShader : public Shader {
 public:

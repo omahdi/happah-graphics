@@ -107,12 +107,6 @@ void WireframeVertexShader::setModelViewMatrix(const hpmat4x4& matrix) { m_model
 
 void WireframeVertexShader::setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
-CheckerboardFragmentShader make_checkerboard_fragment_shader() { return {}; }
-
-CheckerboardGeometryShader make_checkerboard_geometry_shader() { return {}; }
-
-CheckerboardVertexShader make_checkerboard_vertex_shader() { return {}; }
-
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
      message << "Error in shader('";
@@ -122,9 +116,21 @@ std::logic_error make_error(const Shader& shader) {
      return std::logic_error(message.str());
 }
 
+EuclideanCheckerboardFragmentShader make_euclidean_checkerboard_fragment_shader() { return {}; }
+
+EuclideanCheckerboardGeometryShader make_euclidean_checkerboard_geometry_shader() { return {}; }
+
+EuclideanCheckerboardVertexShader make_euclidean_checkerboard_vertex_shader() { return {}; }
+
 Shader make_geometry_shader(std::string path) { return { GL_GEOMETRY_SHADER, std::move(path) }; }
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
+
+HyperbolicCheckerboardFragmentShader make_hyperbolic_checkerboard_fragment_shader() { return {}; }
+
+HyperbolicCheckerboardGeometryShader make_hyperbolic_checkerboard_geometry_shader() { return {}; }
+
+HyperbolicCheckerboardVertexShader make_hyperbolic_checkerboard_vertex_shader() { return {}; }
 
 std::string make_log(const Shader& shader) {
      auto length = GLint(0);
