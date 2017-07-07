@@ -39,6 +39,10 @@ public:
 
      void rotateLongitudinally(hpreal theta);
 
+     std::tuple<Point3D, Point3D, Point3D> getEye() const {
+          return std::make_tuple(m_center, m_eyePosition, m_up);
+     }
+
      void setEye(const Point3D& center, const Point3D& eyePosition, const Vector3D& up);
 
      void setSize(hpuint width, hpuint height);
