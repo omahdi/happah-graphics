@@ -7,7 +7,9 @@
 
 namespace happah {
 
+const DataType DataType::BOOL = { GL_BOOL, sizeof(GLboolean) };
 const DataType DataType::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
+const DataType DataType::INT = { GL_INT, sizeof(GLint) };
 const DataType DataType::UNSIGNED_INT = { GL_UNSIGNED_INT, sizeof(GLuint) };
 
 DataType::DataType(GLenum id, GLuint size)

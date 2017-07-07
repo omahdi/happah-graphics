@@ -67,6 +67,18 @@ Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage) {
      return make_buffer(temp, usage);
 }
 
+Buffer make_buffer(const std::vector<GLboolean>& points, GLenum usage) {
+     auto buffer = make_buffer(points.size(), DataType::BOOL, 1, usage);
+     write(buffer, points);
+     return buffer;
+}
+
+Buffer make_buffer(const std::vector<GLint>& values, GLenum usage) {
+     auto buffer = make_buffer(values.size(), DataType::INT, 0, usage);
+     write(buffer, values);
+     return buffer;
+}
+
 hpuint size(const Buffer& buffer) { return buffer.getSize(); }
 
 }//namespace happah
