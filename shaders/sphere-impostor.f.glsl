@@ -8,7 +8,7 @@
 in Vertex {
      vec2 billboard;
      flat vec4 center;
-};
+} vertex_in;
 
 layout(location = 5000) uniform vec3 light;
 layout(location = 5001) uniform vec4 modelColor;
@@ -18,8 +18,8 @@ layout(location = 4001) uniform float radius;
 out vec4 color;
 
 void main() {
-     float x = billboard.x;
-     float y = billboard.y;
+     float x = vertex_in.billboard.x;
+     float y = vertex_in.billboard.y;
      float z2 = 1.0f - x * x - y * y;
     
      if(z2 <= 0.0f) discard;
@@ -27,7 +27,7 @@ void main() {
      
      vec3 normal = vec3(x, y, z);
 
-     vec4 position = projectionMatrix * vec4(center.xyz + radius * normal, 1.0);
+     vec4 position = projectionMatrix * vec4(vertex_in.center.xyz + radius * normal, 1.0);
      float ndcDepth = position.z / position.w;
 
      gl_FragDepth = ((gl_DepthRange.diff * ndcDepth) + gl_DepthRange.near + gl_DepthRange.far) / 2.0;

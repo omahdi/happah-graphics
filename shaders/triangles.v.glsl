@@ -16,11 +16,11 @@ layout(location = 1001) uniform mat4x4 projectionMatrix;
 out Vertex {
      vec4 position;
      vec4 color;
-} phm_out;
+} vertex_out;
 
 void main() {
-     phm_out.position = modelViewMatrix * position;
-     phm_out.color = color;
-     gl_Position = projectionMatrix * phm_out.position;
+     vertex_out.position = modelViewMatrix * position;
+     vertex_out.color = color;
+     gl_Position = projectionMatrix * vertex_out.position;
 }
 

@@ -13,7 +13,7 @@ in Vertex {
      noperspective vec3 dis;
      vec4 normal;
      vec4 position;
-};
+} vertex_in;
 
 layout(location = 5000) uniform vec4 edgeColor;
 layout(location = 5001) uniform float edgeWidth;
@@ -23,7 +23,7 @@ layout(location = 5003) uniform vec4 modelColor;
 out vec4 color;
 
 void main() {
-     float d = min(dis.x, min(dis.y, dis.z));
+     float d = min(vertex_in.dis.x, min(vertex_in.dis.y, vertex_in.dis.z));
      float w = 0.5 * edgeWidth;
      
      float range = 0.1 * w;
@@ -36,7 +36,7 @@ void main() {
      } else alpha = 0.0;
      
      float ambientCoefficient = 0.4;
-     float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), light));
+     float diffuseCoefficient = max(0.0, dot(normalize(vertex_in.normal.xyz), light));
      color = alpha * edgeColor + (1.0 - alpha) * modelColor;
      color = (ambientCoefficient + diffuseCoefficient) * color;
 }

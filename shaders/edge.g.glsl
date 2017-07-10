@@ -66,7 +66,6 @@ void main() {
      gl_Position = gl_in[1].gl_Position;
      EmitVertex();
 
-     vertex_out.dis = vec3(h0, 0, 0);
      triangle_out.edgeColor0 = vertex_in[0].edgeColor;
      triangle_out.edgeColor1 = vertex_in[1].edgeColor;
      triangle_out.edgeColor2 = vertex_in[2].edgeColor;
@@ -74,6 +73,7 @@ void main() {
      triangle_out.vertexColor1 = vertex_in[1].vertexColor;
      triangle_out.vertexColor2 = vertex_in[2].vertexColor;
      triangle_out.maxheights = vec3(h0, h1, h2);
+     vertex_out.dis = vec3(h0, 0, 0);
      vertex_out.normal = normal;
      vertex_out.position = v2;
      gl_Position = gl_in[2].gl_Position;

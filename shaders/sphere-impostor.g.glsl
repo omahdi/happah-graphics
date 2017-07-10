@@ -10,7 +10,7 @@ layout(triangle_strip, max_vertices = 4) out;
 
 in Vertex {
      vec4 position;
-} hph_in[];
+} vertex_in[];
 
 layout(location = 1001) uniform mat4 projectionMatrix;
 layout(location = 4001) uniform float radius;
@@ -18,28 +18,28 @@ layout(location = 4001) uniform float radius;
 out Vertex {
      vec2 billboard;
      flat vec4 center;
-} hph_out;
+} vertex_out;
 
 void main() {
-     vec4 center = hph_in[0].position;
+     vec4 center = vertex_in[0].position;
 
-     hph_out.center = center;
-     hph_out.billboard = vec2(-1.0f, -1.0f);
+     vertex_out.center = center;
+     vertex_out.billboard = vec2(-1.0f, -1.0f);
      gl_Position = projectionMatrix * vec4(center.x - radius, center.y - radius, center.z, center.w);
      EmitVertex();
 
-     hph_out.center = center;
-     hph_out.billboard = vec2(-1.0f, 1.0f);
+     vertex_out.center = center;
+     vertex_out.billboard = vec2(-1.0f, 1.0f);
      gl_Position = projectionMatrix * vec4(center.x - radius, center.y + radius, center.z, center.w);
      EmitVertex();
 
-     hph_out.center = center;
-     hph_out.billboard = vec2(1.0f, -1.0f);
+     vertex_out.center = center;
+     vertex_out.billboard = vec2(1.0f, -1.0f);
      gl_Position = projectionMatrix * vec4(center.x + radius, center.y - radius, center.z, center.w);
      EmitVertex();
      
-     hph_out.center = center;
-     hph_out.billboard = vec2(1.0f, 1.0f);
+     vertex_out.center = center;
+     vertex_out.billboard = vec2(1.0f, 1.0f);
      gl_Position = projectionMatrix * vec4(center.x + radius, center.y + radius, center.z, center.w);
      EmitVertex();
 

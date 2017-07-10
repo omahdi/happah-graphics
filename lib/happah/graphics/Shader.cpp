@@ -128,6 +128,10 @@ void WireframeFragmentShader::setLight(const Point3D& light) { m_light = light; 
 
 void WireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
 
+EdgeFragmentShader make_edge_fragment_shader() { return {}; }
+     
+EdgeVertexShader make_edge_vertex_shader() { return {}; }
+     
 std::logic_error make_error(const Shader& shader) {
      auto message = std::stringstream();
      message << "Error in shader('";
@@ -139,10 +143,6 @@ std::logic_error make_error(const Shader& shader) {
 
 Shader make_geometry_shader(std::string path) { return { GL_GEOMETRY_SHADER, std::move(path) }; }
 
-EdgeFragmentShader make_edge_fragment_shader() { return {}; }
-     
-EdgeVertexShader make_edge_vertex_shader() { return {}; }
-     
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
 std::string make_log(const Shader& shader) {

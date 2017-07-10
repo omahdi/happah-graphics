@@ -14,7 +14,7 @@ in Vertex {
      noperspective vec3 dis;
      vec4 normal;
      vec4 position;
-};
+} vertex_in;
 
 in Triangle {
      flat vec4 edgeColor0;
@@ -24,7 +24,7 @@ in Triangle {
      flat vec4 vertexColor1;
      flat vec4 vertexColor2;
      flat vec3 maxheights;
-};
+} triangle_in;
 
 layout(location = 5000) uniform float edgeWidth;
 layout(location = 5001) uniform vec3 light;
@@ -33,8 +33,8 @@ layout(location = 5002) uniform vec4 modelColor;
 out vec4 color;
 
 void main() {
-     float d = min(dis.x, min(dis.y, dis.z));
-     color = (dis.y < dis.z) ? ((dis.x < dis.y) ? edgeColor0 : edgeColor1) : ((dis.x < dis.z) ? edgeColor0 : edgeColor2);
+     float d = min(vertex_in.dis.x, min(vertex_in.dis.y, vertex_in.dis.z));
+     color = (vertex_in.dis.y < vertex_in.dis.z) ? ((vertex_in.dis.x < vertex_in.dis.y) ? triangle_in.edgeColor0 : triangle_in.edgeColor1) : ((vertex_in.dis.x < vertex_in.dis.z) ? triangle_in.edgeColor0 : triangle_in.edgeColor2);
      float w = 0.5 * edgeWidth;
      float range = 0.1 * w;
      float alpha = 1.0;
@@ -45,18 +45,18 @@ void main() {
           alpha = pow(2.0, -2.0 * x * x);
      } else alpha = 0.0;
      
-     float vertexRange0 = maxheights.y - dis.y;
-     float vertexRange1 = maxheights.z - dis.z;
-     float vertexRange2 = maxheights.x - dis.x;
+     float vertexRange0 = triangle_in.maxheights.y - vertex_in.dis.y;
+     float vertexRange1 = triangle_in.maxheights.z - vertex_in.dis.z;
+     float vertexRange2 = triangle_in.maxheights.x - vertex_in.dis.x;
      float vertd = min(vertexRange0, min(vertexRange1, vertexRange2));
      vec4 vertexColor = vec4(0,0,0,0);
      
      if(vertexRange0 <= w + range){
-          vertexColor = vertexColor0;
+          vertexColor = triangle_in.vertexColor0;
      }else if(vertexRange1 <= w + range){
-          vertexColor = vertexColor1;
+          vertexColor = triangle_in.vertexColor1;
      }else if(vertexRange2 <= w + range){
-          vertexColor = vertexColor2;
+          vertexColor = triangle_in.vertexColor2;
      }
      
      float beta = 1.0;
@@ -70,7 +70,7 @@ void main() {
      
      
      float ambientCoefficient = 0.4;
-     float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), light));
+     float diffuseCoefficient = max(0.0, dot(normalize(vertex_in.normal.xyz), light));
      color = alpha * color + (1.0 - alpha) * modelColor;
      color = beta * vertexColor + (1.0 - beta) * color;
      color = (ambientCoefficient + diffuseCoefficient) * color;

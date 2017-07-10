@@ -4,13 +4,13 @@ layout(triangles, ccw) in;
 
 in Vertex {
      vec4 position;
-} phm_in[];
+} vertex_in[];
 
 uniform mat4x4 projectionMatrix;
 
 out Vertex {
      vec4 position;
-} phm_out;
+} vertex_out;
 
 void main() {
      float u = gl_TessCoord.x;
@@ -40,19 +40,19 @@ void main() {
      float B01 = 2 * u * w3 + w4 + 6 * u * v * w2 + 6 * v * w3 + 6 * u * v2 * w + 12 * v2 * w2 + 2 * u * v3 + 6 * v3 * w + v4;
      float B02 = w4 + 2 * v * w3;
 
-     phm_out.position  = phm_in[ 0].position * B00;
-     phm_out.position += phm_in[ 1].position * B01;
-     phm_out.position += phm_in[ 2].position * B02;
-     phm_out.position += phm_in[ 3].position * B03;
-     phm_out.position += phm_in[ 4].position * B04;
-     phm_out.position += phm_in[ 5].position * B05;
-     phm_out.position += phm_in[ 6].position * B06;
-     phm_out.position += phm_in[ 7].position * B07;
-     phm_out.position += phm_in[ 8].position * B08;
-     phm_out.position += phm_in[ 9].position * B09;
-     phm_out.position += phm_in[10].position * B10;
-     phm_out.position += phm_in[11].position * B11;
+     vertex_out.position  = vertex_in[ 0].position * B00;
+     vertex_out.position += vertex_in[ 1].position * B01;
+     vertex_out.position += vertex_in[ 2].position * B02;
+     vertex_out.position += vertex_in[ 3].position * B03;
+     vertex_out.position += vertex_in[ 4].position * B04;
+     vertex_out.position += vertex_in[ 5].position * B05;
+     vertex_out.position += vertex_in[ 6].position * B06;
+     vertex_out.position += vertex_in[ 7].position * B07;
+     vertex_out.position += vertex_in[ 8].position * B08;
+     vertex_out.position += vertex_in[ 9].position * B09;
+     vertex_out.position += vertex_in[10].position * B10;
+     vertex_out.position += vertex_in[11].position * B11;
      
-     gl_Position = projectionMatrix * phm_out.position;
+     gl_Position = projectionMatrix * vertex_out.position;
 }
 

@@ -10,8 +10,8 @@
 in Vertex {
      vec4 normal;
      vec4 position;
-     vec4 cornerColor;
-};
+     vec4 color;
+} vertex_in;
 
 layout(location = 5000) uniform vec3 light;
 
@@ -19,7 +19,7 @@ out vec4 color;
 
 void main() {
      float ambientCoefficient = 0.4;
-     float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), light));
-     color = vec4((ambientCoefficient + diffuseCoefficient) * cornerColor.rgb, cornerColor.a);
+     float diffuseCoefficient = max(0.0, dot(normalize(vertex_in.normal.xyz), light));
+     color = vec4((ambientCoefficient + diffuseCoefficient) * vertex_in.color.rgb, vertex_in.color.a);
 }
 

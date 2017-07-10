@@ -4,14 +4,14 @@ layout(triangles, ccw) in;
 
 in Vertex {
      vec4 position;
-} phm_in[];
+} vertex_in[];
 
 uniform mat4x4 projectionMatrix;
 
 out Vertex {
      vec4 normal;
      vec4 position;
-} phm_out;
+} vertex_out;
 
 void main() {
      float u = gl_TessCoord.x;
@@ -69,63 +69,63 @@ void main() {
      float B519 =  5 *      v  * w4;
      float B520 =                w5;
 
-     phm_out.position  = phm_in[ 0].position * B500;
-     phm_out.position += phm_in[ 1].position * B501;
-     phm_out.position += phm_in[ 2].position * B502;
-     phm_out.position += phm_in[ 3].position * B503;
-     phm_out.position += phm_in[ 4].position * B504;
-     phm_out.position += phm_in[ 5].position * B505;
-     phm_out.position += phm_in[ 6].position * B506;
-     phm_out.position += phm_in[ 7].position * B507;
-     phm_out.position += phm_in[ 8].position * B508;
-     phm_out.position += phm_in[ 9].position * B509;
-     phm_out.position += phm_in[10].position * B510;
-     phm_out.position += phm_in[11].position * B511;
-     phm_out.position += phm_in[12].position * B512;
-     phm_out.position += phm_in[13].position * B513;
-     phm_out.position += phm_in[14].position * B514;
-     phm_out.position += phm_in[15].position * B515;
-     phm_out.position += phm_in[16].position * B516;
-     phm_out.position += phm_in[17].position * B517;
-     phm_out.position += phm_in[18].position * B518;
-     phm_out.position += phm_in[19].position * B519;
-     phm_out.position += phm_in[20].position * B520;
+     vertex_out.position  = vertex_in[ 0].position * B500;
+     vertex_out.position += vertex_in[ 1].position * B501;
+     vertex_out.position += vertex_in[ 2].position * B502;
+     vertex_out.position += vertex_in[ 3].position * B503;
+     vertex_out.position += vertex_in[ 4].position * B504;
+     vertex_out.position += vertex_in[ 5].position * B505;
+     vertex_out.position += vertex_in[ 6].position * B506;
+     vertex_out.position += vertex_in[ 7].position * B507;
+     vertex_out.position += vertex_in[ 8].position * B508;
+     vertex_out.position += vertex_in[ 9].position * B509;
+     vertex_out.position += vertex_in[10].position * B510;
+     vertex_out.position += vertex_in[11].position * B511;
+     vertex_out.position += vertex_in[12].position * B512;
+     vertex_out.position += vertex_in[13].position * B513;
+     vertex_out.position += vertex_in[14].position * B514;
+     vertex_out.position += vertex_in[15].position * B515;
+     vertex_out.position += vertex_in[16].position * B516;
+     vertex_out.position += vertex_in[17].position * B517;
+     vertex_out.position += vertex_in[18].position * B518;
+     vertex_out.position += vertex_in[19].position * B519;
+     vertex_out.position += vertex_in[20].position * B520;
 
      vec4 t0 = vec4(0.0);
-     t0 += (phm_in[ 1].position - phm_in[ 0].position) * B400;
-     t0 += (phm_in[ 2].position - phm_in[ 1].position) * B401;
-     t0 += (phm_in[ 3].position - phm_in[ 2].position) * B402;
-     t0 += (phm_in[ 4].position - phm_in[ 3].position) * B403;
-     t0 += (phm_in[ 5].position - phm_in[ 4].position) * B404;
-     t0 += (phm_in[ 7].position - phm_in[ 6].position) * B405;
-     t0 += (phm_in[ 8].position - phm_in[ 7].position) * B406;
-     t0 += (phm_in[ 9].position - phm_in[ 8].position) * B407;
-     t0 += (phm_in[10].position - phm_in[ 9].position) * B408;
-     t0 += (phm_in[12].position - phm_in[11].position) * B409;
-     t0 += (phm_in[13].position - phm_in[12].position) * B410;
-     t0 += (phm_in[14].position - phm_in[13].position) * B411;
-     t0 += (phm_in[16].position - phm_in[15].position) * B412;
-     t0 += (phm_in[17].position - phm_in[16].position) * B413;
-     t0 += (phm_in[19].position - phm_in[18].position) * B414;
+     t0 += (vertex_in[ 1].position - vertex_in[ 0].position) * B400;
+     t0 += (vertex_in[ 2].position - vertex_in[ 1].position) * B401;
+     t0 += (vertex_in[ 3].position - vertex_in[ 2].position) * B402;
+     t0 += (vertex_in[ 4].position - vertex_in[ 3].position) * B403;
+     t0 += (vertex_in[ 5].position - vertex_in[ 4].position) * B404;
+     t0 += (vertex_in[ 7].position - vertex_in[ 6].position) * B405;
+     t0 += (vertex_in[ 8].position - vertex_in[ 7].position) * B406;
+     t0 += (vertex_in[ 9].position - vertex_in[ 8].position) * B407;
+     t0 += (vertex_in[10].position - vertex_in[ 9].position) * B408;
+     t0 += (vertex_in[12].position - vertex_in[11].position) * B409;
+     t0 += (vertex_in[13].position - vertex_in[12].position) * B410;
+     t0 += (vertex_in[14].position - vertex_in[13].position) * B411;
+     t0 += (vertex_in[16].position - vertex_in[15].position) * B412;
+     t0 += (vertex_in[17].position - vertex_in[16].position) * B413;
+     t0 += (vertex_in[19].position - vertex_in[18].position) * B414;
 
      vec4 t1 = vec4(0.0);
-     t1 += (phm_in[ 6].position - phm_in[ 0].position) * B400;
-     t1 += (phm_in[ 7].position - phm_in[ 1].position) * B401;
-     t1 += (phm_in[ 8].position - phm_in[ 2].position) * B402;
-     t1 += (phm_in[ 9].position - phm_in[ 3].position) * B403;
-     t1 += (phm_in[10].position - phm_in[ 4].position) * B404;
-     t1 += (phm_in[11].position - phm_in[ 6].position) * B405;
-     t1 += (phm_in[12].position - phm_in[ 7].position) * B406;
-     t1 += (phm_in[13].position - phm_in[ 8].position) * B407;
-     t1 += (phm_in[14].position - phm_in[ 9].position) * B408;
-     t1 += (phm_in[15].position - phm_in[11].position) * B409;
-     t1 += (phm_in[16].position - phm_in[12].position) * B410;
-     t1 += (phm_in[17].position - phm_in[13].position) * B411;
-     t1 += (phm_in[18].position - phm_in[15].position) * B412;
-     t1 += (phm_in[19].position - phm_in[16].position) * B413;
-     t1 += (phm_in[20].position - phm_in[18].position) * B414;
+     t1 += (vertex_in[ 6].position - vertex_in[ 0].position) * B400;
+     t1 += (vertex_in[ 7].position - vertex_in[ 1].position) * B401;
+     t1 += (vertex_in[ 8].position - vertex_in[ 2].position) * B402;
+     t1 += (vertex_in[ 9].position - vertex_in[ 3].position) * B403;
+     t1 += (vertex_in[10].position - vertex_in[ 4].position) * B404;
+     t1 += (vertex_in[11].position - vertex_in[ 6].position) * B405;
+     t1 += (vertex_in[12].position - vertex_in[ 7].position) * B406;
+     t1 += (vertex_in[13].position - vertex_in[ 8].position) * B407;
+     t1 += (vertex_in[14].position - vertex_in[ 9].position) * B408;
+     t1 += (vertex_in[15].position - vertex_in[11].position) * B409;
+     t1 += (vertex_in[16].position - vertex_in[12].position) * B410;
+     t1 += (vertex_in[17].position - vertex_in[13].position) * B411;
+     t1 += (vertex_in[18].position - vertex_in[15].position) * B412;
+     t1 += (vertex_in[19].position - vertex_in[16].position) * B413;
+     t1 += (vertex_in[20].position - vertex_in[18].position) * B414;
 
-     phm_out.normal = vec4(normalize(cross(t0.xyz, t1.xyz)), 0.0);
-     gl_Position = projectionMatrix * phm_out.position;
+     vertex_out.normal = vec4(normalize(cross(t0.xyz, t1.xyz)), 0.0);
+     gl_Position = projectionMatrix * vertex_out.position;
 }
 
