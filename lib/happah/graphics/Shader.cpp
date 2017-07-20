@@ -7,7 +7,7 @@
 // 2017.05 - Pawel Herman     - Initial commit.
 // 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
 
-#include <happah/Happah.h>
+#include <happah/Happah.hpp>
 #include <sstream>
 
 #include "happah/graphics/Shader.hpp"

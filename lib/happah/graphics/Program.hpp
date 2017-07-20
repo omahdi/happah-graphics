@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <happah/Happah.h>
+#include <happah/Happah.hpp>
 #include <stdexcept>
 
 #include "happah/graphics/RenderContext.hpp"

@@ -10,8 +10,8 @@
 #pragma once
 
 #include <array>
-#include <happah/Happah.h>
-#include <happah/math/Space.h>
+#include <happah/Happah.hpp>
+#include <happah/math/Space.hpp>
 #include <string>
 
 #include "happah/graphics/glad.h"

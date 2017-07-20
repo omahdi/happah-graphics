@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <happah/Happah.h>
-#include <happah/math/Space.h>
+#include <happah/Happah.hpp>
+#include <happah/math/Space.hpp>
 
 namespace happah {
 

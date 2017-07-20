@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <glm/gtc/type_ptr.hpp>
-#include <happah/Happah.h>
+#include <happah/Happah.hpp>
 
 #include "happah/graphics/Uniform.hpp"
 

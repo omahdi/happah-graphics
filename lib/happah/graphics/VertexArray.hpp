@@ -6,8 +6,8 @@
 #pragma once
 
 #include <array>
-#include <happah/Happah.h>
-#include <happah/math/Space.h>
+#include <happah/Happah.hpp>
+#include <happah/math/Space.hpp>
 
 #include "happah/graphics/DataType.hpp"
 #include "happah/graphics/glad.h"

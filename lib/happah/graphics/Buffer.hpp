@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include <happah/Happah.h>
-#include <happah/geometries/Vertex.h>
-#include <happah/math/Space.h>
+#include <happah/Happah.hpp>
+#include <happah/geometries/Vertex.hpp>
+#include <happah/math/Space.hpp>
 #include <tuple>
 #include <vector>
 
