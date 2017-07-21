@@ -61,6 +61,14 @@ Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage) {
      return make_buffer(temp, usage);
 }
 
+Buffer make_buffer(const std::vector<VertexP4>& vertices, GLenum usage) {
+     //TODO: write directly into buffer instead of temporary?
+     auto temp = std::vector<Point4D>();
+     temp.reserve(vertices.size());
+     for(auto& vertex : vertices) temp.emplace_back(vertex.position);
+     return make_buffer(temp, usage);
+}
+
 hpuint size(const Buffer& buffer) { return buffer.getSize(); }
 
 }//namespace happah
