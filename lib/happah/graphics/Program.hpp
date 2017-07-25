@@ -41,7 +41,7 @@ template<class... Shaders>
 void attach(const Program& program, const Shader& shader, const Shaders&... shaders);
 
 template<class... Shaders>
-void build_program(const Program& program, const Shaders&... shaders);
+void build(const Program& program, const Shaders&... shaders);
 
 void detach(const Program& program, const Shader& shader);
 
@@ -83,7 +83,7 @@ void attach(const Program& program, const Shader& shader, const Shaders&... shad
 }
 
 template<class... Shaders>
-void build_program(const Program& program, const Shaders&... shaders) {
+void build(const Program& program, const Shaders&... shaders) {
      attach(program, shaders...);
      link(program);
      detach(program, shaders...);
@@ -98,7 +98,7 @@ void detach(const Program& program, const Shader& shader, const Shaders&... shad
 template<class... Shaders>
 Program make_program(std::string name, const Shaders&... shaders) {
      auto program = make_program(std::move(name));
-     build_program(program, shaders...);
+     build(program, shaders...);
      return program;
 }
 

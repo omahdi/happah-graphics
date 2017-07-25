@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.05 - Pawel Herman     - Initial commit.
-// 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
+// 2017.07 - Hedwig Amberg    - Add new shader for coloring triangles individually.
 
 #pragma once
 
