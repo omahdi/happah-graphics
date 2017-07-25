@@ -15,22 +15,15 @@
 namespace happah {
 
 Shader::Shader(GLuint type, std::string path)
-     : m_id(glCreateShader(type)), m_path(std::move(path)), m_type(type) {
-     auto source = slurp(m_path);
-     auto temp = source.c_str();
-     GLint length = source.size();
-     glShaderSource(m_id, 1, &temp, &length);
-     glCompileShader(m_id);
-     GLint status;
-     glGetShaderiv(m_id, GL_COMPILE_STATUS, &status);
-     if(status == GL_FALSE) throw make_error(*this);
-}
+     : m_id(glCreateShader(type)), m_path(std::move(path)), m_source(slurp(m_path)), m_type(type) {}
 
 Shader::~Shader() { glDeleteShader(m_id); }
 
 GLuint Shader::getId() const { return m_id; }
 
 const std::string& Shader::getPath() const { return m_path; }
+
+const std::string& Shader::getSource() const { return m_source; }
 
 GLuint Shader::getType() const { return m_type; }
 
@@ -127,6 +120,18 @@ void WireframeFragmentShader::setEdgeWidth(hpreal width) { m_edgeWidth = width; 
 void WireframeFragmentShader::setLight(const Point3D& light) { m_light = light; }
 
 void WireframeFragmentShader::setModelColor(const hpcolor& color) { m_modelColor = color; }
+
+void compile(const Shader& shader) {
+     auto id = shader.getId();
+     auto& source = shader.getSource();
+     auto temp = source.c_str();
+     GLint length = source.size();
+     glShaderSource(id, 1, &temp, &length);
+     glCompileShader(id);
+     GLint status;
+     glGetShaderiv(id, GL_COMPILE_STATUS, &status);
+     if(status == GL_FALSE) throw make_error(shader);
+}
 
 EdgeFragmentShader make_edge_fragment_shader() { return {}; }
      

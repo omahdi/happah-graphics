@@ -29,11 +29,14 @@ public:
 
      const std::string& getPath() const;
 
+     const std::string& getSource() const;
+
      GLuint getType() const;
 
 private:
      GLuint m_id;
      std::string m_path;
+     std::string m_source;
      GLuint m_type;
 
 };//Shader
@@ -209,6 +212,8 @@ private:
      Uniform<hpcolor> m_modelColor;
 
 };//WireframeFragmentShader
+
+void compile(const Shader& shader);
 
 EdgeVertexShader make_edge_vertex_shader();
      
