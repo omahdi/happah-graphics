@@ -1,4 +1,5 @@
 #version 430
+#extension GL_ARB_shading_language_include : require
 
 in Vertex {
      vec4 normal;
@@ -10,9 +11,7 @@ layout(location = 5001) uniform vec4 modelColor;
 
 out vec4 color;
 
-void main() {
-     float ambientCoefficient = 0.4;
-     float diffuseCoefficient = max(0.0, dot(normalize(vertex_in.normal.xyz), light));
-     color = vec4((ambientCoefficient + diffuseCoefficient) * modelColor.rgb, modelColor.a);
-}
+#include "/happah/illumination.h.glsl"
+
+void main() { color = illuminate(light, vertex_in.normal.xyz, modelColor); }
 

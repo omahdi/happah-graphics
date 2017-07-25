@@ -125,13 +125,18 @@ void compile(const Shader& shader) {
      auto id = shader.getId();
      auto& source = shader.getSource();
      auto temp = source.c_str();
-     GLint length = source.size();
+     auto length = GLint(source.size());
+     auto status = GLint();
+
      glShaderSource(id, 1, &temp, &length);
      glCompileShader(id);
-     GLint status;
      glGetShaderiv(id, GL_COMPILE_STATUS, &status);
      if(status == GL_FALSE) throw make_error(shader);
 }
+
+void load(const std::string& name, const std::string& source) { glNamedStringARB(GL_SHADER_INCLUDE_ARB, -1, name.data(), -1, source.data()); }
+
+void load(const std::string& name, const std::experimental::filesystem::path& source) { load(name, slurp(source.string())); }
 
 EdgeFragmentShader make_edge_fragment_shader() { return {}; }
      

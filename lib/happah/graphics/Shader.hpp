@@ -10,6 +10,7 @@
 #pragma once
 
 #include <array>
+#include <experimental/filesystem>
 #include <happah/Happah.hpp>
 #include <happah/math/Space.hpp>
 #include <string>
@@ -214,6 +215,10 @@ private:
 };//WireframeFragmentShader
 
 void compile(const Shader& shader);
+
+void load(const std::string& name, const std::string& source);
+
+void load(const std::string& name, const std::experimental::filesystem::path& source);
 
 EdgeVertexShader make_edge_vertex_shader();
      
