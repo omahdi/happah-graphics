@@ -22,13 +22,13 @@ namespace happah {
 
 class Shader {
 public:
-     Shader(GLuint type, std::string path);
+     Shader(GLuint type, std::string name, std::string source);
 
      ~Shader();
 
      GLuint getId() const;
 
-     const std::string& getPath() const;
+     const std::string& getName() const;
 
      const std::string& getSource() const;
 
@@ -36,7 +36,7 @@ public:
 
 private:
      GLuint m_id;
-     std::string m_path;
+     std::string m_name;
      std::string m_source;
      GLuint m_type;
 
@@ -44,8 +44,6 @@ private:
 
 class TessellationControlShader : public Shader {
 public:
-     TessellationControlShader(std::string path);
-
      static void setInnerTessellationLevel(const std::array<float, 2>& level);
 
      static void setOuterTessellationLevel(const std::array<float, 4>& level);
@@ -226,6 +224,8 @@ EdgeFragmentShader make_edge_fragment_shader();
      
 std::logic_error make_error(const Shader& shader);
 
+Shader make_geometry_shader(std::string name, std::string source);
+
 Shader make_geometry_shader(std::string path);
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader();
@@ -239,6 +239,8 @@ SimpleVertexShader make_simple_vertex_shader();
 SphereImpostorFragmentShader make_sphere_impostor_fragment_shader();
 
 SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
+
+Shader make_tessellation_evaluation_shader(std::string name, std::string source);
 
 Shader make_tessellation_evaluation_shader(std::string path);
 
