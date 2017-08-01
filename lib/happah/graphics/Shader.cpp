@@ -151,7 +151,7 @@ std::logic_error make_error(const Shader& shader) {
 
 Shader make_geometry_shader(std::string name, std::string source) { return { GL_GEOMETRY_SHADER, std::move(name), std::move(source) }; }
 
-Shader make_geometry_shader(std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
+Shader make_geometry_shader(const std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
@@ -173,7 +173,7 @@ SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {};
 
 Shader make_tessellation_evaluation_shader(std::string name, std::string source) { return { GL_TESS_EVALUATION_SHADER, std::move(name), std::move(source) }; }
 
-Shader make_tessellation_evaluation_shader(std::experimental::filesystem::path& path) { return { GL_TESS_EVALUATION_SHADER, path.string(), slurp(path) }; }
+Shader make_tessellation_evaluation_shader(const std::experimental::filesystem::path& path) { return { GL_TESS_EVALUATION_SHADER, path.string(), slurp(path) }; }
 
 TrianglesFragmentShader make_triangles_fragment_shader() { return {}; }
      

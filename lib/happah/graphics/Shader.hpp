@@ -227,7 +227,7 @@ std::logic_error make_error(const Shader& shader);
 
 Shader make_geometry_shader(std::string name, std::string source);
 
-Shader make_geometry_shader(std::experimental::filesystem::path& path);
+Shader make_geometry_shader(const std::experimental::filesystem::path& path);
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader();
 
@@ -243,7 +243,7 @@ SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
 
 Shader make_tessellation_evaluation_shader(std::string name, std::string source);
 
-Shader make_tessellation_evaluation_shader(std::experimental::filesystem::path& path);
+Shader make_tessellation_evaluation_shader(const std::experimental::filesystem::path& path);
 
 TrianglesVertexShader make_triangles_vertex_shader();
      
