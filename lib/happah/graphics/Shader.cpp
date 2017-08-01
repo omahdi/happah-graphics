@@ -5,8 +5,8 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.05 - Pawel Herman     - Initial commit.
-// 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
-// 2017.08 - Hedwig Amberg    - Changed make_..._shader fnctions so they use path type.
+// 2017.07 - Hedwig Amberg    - Added new shader for coloring triangles individually.
+// 2017.08 - Hedwig Amberg    - Refactored make_..._shader functions to use std::filesystem::path.
 
 #include <happah/Happah.hpp>
 #include <sstream>
@@ -149,7 +149,7 @@ std::logic_error make_error(const Shader& shader) {
      return std::logic_error(message.str());
 }
 
-Shader make_geometry_shader(std::string name, std::string source) { return { GL_GEOMETRY_SHADER, name, source }; }
+Shader make_geometry_shader(std::string name, std::string source) { return { GL_GEOMETRY_SHADER, std::move(name), std::move(source) }; }
 
 Shader make_geometry_shader(std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
 
