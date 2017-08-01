@@ -5,9 +5,8 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.05 - Pawel Herman     - Initial commit.
-// 2017.07 - Hedwig Amberg    - Add new shader for coloring triangles individually.
-// 2017.08 - Hedwig Amberg    - Changed make_..._shader fnctions so they use path type.
-
+// 2017.07 - Hedwig Amberg    - Added new shader for coloring triangles individually.
+// 2017.08 - Hedwig Amberg    - Refactored make_..._shader functions to use std::filesystem::path.
 
 #pragma once
 
