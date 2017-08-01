@@ -171,7 +171,7 @@ SphereImpostorFragmentShader make_sphere_impostor_fragment_shader() { return {};
 
 SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {}; }
 
-Shader make_tessellation_evaluation_shader(std::string name, std::string source) { return { GL_TESS_EVALUATION_SHADER, name, source }; }
+Shader make_tessellation_evaluation_shader(std::string name, std::string source) { return { GL_TESS_EVALUATION_SHADER, std::move(name), std::move(source) }; }
 
 Shader make_tessellation_evaluation_shader(std::experimental::filesystem::path& path) { return { GL_TESS_EVALUATION_SHADER, path.string(), slurp(path) }; }
 
