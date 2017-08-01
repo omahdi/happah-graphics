@@ -6,6 +6,7 @@
 
 // 2017.05 - Pawel Herman     - Initial commit.
 // 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
+// 2017.08 - Hedwig Amberg    - Changed make_..._shader fnctions so they use path type.
 
 #include <happah/Happah.hpp>
 #include <sstream>
@@ -15,7 +16,7 @@
 namespace happah {
 
 Shader::Shader(GLuint type, std::string name, std::string source)
-     : m_id(glCreateShader(type)), m_name(std::move(name)), m_source(std::move(m_source)), m_type(type) {}
+     : m_id(glCreateShader(type)), m_name(std::move(name)), m_source(std::move(source)), m_type(type) {}
 
 Shader::~Shader() { glDeleteShader(m_id); }
 
@@ -148,9 +149,9 @@ std::logic_error make_error(const Shader& shader) {
      return std::logic_error(message.str());
 }
 
-Shader make_geometry_shader(std::string name, std::string source) { return { GL_GEOMETRY_SHADER, std::move(name), std::move(source) }; }
+Shader make_geometry_shader(std::string name, std::string source) { return { GL_GEOMETRY_SHADER, name, source }; }
 
-Shader make_geometry_shader(std::string path) { return { GL_GEOMETRY_SHADER, std::move(path), std::move(slurp(path)) }; }
+Shader make_geometry_shader(std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
@@ -170,9 +171,9 @@ SphereImpostorFragmentShader make_sphere_impostor_fragment_shader() { return {};
 
 SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {}; }
 
-Shader make_tessellation_evaluation_shader(std::string name, std::string source) { return { GL_TESS_EVALUATION_SHADER, std::move(name), std::move(source) }; }
+Shader make_tessellation_evaluation_shader(std::string name, std::string source) { return { GL_TESS_EVALUATION_SHADER, name, source }; }
 
-Shader make_tessellation_evaluation_shader(std::string path) { return { GL_TESS_EVALUATION_SHADER, std::move(path), std::move(slurp(path)) }; }
+Shader make_tessellation_evaluation_shader(std::experimental::filesystem::path& path) { return { GL_TESS_EVALUATION_SHADER, path.string(), slurp(path) }; }
 
 TrianglesFragmentShader make_triangles_fragment_shader() { return {}; }
      

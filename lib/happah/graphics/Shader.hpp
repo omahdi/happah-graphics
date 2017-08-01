@@ -6,6 +6,8 @@
 
 // 2017.05 - Pawel Herman     - Initial commit.
 // 2017.07 - Hedwig Amberg    - Add new shader for coloring triangles individually.
+// 2017.08 - Hedwig Amberg    - Changed make_..._shader fnctions so they use path type.
+
 
 #pragma once
 
@@ -226,7 +228,7 @@ std::logic_error make_error(const Shader& shader);
 
 Shader make_geometry_shader(std::string name, std::string source);
 
-Shader make_geometry_shader(std::string path);
+Shader make_geometry_shader(std::experimental::filesystem::path& path);
 
 HighlightLinesFragmentShader make_highlight_lines_fragment_shader();
 
@@ -242,7 +244,7 @@ SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
 
 Shader make_tessellation_evaluation_shader(std::string name, std::string source);
 
-Shader make_tessellation_evaluation_shader(std::string path);
+Shader make_tessellation_evaluation_shader(std::experimental::filesystem::path& path);
 
 TrianglesVertexShader make_triangles_vertex_shader();
      
