@@ -9,25 +9,10 @@
 
 namespace happah {
 
-Program::Program(std::string name)
-     : m_id(glCreateProgram()), m_name(std::move(name)) {}
-
-Program::~Program() { glDeleteProgram(m_id); }
-
-GLuint Program::getId() const { return m_id; }
-
-const std::string& Program::getName() const { return m_name; }
-
-void activate(const Program& program) { glUseProgram(program.getId()); }
-
 void activate(const Program& program, const PatchType& type) {
      glUseProgram(program.getId());
      glPatchParameteri(GL_PATCH_VERTICES, type.getSize());
 }
-
-void attach(const Program& program, const Shader& shader) { glAttachShader(program.getId(), shader.getId()); }
-
-void detach(const Program& program, const Shader& shader) { glDetachShader(program.getId(), shader.getId()); }
 
 void execute(const Program& program, hpuint nx, hpuint ny, hpuint nz) {
      glDispatchCompute(nx, ny, nz);
@@ -56,8 +41,6 @@ void link(const Program& program) {
      if(status == GL_FALSE) throw make_error(program);
 }
 
-Program make_program(std::string name) { return { std::move(name) }; }
-
 std::logic_error make_error(const Program& program) {
      auto message = std::stringstream();
      message << "Error in program('";
@@ -75,14 +58,10 @@ std::string make_log(const Program& program) {
      return log;
 }
 
-void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) { execute(program, context, n, offset); }
-
 void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
      activate(context.getIndices(), context.getVertexArray());
      execute(program, context, n, offset);
 }
-
-void render(const Program& program, const RenderContext<GeometryType::MESH>& context) { render(program, context, context.getIndices().getSize() / context.getType().getSize()); }
 
 }//namespace happah
 

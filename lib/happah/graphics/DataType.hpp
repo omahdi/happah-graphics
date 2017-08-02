@@ -16,11 +16,12 @@ public:
      static const DataType FLOAT;
      static const DataType UNSIGNED_INT;
 
-     DataType(GLenum id, GLuint size);
+     DataType(GLenum id, GLuint size)
+          : m_id(id), m_size(size) {}
 
-     GLenum getId() const;
+     GLenum getId() const { return m_id; }
 
-     GLuint getSize() const;
+     GLuint getSize() const { return m_size; }
 
 private:
      GLenum m_id;

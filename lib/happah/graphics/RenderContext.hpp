@@ -22,11 +22,12 @@ public:
      static const PatchType POINT;
      static const PatchType TRIANGLE;
 
-     PatchType(GLenum id, GLuint size);
+     PatchType(GLenum id, GLuint size)
+          : m_id(id), m_size(size) {}
 
-     GLenum getId() const;
+     GLenum getId() const { return m_id; }
 
-     GLuint getSize() const;
+     GLuint getSize() const { return m_size; }
 
 private:
      GLenum m_id;
@@ -40,11 +41,12 @@ class RenderContext;
 template<>
 class RenderContext<GeometryType::ARRAY> {
 public:
-     RenderContext(const VertexArray& array, const PatchType& type);
+     RenderContext(const VertexArray& array, const PatchType& type)
+          : m_array(array), m_type(type) {}
 
-     const PatchType& getType() const;
+     const PatchType& getType() const { return m_type; }
 
-     const VertexArray& getVertexArray() const;
+     const VertexArray& getVertexArray() const { return m_array; }
 
 private:
      const VertexArray& m_array;
@@ -55,13 +57,14 @@ private:
 template<>
 class RenderContext<GeometryType::MESH> {
 public:
-     RenderContext(const VertexArray& array, const Buffer& indices, const PatchType& type);
+     RenderContext(const VertexArray& array, const Buffer& indices, const PatchType& type)
+          : m_array(array), m_indices(indices), m_type(type) {}
 
-     const Buffer& getIndices() const;
+     const Buffer& getIndices() const { return m_indices; }
 
-     const PatchType& getType() const;
+     const PatchType& getType() const { return m_type; }
 
-     const VertexArray& getVertexArray() const;
+     const VertexArray& getVertexArray() const { return m_array; }
 
 private:
      const VertexArray& m_array;
@@ -70,9 +73,9 @@ private:
 
 };//RenderContext<GeometryType::MESH>
 
-RenderContext<GeometryType::ARRAY> make_render_context(const VertexArray& array, const PatchType& type);
+inline RenderContext<GeometryType::ARRAY> make_render_context(const VertexArray& array, const PatchType& type) { return { array, type }; }
 
-RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type);
+inline RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type) { return { array, indices, type }; }
 
 }//namespace happah
 

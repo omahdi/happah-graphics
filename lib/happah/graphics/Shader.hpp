@@ -23,17 +23,18 @@ namespace happah {
 
 class Shader {
 public:
-     Shader(GLuint type, std::string name, std::string source);
+     Shader(GLuint type, std::string name, std::string source)
+          : m_id(glCreateShader(type)), m_name(std::move(name)), m_source(std::move(source)), m_type(type) {}
 
-     ~Shader();
+     ~Shader() { glDeleteShader(m_id); }
 
-     GLuint getId() const;
+     GLuint getId() const { return m_id; }
 
-     const std::string& getName() const;
+     const std::string& getName() const { return m_name; }
 
-     const std::string& getSource() const;
+     const std::string& getSource() const { return m_source; }
 
-     GLuint getType() const;
+     GLuint getType() const { return m_type; }
 
 private:
      GLuint m_id;
@@ -45,21 +46,22 @@ private:
 
 class TessellationControlShader : public Shader {
 public:
-     static void setInnerTessellationLevel(const std::array<float, 2>& level);
+     inline static void setInnerTessellationLevel(const std::array<float, 2>& level) { glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, level.data()); }
 
-     static void setOuterTessellationLevel(const std::array<float, 4>& level);
+     inline static void setOuterTessellationLevel(const std::array<float, 4>& level) { glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, level.data()); }
 
 };//TessellationControlShader
      
 class EdgeFragmentShader : public Shader {
 public:
-     EdgeFragmentShader();
+     EdgeFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/edge.f.glsl", slurp("shaders/edge.f.glsl")), m_edgeWidth(5000), m_light(5001), m_modelColor(5002) {}
 
-     void setEdgeWidth(hpreal width);
+     void setEdgeWidth(hpreal width)  { m_edgeWidth = width; }
 
-     void setLight(const Point3D& light);
+     void setLight(const Point3D& light) { m_light = light; }
 
-     void setModelColor(const hpcolor& color);
+     void setModelColor(const hpcolor& color)  { m_modelColor = color; }
 
 private:
      Uniform<hpreal> m_edgeWidth;
@@ -70,11 +72,11 @@ private:
      
 class EdgeVertexShader : public Shader {
 public:
-     EdgeVertexShader();
+     EdgeVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/edge.v.glsl", slurp("shaders/edge.v.glsl")), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
 
-     void setModelViewMatrix(const hpmat4x4& matrix);
+     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
 
-     void setProjectionMatrix(const hpmat4x4& matrix);
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
 private:
      Uniform<hpmat4x4> m_modelViewMatrix;
@@ -84,17 +86,17 @@ private:
 
 class HighlightLinesFragmentShader : public Shader {
 public:
-     HighlightLinesFragmentShader();
+     HighlightLinesFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/highlight-lines.f.glsl", slurp("shaders/highlight-lines.f.glsl")), m_bandColor0(5000), m_bandColor1(5001), m_bandWidth(5002), m_beamDirection(5003), m_beamOrigin(5004), m_light(5005) {}
+     void setBandColor0(const hpcolor& color) { m_bandColor0 = color; }
 
-     void setBandColor0(const hpcolor& color);
+     void setBandColor1(const hpcolor& color) { m_bandColor1 = color; }
 
-     void setBandColor1(const hpcolor& color);
-
-     void setBandWidth(hpreal width);
+     void setBandWidth(hpreal width) { m_bandWidth = width; }
 
      void setBeam(const Point3D& origin, const Vector3D& direction);
 
-     void setLight(const Point3D& light);
+     void setLight(const Point3D& light)  { m_light = light; }
 
 private:
      Uniform<hpcolor> m_bandColor0;
@@ -108,11 +110,12 @@ private:
 
 class SimpleFragmentShader : public Shader {
 public:
-     SimpleFragmentShader();
+     SimpleFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/simple.f.glsl", slurp("shaders/simple.f.glsl")), m_light(5000), m_modelColor(5001) {}
 
-     void setLight(const Point3D& light);
+     void setLight(const Point3D& light) { m_light = light; }
 
-     void setModelColor(const hpcolor& color);
+     void setModelColor(const hpcolor& color) { m_modelColor = color; }
 
 private:
      Uniform<Point3D> m_light;
@@ -122,11 +125,12 @@ private:
 
 class SimpleVertexShader : public Shader {
 public:
-     SimpleVertexShader();
+     SimpleVertexShader()
+          : Shader(GL_VERTEX_SHADER, "shaders/simple.v.glsl", slurp("shaders/simple.v.glsl")), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
 
-     void setModelViewMatrix(const hpmat4x4& matrix);
+     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
 
-     void setProjectionMatrix(const hpmat4x4& matrix);
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
 private:
      Uniform<hpmat4x4> m_modelViewMatrix;
@@ -136,15 +140,16 @@ private:
 
 class SphereImpostorFragmentShader : public Shader {
 public:
-     SphereImpostorFragmentShader();
+     SphereImpostorFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/sphere-impostor.f.glsl", slurp("shaders/sphere-impostor.f.glsl")), m_light(5000), m_modelColor(5001), m_projectionMatrix(1001), m_radius(4001) {}
 
-     void setLight(const Point3D& light);
+     void setLight(const Point3D& light) { m_light = light; }
 
-     void setModelColor(const hpcolor& color);
+     void setModelColor(const hpcolor& color) { m_modelColor = color; }
 
-     void setProjectionMatrix(const hpmat4x4& matrix);
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
-     void setRadius(hpreal radius);
+     void setRadius(hpreal radius) { m_radius = radius; }
 
 private:
      Uniform<Point3D> m_light;
@@ -156,11 +161,12 @@ private:
 
 class SphereImpostorGeometryShader : public Shader {
 public:
-     SphereImpostorGeometryShader();
+     SphereImpostorGeometryShader()
+          : Shader(GL_GEOMETRY_SHADER, "shaders/sphere-impostor.g.glsl", slurp("shaders/sphere-impostor.g.glsl")), m_projectionMatrix(1001), m_radius(4001) {}
 
-     void setProjectionMatrix(const hpmat4x4& matrix);
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
-     void setRadius(hpreal radius);
+     void setRadius(hpreal radius) { m_radius = radius; }
 
 private:
      Uniform<hpmat4x4> m_projectionMatrix;
@@ -170,9 +176,10 @@ private:
 
 class TrianglesFragmentShader : public Shader {
 public:
-     TrianglesFragmentShader();
+     TrianglesFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/triangles.f.glsl", slurp("shaders/triangles.f.glsl")), m_light(5000) {}
 
-     void setLight(const Point3D& light);
+     void setLight(const Point3D& light) { m_light = light; }
 
 private:
      Uniform<Point3D> m_light;
@@ -181,11 +188,12 @@ private:
      
 class TrianglesVertexShader : public Shader {
 public:
-     TrianglesVertexShader();
+     TrianglesVertexShader()
+          : Shader(GL_VERTEX_SHADER, "shaders/triangles.v.glsl", slurp("shaders/triangles.v.glsl")), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
 
-     void setModelViewMatrix(const hpmat4x4& matrix);
+     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
 
-     void setProjectionMatrix(const hpmat4x4& matrix);
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
 
 private:
      Uniform<hpmat4x4> m_modelViewMatrix;
@@ -195,15 +203,16 @@ private:
 
 class WireframeFragmentShader : public Shader {
 public:
-     WireframeFragmentShader();
+     WireframeFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/wireframe.f.glsl", slurp("shaders/wireframe.f.glsl")), m_edgeColor(5000), m_edgeWidth(5001), m_light(5002), m_modelColor(5003) {}
 
-     void setEdgeColor(const hpcolor& color);
+     void setEdgeColor(const hpcolor& color) { m_edgeColor = color; }
 
-     void setEdgeWidth(hpreal width);
+     void setEdgeWidth(hpreal width) { m_edgeWidth = width; }
 
-     void setLight(const Point3D& light);
+     void setLight(const Point3D& light) { m_light = light; }
 
-     void setModelColor(const hpcolor& color);
+     void setModelColor(const hpcolor& color) { m_modelColor = color; }
 
 private:
      Uniform<hpcolor> m_edgeColor;
@@ -215,41 +224,41 @@ private:
 
 void compile(const Shader& shader);
 
-void load(const std::string& name, const std::string& source);
+inline void load(const std::string& name, const std::string& source) { glNamedStringARB(GL_SHADER_INCLUDE_ARB, -1, name.data(), -1, source.data()); }
 
-void load(const std::string& name, const std::experimental::filesystem::path& source);
+inline void load(const std::string& name, const std::experimental::filesystem::path& source) { load(name, slurp(source.string())); }
 
-EdgeVertexShader make_edge_vertex_shader();
-     
-EdgeFragmentShader make_edge_fragment_shader();
-     
 std::logic_error make_error(const Shader& shader);
-
-Shader make_geometry_shader(std::string name, std::string source);
-
-Shader make_geometry_shader(const std::experimental::filesystem::path& path);
-
-HighlightLinesFragmentShader make_highlight_lines_fragment_shader();
 
 std::string make_log(const Shader& shader);
 
-SimpleFragmentShader make_simple_fragment_shader();
+inline EdgeVertexShader make_edge_vertex_shader() { return {}; }
 
-SimpleVertexShader make_simple_vertex_shader();
+inline EdgeFragmentShader make_edge_fragment_shader() { return {}; }
 
-SphereImpostorFragmentShader make_sphere_impostor_fragment_shader();
+inline Shader make_geometry_shader(std::string name, std::string source) { return { GL_GEOMETRY_SHADER, std::move(name), std::move(source) }; }
 
-SphereImpostorGeometryShader make_sphere_impostor_geometry_shader();
+inline Shader make_geometry_shader(const std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
 
-Shader make_tessellation_evaluation_shader(std::string name, std::string source);
+inline HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
-Shader make_tessellation_evaluation_shader(const std::experimental::filesystem::path& path);
+inline SimpleFragmentShader make_simple_fragment_shader() { return {}; }
 
-TrianglesVertexShader make_triangles_vertex_shader();
-     
-TrianglesFragmentShader make_triangles_fragment_shader();
+inline SimpleVertexShader make_simple_vertex_shader() { return {}; }
 
-WireframeFragmentShader make_wireframe_fragment_shader();
-     
+inline SphereImpostorFragmentShader make_sphere_impostor_fragment_shader() { return {}; }
+
+inline SphereImpostorGeometryShader make_sphere_impostor_geometry_shader() { return {}; }
+
+inline Shader make_tessellation_evaluation_shader(std::string name, std::string source) { return { GL_TESS_EVALUATION_SHADER, std::move(name), std::move(source) }; }
+
+inline Shader make_tessellation_evaluation_shader(const std::experimental::filesystem::path& path) { return { GL_TESS_EVALUATION_SHADER, path.string(), slurp(path) }; }
+
+inline TrianglesVertexShader make_triangles_vertex_shader() { return {}; }
+
+inline TrianglesFragmentShader make_triangles_fragment_shader() { return {}; }
+
+inline WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
+
 }//namespace happah
 

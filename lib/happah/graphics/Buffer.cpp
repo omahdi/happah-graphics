@@ -13,26 +13,6 @@ Buffer::Buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage)
      glNamedBufferData(m_id, m_size * m_type.getSize(), NULL, usage);
 }
 
-Buffer::~Buffer() { glDeleteBuffers(1, &m_id); }
-
-GLuint Buffer::getId() const { return m_id; }
-
-hpuint Buffer::getSize() const { return m_size; }
-
-GLsizei Buffer::getStride() const { return m_stride; }
-
-const DataType& Buffer::getType() const { return m_type; }
-
-void activate(const Buffer& indices, const VertexArray& array) { glVertexArrayElementBuffer(array.getId(), indices.getId()); }
-
-void activate(const Buffer& buffer, const VertexArray& array, GLuint target, GLuint offset) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, buffer.getStride() * buffer.getType().getSize()); }
-
-void activate(const Buffer& buffer, const VertexArray& array, GLuint target) { activate(buffer, array, target, 0); }
-
-void activate(const Buffer& buffer, GLuint target, GLenum type) { glBindBufferBase(type, target, buffer.getId()); }
-
-Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride, GLenum usage) { return { n, type, stride, usage }; }
-
 Buffer make_buffer(const Indices& indices, GLenum usage) {
      auto buffer = make_buffer(indices.size(), DataType::UNSIGNED_INT, 0, usage);
      write(buffer, indices);
@@ -68,8 +48,6 @@ Buffer make_buffer(const std::vector<VertexP4>& vertices, GLenum usage) {
      for(auto& vertex : vertices) temp.emplace_back(vertex.position);
      return make_buffer(temp, usage);
 }
-
-hpuint size(const Buffer& buffer) { return buffer.getSize(); }
 
 }//namespace happah
 

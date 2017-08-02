@@ -23,15 +23,15 @@ class Buffer {
 public:
      Buffer(hpuint n, const DataType& type, GLsizei stride = 0, GLenum usage = GL_STATIC_DRAW);
 
-     ~Buffer();
+     ~Buffer() { glDeleteBuffers(1, &m_id); }
 
-     GLuint getId() const;
+     GLuint getId() const { return m_id; }
 
-     hpuint getSize() const;
+     hpuint getSize() const { return m_size; }
 
-     GLsizei getStride() const;
+     GLsizei getStride() const { return m_stride; }
 
-     const DataType& getType() const;
+     const DataType& getType() const { return m_type; }
 
 private:
      GLuint m_id;
@@ -41,15 +41,14 @@ private:
 
 };//Buffer
 
-void activate(const Buffer& indices, const VertexArray& array);
+inline void activate(const Buffer& indices, const VertexArray& array) { glVertexArrayElementBuffer(array.getId(), indices.getId()); }
 
-void activate(const Buffer& buffer, const VertexArray& array, GLuint target, GLuint offset);
+inline void activate(const Buffer& buffer, const VertexArray& array, GLuint target, GLuint offset) { glVertexArrayVertexBuffer(array.getId(), target, buffer.getId(), offset, buffer.getStride() * buffer.getType().getSize()); }
+inline void activate(const Buffer& buffer, const VertexArray& array, GLuint target) { activate(buffer, array, target, 0); }
 
-void activate(const Buffer& buffer, const VertexArray& array, GLuint target);
+inline void activate(const Buffer& buffer, GLuint target, GLenum type = GL_SHADER_STORAGE_BUFFER)  { glBindBufferBase(type, target, buffer.getId()); }
 
-void activate(const Buffer& buffer, GLuint target, GLenum type = GL_SHADER_STORAGE_BUFFER);
-
-Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride = 0, GLenum usage = GL_STATIC_DRAW);
+inline Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride = 0, GLenum usage = GL_STATIC_DRAW) { return { n, type, stride, usage }; }
 
 Buffer make_buffer(const Indices& indices, GLenum usage = GL_STATIC_DRAW);
 
@@ -61,7 +60,7 @@ Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage = GL_STAT
 
 Buffer make_buffer(const std::vector<VertexP4>& vertices, GLenum usage = GL_STATIC_DRAW);
 
-hpuint size(const Buffer& buffer);
+inline hpuint size(const Buffer& buffer) { return buffer.getSize(); }
 
 template<class T>
 void write(const Buffer& buffer, const T* ts, hpuint n, hpuint offset = 0);

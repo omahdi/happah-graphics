@@ -17,13 +17,14 @@ namespace happah {
 
 class Program {
 public:
-     Program(std::string name);
+     Program(std::string name)
+           : m_id(glCreateProgram()), m_name(std::move(name)) {}
 
-     virtual ~Program();
+     virtual ~Program() { glDeleteProgram(m_id); }
 
-     GLuint getId() const;
+     GLuint getId() const { return m_id; }
 
-     const std::string& getName() const;
+     const std::string& getName() const { return m_name; }
 
 private:
      GLuint m_id;
@@ -31,11 +32,11 @@ private:
 
 };//Program
 
-void activate(const Program& program);
+inline void activate(const Program& program) { glUseProgram(program.getId()); }
 
 void activate(const Program& program, const PatchType& type);
 
-void attach(const Program& program, const Shader& shader);
+inline void attach(const Program& program, const Shader& shader) { glAttachShader(program.getId(), shader.getId()); }
 
 template<class... Shaders>
 void attach(const Program& program, const Shader& shader, const Shaders&... shaders);
@@ -43,7 +44,7 @@ void attach(const Program& program, const Shader& shader, const Shaders&... shad
 template<class... Shaders>
 void build(const Program& program, const Shaders&... shaders);
 
-void detach(const Program& program, const Shader& shader);
+inline void detach(const Program& program, const Shader& shader) { glDetachShader(program.getId(), shader.getId()); }
 
 template<class... Shaders>
 void detach(const Program& program, const Shader& shader, const Shaders&... shaders);
@@ -60,7 +61,7 @@ std::logic_error make_error(const Program& program);
 
 std::string make_log(const Program& program);
 
-Program make_program(std::string name);
+inline Program make_program(std::string name) { return { std::move(name) }; }
 
 template<class... Shaders>
 Program make_program(std::string name, const Shaders&... shaders);
@@ -68,11 +69,11 @@ Program make_program(std::string name, const Shaders&... shaders);
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
 
-void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
+inline void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0) { execute(program, context, n, offset); }
 
 void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
 
-void render(const Program& program, const RenderContext<GeometryType::MESH>& context);
+inline void render(const Program& program, const RenderContext<GeometryType::MESH>& context) { render(program, context, context.getIndices().getSize() / context.getType().getSize()); }
 
 //DEFINITIONS
 
