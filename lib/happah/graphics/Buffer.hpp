@@ -56,6 +56,8 @@ Buffer make_buffer(const std::vector<Point4D>& points, GLenum usage = GL_STATIC_
 
 Buffer make_buffer(const std::vector<Point3D>& points, GLenum usage = GL_STATIC_DRAW);
 
+Buffer make_buffer(const std::vector<VertexP2>& vertices, GLenum usage = GL_STATIC_DRAW);
+
 Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const std::vector<VertexP4>& vertices, GLenum usage = GL_STATIC_DRAW);

@@ -33,6 +33,14 @@ Buffer make_buffer(const std::vector<Point3D>& points, GLenum usage) {
      return make_buffer(temp, usage);
 }
 
+Buffer make_buffer(const std::vector<VertexP2>& vertices, GLenum usage) {
+     //TODO: write directly into buffer instead of temporary?
+     auto temp = std::vector<Point4D>();
+     temp.reserve(vertices.size());
+     for(auto& vertex : vertices) temp.emplace_back(vertex.position, 0.0f, 1.0f);
+     return make_buffer(temp, usage);
+}
+
 Buffer make_buffer(const std::vector<VertexP3>& vertices, GLenum usage) {
      //TODO: write directly into buffer instead of temporary?
      auto temp = std::vector<Point4D>();
