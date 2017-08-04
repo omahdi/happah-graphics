@@ -18,15 +18,16 @@ namespace happah {
 
 class Attribute {
 public:
-     Attribute(GLuint id, GLint dimension, const DataType& type);
+     Attribute(GLuint id, GLint dimension, const DataType& type)
+     : m_dimension(dimension), m_id(id), m_type(std::move(type)) {}
 
-     GLint getDimension() const;
+     GLint getDimension() const { return m_dimension; }
 
-     GLuint getId() const;
+     GLuint getId() const { return m_id; }
 
-     GLuint getSize() const;
+     GLuint getSize() const { return m_dimension * m_type.getSize(); }
 
-     const DataType& getType() const;
+     const DataType& getType() const { return m_type; }
 
 private:
      GLint m_dimension;
@@ -37,30 +38,30 @@ private:
 
 class VertexArray {
 public:
-     VertexArray();
+     VertexArray() { glCreateVertexArrays(1, &m_id); }
 
-     ~VertexArray();
+     ~VertexArray() { glDeleteVertexArrays(1, &m_id); }
 
-     GLuint getId() const;
+     GLuint getId() const { return m_id; }
 
 private:
      GLuint m_id;
 
 };//VertexArray
 
-void activate(const VertexArray& array);
+inline void activate(const VertexArray& array) { glBindVertexArray(array.getId()); }
 
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute);
 
-void describe(const VertexArray& array, GLuint target, const Attribute& attribute);
+inline void describe(const VertexArray& array, GLuint target, const Attribute& attribute) { describe(array, target, 0, attribute); }
 
 //Describe interleaved vertex array.
 template<class... Attributes>
 void describe(const VertexArray& array, GLuint target, GLuint offset, const Attribute& attribute, const Attributes&... attributes);
 
-Attribute make_attribute(GLuint id, GLint dimension, const DataType& type);
+inline Attribute make_attribute(GLuint id, GLint dimension, const DataType& type) { return { id, dimension, type }; }
 
-VertexArray make_vertex_array();
+inline VertexArray make_vertex_array() { return {}; }
 
 //DEFINITIONS
 

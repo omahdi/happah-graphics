@@ -5,6 +5,10 @@
 
 #pragma once
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include <happah/Happah.hpp>
 #include <happah/math/Space.hpp>
 
@@ -13,25 +17,25 @@ namespace happah {
 //TODO: move viewport to core?
 class Viewport {
 public:
-     Viewport();
+     Viewport() : Viewport(0, 0) {}
 
-     Viewport(hpuint width, hpuint height);
-
+     Viewport(hpuint width, hpuint height)
+     : m_center(0.0), m_eyePosition(0.0,0.0,1.0), m_farZ(1000.0), m_fieldOfViewAngleY(45.0), m_height(height), m_nearZ(0.1), m_offsetX(0), m_offsetY(0), m_up(0.0,1.0,0.0), m_viewDirection(glm::normalize(m_center-m_eyePosition)), m_viewMatrix(glm::lookAt(m_eyePosition, m_center, m_up)), m_width(width) { updateProjectionMatrix(); }
      const Point3D& getEyePosition() const;
 
-     hpuint getHeight() const;
+     hpuint getHeight() const { return m_height; }
 
-     hpuint getOffsetX() const;
+     hpuint getOffsetX() const { return m_offsetX; }
 
-     hpuint getOffsetY() const;
+     hpuint getOffsetY() const { return m_offsetY; }
 
-     const hpmat4x4& getProjectionMatrix() const;
+     const hpmat4x4& getProjectionMatrix() const { return m_projectionMatrix; }
 
-     const Point3D& getViewDirection() const;
+     const Point3D& getViewDirection() const { return m_viewDirection; }
 
-     const hpmat4x4& getViewMatrix() const;
+     const hpmat4x4& getViewMatrix() const { return m_viewMatrix; }
 
-     hpuint getWidth() const;
+     hpuint getWidth() const { return m_width; }
 
      void rotate(hpreal x0, hpreal y0, hpreal x1, hpreal y1);
 
@@ -47,7 +51,7 @@ public:
 
      void translate(const Vector2D& delta);
 
-     Point3D unproject(const Point2D& point, hpreal z) const;
+     Point3D unproject(const Point2D& point, hpreal z) const { return glm::unProject(Point3D(point.x, point.y, z), m_viewMatrix, m_projectionMatrix, glm::vec4(m_offsetX, m_offsetY, m_width, m_height)); }
 
      void zoom(hpreal delta);
 
@@ -66,9 +70,11 @@ private:
      hpmat4x4 m_viewMatrix;
      hpuint m_width;
 
-     void updateProjectionMatrix();
-     void updateViewDirection();
-     void updateViewMatrix();
+     void updateProjectionMatrix() { m_projectionMatrix = glm::perspective(m_fieldOfViewAngleY, (hpreal) m_width / (hpreal) m_height, m_nearZ, m_farZ); }
+
+     void updateViewDirection() { m_viewDirection = glm::normalize(m_center - m_eyePosition); }
+
+     void updateViewMatrix() { m_viewMatrix = glm::lookAt(m_eyePosition, m_center, m_up); }
 
 };
 
