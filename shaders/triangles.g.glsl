@@ -4,8 +4,10 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.07 - Hedwig Amberg    - add new shader for coloring triangles individualy.
+// 2017.08 - Hedwig Amberg    - used new methods from headers in shaders.
 
 #version 400
+#extension GL_ARB_shading_language_include : require
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
@@ -21,14 +23,14 @@ out Vertex {
      vec4 color;
 } vertex_out;
 
+#include "/happah/geometry.h.glsl"
+
 void main() {
      vec4 v0 = vertex_in[0].position;
      vec4 v1 = vertex_in[1].position;
      vec4 v2 = vertex_in[2].position;
-     vec3 w0 = v0.xyz / v0.w;
-     vec3 w1 = v1.xyz / v1.w;
-     vec3 w2 = v2.xyz / v2.w;
-     vec4 normal = vec4(normalize(cross(w2 - w1, w0 - w1)), 1.0);
+     
+     vec4 normal = calc_normal(v0, v1, v2);
 
      vertex_out.normal = normal;
      vertex_out.position = v0;

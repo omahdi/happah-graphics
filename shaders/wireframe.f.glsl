@@ -4,10 +4,12 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
  
 // 2017.07 - Hedwig Amberg    - rename new shader version, add old version with original name.
+// 2017.08 - Hedwig Amberg    - used new methods from headers in shaders.
 
 //TODO: range auf Pixel beziehen ~2 Pixel antialiasing
 
 #version 430
+#extension GL_ARB_shading_language_include : require
 
 in Vertex {
      noperspective vec3 dis;
@@ -22,21 +24,11 @@ layout(location = 5003) uniform vec4 modelColor;
 
 out vec4 color;
 
+#include "/happah/illumination.h.glsl"
+#include "/happah/paint.h.glsl"
+
 void main() {
-     float d = min(vertex_in.dis.x, min(vertex_in.dis.y, vertex_in.dis.z));
-     float w = 0.5 * edgeWidth;
      
-     float range = 0.1 * w;
-     float alpha;
-     
-     if(d <= w - range) alpha = 1.0;
-     else if(d <= w + range) {
-          float x = (d - w + range) / range; 
-          alpha = pow(2.0, -2.0 * x * x);
-     } else alpha = 0.0;
-     
-     float ambientCoefficient = 0.4;
-     float diffuseCoefficient = max(0.0, dot(normalize(vertex_in.normal.xyz), light));
-     color = alpha * edgeColor + (1.0 - alpha) * modelColor;
-     color = (ambientCoefficient + diffuseCoefficient) * color;
+     color = paint_wf(edgeWidth, vertex_in.dis, modelColor, edgeColor);
+     color = illuminate(light, vertex_in.normal.xyz, color);
 }
