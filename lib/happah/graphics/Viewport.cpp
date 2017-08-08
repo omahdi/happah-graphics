@@ -5,33 +5,9 @@
 
 #define GLM_FORCE_RADIANS
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-
 #include "happah/graphics/Viewport.hpp"
 
 namespace happah {
-
-Viewport::Viewport()
-     : Viewport(0, 0) {}
-
-Viewport::Viewport(hpuint width, hpuint height)
-     : m_center(0.0), m_eyePosition(0.0,0.0,1.0), m_farZ(1000.0), m_fieldOfViewAngleY(45.0), m_height(height), m_nearZ(0.1), m_offsetX(0), m_offsetY(0), m_up(0.0,1.0,0.0), m_viewDirection(glm::normalize(m_center-m_eyePosition)), m_viewMatrix(glm::lookAt(m_eyePosition, m_center, m_up)), m_width(width) { updateProjectionMatrix(); }
-
-hpuint Viewport::getHeight() const { return m_height; }
-
-hpuint Viewport::getOffsetX() const { return m_offsetX; }
-
-hpuint Viewport::getOffsetY() const { return m_offsetY; }
-
-const hpmat4x4& Viewport::getProjectionMatrix() const { return m_projectionMatrix; }
-
-const Vector3D& Viewport::getViewDirection() const { return m_viewDirection; }
-
-const hpmat4x4& Viewport::getViewMatrix() const { return m_viewMatrix; }
-
-hpuint Viewport::getWidth() const { return m_width; }
 
 //NOTE: Input coordinates must be relative to an origin in the bottom left with the positive y-axis pointing up and the positive x-axis pointing to the right.
 void Viewport::rotate(hpreal x0, hpreal y0, hpreal x1, hpreal y1) {
@@ -106,14 +82,6 @@ void Viewport::translate(const Vector2D& delta) {
      auto right = glm::normalize(glm::cross(m_up, forward));
      translate(distance * (delta.x * right + delta.y * m_up));
 }
-
-Point3D Viewport::unproject(const Point2D& point, hpreal z) const { return glm::unProject(Point3D(point.x, point.y, z), m_viewMatrix, m_projectionMatrix, glm::vec4(m_offsetX, m_offsetY, m_width, m_height)); }
-
-void Viewport::updateViewDirection() { m_viewDirection = glm::normalize(m_center - m_eyePosition); }
-
-void Viewport::updateProjectionMatrix() { m_projectionMatrix = glm::perspective(m_fieldOfViewAngleY, (hpreal) m_width / (hpreal) m_height, m_nearZ, m_farZ); }
-
-void Viewport::updateViewMatrix() { m_viewMatrix = glm::lookAt(m_eyePosition, m_center, m_up); }
 
 void Viewport::zoom(hpreal delta) {
      auto forward = m_center - m_eyePosition;

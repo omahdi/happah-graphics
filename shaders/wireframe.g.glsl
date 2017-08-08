@@ -4,10 +4,12 @@
 // (See accompanying file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // 2017.07 - Hedwig Amberg    - rename new shader version, add old version with original name.
+// 2017.08 - Hedwig Amberg    - used new methods from headers in shaders.
 
 //TODO: so far only general case
 
 #version 400
+#extension GL_ARB_shading_language_include : require
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
@@ -22,38 +24,29 @@ out Vertex {
      vec4 position;
 } vertex_out;
 
+#include "/happah/geometry.h.glsl"
+
 void main() {
      vec4 v0 = vertex_in[0].position;
      vec4 v1 = vertex_in[1].position;
      vec4 v2 = vertex_in[2].position;
      
-     float e0 = distance(v0.xyz, v1.xyz);
-     float e1 = distance(v1.xyz, v2.xyz);
-     float e2 = distance(v2.xyz, v0.xyz);
-     float s = 0.5 * (e0 + e1 + e2);
-     float t = sqrt(s * (s - e0) * (s - e1) * (s - e2));
-     float h0 = (2.0 / e0) * t;
-     float h1 = (2.0 / e1) * t;
-     float h2 = (2.0 / e2) * t;
+     vec3 heights = calc_heights(v0, v1, v2);
+     vec4 normal = calc_normal(v0, v1, v2);
      
-     vec3 w0 = v0.xyz / v0.w;
-     vec3 w1 = v1.xyz / v1.w;
-     vec3 w2 = v2.xyz / v2.w;
-     vec4 normal = vec4(normalize(cross(w2 - w1, w0 - w1)), 1.0);
-     
-     vertex_out.dis = vec3(0, h1, 0);
+     vertex_out.dis = vec3(0, heights.y, 0);
      vertex_out.normal = normal;
      vertex_out.position = v0;
      gl_Position = gl_in[0].gl_Position;
      EmitVertex();
 
-     vertex_out.dis = vec3(0, 0, h2);
+     vertex_out.dis = vec3(0, 0, heights.z);
      vertex_out.normal = normal;
      vertex_out.position = v1;
      gl_Position = gl_in[1].gl_Position;
      EmitVertex();
 
-     vertex_out.dis = vec3(h0, 0, 0);
+     vertex_out.dis = vec3(heights.x, 0, 0);
      vertex_out.normal = normal;
      vertex_out.position = v2;
      gl_Position = gl_in[2].gl_Position;

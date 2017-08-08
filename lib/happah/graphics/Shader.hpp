@@ -108,6 +108,35 @@ private:
 
 };//HighlightLinesFragmentShader
 
+class PatchesFragmentShader : public Shader {
+public:
+     PatchesFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/patches.f.glsl", slurp("shaders/patches.f.glsl")), m_edgeWidth(5000), m_light(5001) {}
+
+     void setEdgeWidth(hpreal width)  { m_edgeWidth = width; }
+
+     void setLight(const Point3D& light) { m_light = light; }
+
+private:
+     Uniform<hpreal> m_edgeWidth;
+     Uniform<Point3D> m_light;
+
+};//PatchesFragmentShader
+     
+class PatchesVertexShader : public Shader {
+public:
+      PatchesVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/patches.v.glsl", slurp("shaders/patches.v.glsl")), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
+
+     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
+
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix;
+     Uniform<hpmat4x4> m_projectionMatrix;
+
+};//PatchesVertexShader
+     
 class SimpleFragmentShader : public Shader {
 public:
      SimpleFragmentShader()
@@ -241,6 +270,10 @@ inline Shader make_geometry_shader(std::string name, std::string source) { retur
 inline Shader make_geometry_shader(const std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
 
 inline HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
+
+inline PatchesFragmentShader make_patches_fragment_shader() { return {}; }
+
+inline PatchesVertexShader make_patches_vertex_shader() { return {}; }
 
 inline SimpleFragmentShader make_simple_fragment_shader() { return {}; }
 
