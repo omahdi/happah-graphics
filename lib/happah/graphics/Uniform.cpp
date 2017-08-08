@@ -17,25 +17,49 @@ void Uniform<hpuint>::operator=(hpuint value) {
 }
 
 template<>
-void Uniform<hpreal>::operator=(hpreal value) {
+void Uniform<glm::highp_float>::operator=(glm::highp_float value) {
+     m_value = value;
+     glUniform1d(m_location, m_value); 
+}
+
+template<>
+void Uniform<glm::mediump_float>::operator=(glm::mediump_float value) {
      m_value = value;
      glUniform1f(m_location, m_value); 
 }
 
 template<>
-void Uniform<hpmat4x4>::operator=(hpmat4x4 value) {
+void Uniform<glm::highp_dmat4x4>::operator=(glm::highp_dmat4x4 value) {
+     m_value = std::move(value);
+     glUniformMatrix4dv(m_location, 1, GL_FALSE, glm::value_ptr(m_value));
+}
+
+template<>
+void Uniform<glm::mediump_mat4x4>::operator=(glm::mediump_mat4x4 value) {
      m_value = std::move(value);
      glUniformMatrix4fv(m_location, 1, GL_FALSE, glm::value_ptr(m_value));
 }
 
 template<>
-void Uniform<hpvec3>::operator=(hpvec3 value) {
+void Uniform<glm::highp_dvec3>::operator=(glm::highp_dvec3 value) {
+     m_value = std::move(value);
+     glUniform3dv(m_location, 1, glm::value_ptr(m_value));
+}
+
+template<>
+void Uniform<glm::mediump_vec3>::operator=(glm::mediump_vec3 value) {
      m_value = std::move(value);
      glUniform3fv(m_location, 1, glm::value_ptr(m_value));
 }
 
 template<>
-void Uniform<hpvec4>::operator=(hpvec4 value) {
+void Uniform<glm::highp_dvec4>::operator=(glm::highp_dvec4 value) {
+     m_value = std::move(value);
+     glUniform4dv(m_location, 1, glm::value_ptr(m_value));
+}
+
+template<>
+void Uniform<glm::mediump_vec4>::operator=(glm::mediump_vec4 value) {
      m_value = std::move(value);
      glUniform4fv(m_location, 1, glm::value_ptr(m_value));
 }

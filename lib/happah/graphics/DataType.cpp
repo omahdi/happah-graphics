@@ -7,6 +7,7 @@
 
 namespace happah {
 
+const DataType DataType::DOUBLE = { GL_DOUBLE, sizeof(GLdouble) };
 const DataType DataType::FLOAT = { GL_FLOAT, sizeof(GLfloat) };
 const DataType DataType::UNSIGNED_INT = { GL_UNSIGNED_INT, sizeof(GLuint) };
 

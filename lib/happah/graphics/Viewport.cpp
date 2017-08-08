@@ -43,18 +43,18 @@ void Viewport::rotate(hpreal x0, hpreal y0, hpreal x1, hpreal y1) {
      auto q1 = Vector2D(x1, y1) - c;
      auto d0 = glm::length2(q0);
      auto d1 = glm::length2(q1);
-     auto z0 = glm::sqrt((d0 < r2 / 2.0f) ? r2 - d0 : r2 * r2 / (4.0f * d0));
-     auto z1 = glm::sqrt((d1 < r2 / 2.0f) ? r2 - d1 : r2 * r2 / (4.0f * d1));
+     auto z0 = glm::sqrt((d0 < r2 / hpreal(2.0)) ? r2 - d0 : r2 * r2 / (hpreal(4.0) * d0));
+     auto z1 = glm::sqrt((d1 < r2 / hpreal(2.0)) ? r2 - d1 : r2 * r2 / (hpreal(4.0) * d1));
      auto p0 = glm::normalize(Vector3D(q0, z0));
      auto p1 = glm::normalize(Vector3D(q1, z1));
      auto axis = glm::cross(p1, p0);
-     auto angle = glm::atan(glm::clamp(glm::length(axis), -1.0f, 1.0f), glm::clamp(glm::dot(p0, p1), -1.0f, 1.0f));// angle of rotation about center of screen
-     angle = -glm::atan((t - r * glm::cos(angle / 2.0f)) / (r * glm::sin(angle / 2.0f)));// angle of rotation about center of scene
+     auto angle = glm::atan(glm::clamp(glm::length(axis), hpreal(-1.0), hpreal(1.0)), glm::clamp(glm::dot(p0, p1), hpreal(-1.0), hpreal(1.0)));// angle of rotation about center of screen
+     angle = -glm::atan((t - r * glm::cos(angle / hpreal(2.0))) / (r * glm::sin(angle / hpreal(2.0))));// angle of rotation about center of scene
      auto q = glm::angleAxis(angle, axis);
      auto R = glm::inverse(m_viewMatrix) * glm::toMat4(glm::normalize(q)) * m_viewMatrix;
-     m_viewDirection = glm::normalize(Vector3D(R * Vector4D(m_viewDirection, 0.0f)));
+     m_viewDirection = glm::normalize(Vector3D(R * Vector4D(m_viewDirection, hpreal(0.0))));
      m_eyePosition = m_center - t * m_viewDirection;
-     m_up = glm::normalize(Vector3D(R * Vector4D(m_up, 0.0f)));
+     m_up = glm::normalize(Vector3D(R * Vector4D(m_up, hpreal(0.0))));
      updateViewMatrix();
 }
 

@@ -13,6 +13,7 @@ namespace happah {
 
 class DataType {
 public:
+     static const DataType DOUBLE;
      static const DataType FLOAT;
      static const DataType UNSIGNED_INT;
 
