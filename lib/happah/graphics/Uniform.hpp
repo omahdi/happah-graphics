@@ -23,7 +23,7 @@ protected:
      GLint m_location;
      T m_value;
 
-};
+};//Uniform
 
 }//namespace happah
 

@@ -54,9 +54,17 @@ Buffer make_buffer(const Indices& indices, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const std::vector<glm::highp_dvec3>& vecs, GLenum usage = GL_STATIC_DRAW);
 
+Buffer make_buffer(const std::vector<glm::highp_vec3>& vecs, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<glm::lowp_vec3>& vecs, GLenum usage = GL_STATIC_DRAW);
+
 Buffer make_buffer(const std::vector<glm::mediump_vec3>& vecs, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const std::vector<glm::highp_dvec4>& vecs, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<glm::highp_vec4>& vecs, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<glm::lowp_vec4>& vecs, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const std::vector<glm::mediump_vec4>& vecs, GLenum usage = GL_STATIC_DRAW);
 
