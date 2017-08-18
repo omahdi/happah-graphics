@@ -27,9 +27,10 @@ void Viewport::rotate(hpreal x0, hpreal y0, hpreal x1, hpreal y1) {
      auto angle = glm::atan(glm::clamp(glm::length(axis), hpreal(-1.0), hpreal(1.0)), glm::clamp(glm::dot(p0, p1), hpreal(-1.0), hpreal(1.0)));// angle of rotation about center of screen
      angle = -glm::atan((t - r * glm::cos(angle / hpreal(2.0))) / (r * glm::sin(angle / hpreal(2.0))));// angle of rotation about center of scene
      auto q = glm::angleAxis(angle, axis);
-     auto R = glm::inverse(m_viewMatrix) * glm::toMat4(glm::normalize(q)) * m_viewMatrix;
+     auto viewMatrix = make_view_matrix(*this);
+     auto R = glm::inverse(viewMatrix) * glm::toMat4(glm::normalize(q)) * viewMatrix;
      m_eyePosition = m_center - t * glm::normalize(Vector3D(R * Vector4D(glm::normalize(m_center - m_eyePosition), hpreal(0.0))));
-     m_up = glm::normalize(Vector3D(R * Vector4D(m_up, hpreal(0.0))));
+     m_up = Vector3D(R * Vector4D(m_up, hpreal(0.0)));
 }
 
 void Viewport::rotateLaterally(hpreal theta) {
@@ -43,22 +44,21 @@ void Viewport::rotateLongitudinally(hpreal theta) {
      auto forward = m_center - m_eyePosition;
      auto distance = glm::length(forward);
      auto right = glm::cross(m_up, forward);
-     auto up = distance * m_up;
+     auto up = distance * glm::normalize(m_up);
      auto delta = std::sin(theta) * up - std::cos(theta) * forward;
      m_eyePosition = m_center + delta;
-     m_up = glm::normalize(glm::cross(-delta, right));
+     m_up = glm::cross(-delta, right);
 }
 
-void Viewport::setEye(const Point3D& center, const Point3D& eyePosition, const Vector3D& up) {
-     m_center = center;
-     m_eyePosition = eyePosition;
-     m_up = glm::normalize(up);
+void Viewport::setEye(Point3D center, Point3D eyePosition, Vector3D up) {
+     m_center = std::move(center);
+     m_eyePosition = std::move(eyePosition);
+     m_up = std::move(up);
 }
 
 void Viewport::setSize(hpuint width, hpuint height) {
      m_width = width;
      m_height = height;
-     updateProjectionMatrix();
 }
 
 void Viewport::translate(const Vector3D& delta) {
