@@ -35,10 +35,8 @@ inline Point3D unproject(const Viewport& viewport, const Point2D& point, hpreal 
 //TODO: move viewport to core?
 class Viewport {
 public:
-     Viewport() : Viewport(0, 0) {}
-
      Viewport(hpuint width, hpuint height)
-          : m_center(0.0), m_eyePosition(0.0, 0.0, 1.0), m_farZ(1000.0), m_fieldOfViewAngleY(45.0), m_height(height), m_nearZ(0.1), m_offsetX(0), m_offsetY(0), m_up(0.0, 1.0, 0.0), m_width(width) {}
+          : m_height(height), m_width(width) {}
 
      const Point3D& getCenter() const { return m_center; }
 
@@ -77,16 +75,16 @@ public:
      void zoom(hpreal delta);
 
 private:
-     Point3D m_center;
-     Point3D m_eyePosition;
-     hpreal m_farZ;
-     hpreal m_fieldOfViewAngleY;
-     hpuint m_height;
-     hpreal m_nearZ;
-     hpuint m_offsetX;
-     hpuint m_offsetY;
-     Vector3D m_up;
-     hpuint m_width;
+     Point3D m_center = { hpreal(0), hpreal(0), hpreal(0) };
+     Point3D m_eyePosition = { hpreal(0), hpreal(0), hpreal(0.1) };
+     hpreal m_farZ = hpreal(1000);
+     hpreal m_fieldOfViewAngleY = hpreal(45);
+     hpuint m_height = hpuint(0);
+     hpreal m_nearZ = hpreal(0.1);
+     hpuint m_offsetX = hpuint(0);
+     hpuint m_offsetY = hpuint(0);
+     Vector3D m_up = { hpreal(0), hpreal(1), hpreal(0) };
+     hpuint m_width = 0;
 
 };
 
