@@ -26,6 +26,10 @@ inline Vector3D make_view_direction(const Viewport& viewport);
 
 inline hpmat4x4 make_view_matrix(const Viewport& viewport);
 
+inline Point3D unproject(const Viewport& viewport, const hpmat4x4 viewMatrix, const hpmat4x4 projectionMatrix, const Point2D& point, hpreal z);
+
+inline Point3D unproject(const Viewport& viewport, const Point2D& point, hpreal z);
+
 //DEFINITIONS
 
 //TODO: move viewport to core?
@@ -70,8 +74,6 @@ public:
 
      void translate(const Vector2D& delta);
 
-     //Point3D unproject(const Point2D& point, hpreal z) const { return glm::unProject(Point3D(point.x, point.y, z), m_viewMatrix, m_projectionMatrix, glm::vec4(m_offsetX, m_offsetY, m_width, m_height)); }
-
      void zoom(hpreal delta);
 
 private:
@@ -109,6 +111,10 @@ inline hpmat4x4 make_projection_matrix(const Viewport& viewport){ return glm::pe
 inline Vector3D make_view_direction(const Viewport& viewport) { return viewport.getCenter() - viewport.getEyePosition(); }
 
 inline hpmat4x4 make_view_matrix(const Viewport& viewport) { return glm::lookAt(viewport.getEyePosition(), viewport.getCenter(), viewport.getUp()); }
+
+inline Point3D unproject(const Viewport& viewport, const hpmat4x4 viewMatrix, const hpmat4x4 projectionMatrix, const Point2D& point, hpreal z) { return glm::unProject(Point3D(point.x, point.y, z), viewMatrix, projectionMatrix, glm::vec4(viewport.getOffsetX(), viewport.getOffsetY(), viewport.getWidth(), viewport.getHeight())); }
+
+inline Point3D unproject(const Viewport& viewport, const Point2D& point, hpreal z) { return unproject(viewport, make_view_matrix(viewport), make_projection_matrix(viewport), point, z); }
 
 }//namespace happah
 
