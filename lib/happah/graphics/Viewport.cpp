@@ -28,10 +28,8 @@ void Viewport::rotate(hpreal x0, hpreal y0, hpreal x1, hpreal y1) {
      angle = -glm::atan((t - r * glm::cos(angle / hpreal(2.0))) / (r * glm::sin(angle / hpreal(2.0))));// angle of rotation about center of scene
      auto q = glm::angleAxis(angle, axis);
      auto R = glm::inverse(m_viewMatrix) * glm::toMat4(glm::normalize(q)) * m_viewMatrix;
-     m_viewDirection = glm::normalize(Vector3D(R * Vector4D(m_viewDirection, hpreal(0.0))));
-     m_eyePosition = m_center - t * m_viewDirection;
+     m_eyePosition = m_center - t * glm::normalize(Vector3D(R * Vector4D(glm::normalize(m_center - m_eyePosition), hpreal(0.0))));
      m_up = glm::normalize(Vector3D(R * Vector4D(m_up, hpreal(0.0))));
-     updateViewMatrix();
 }
 
 void Viewport::rotateLaterally(hpreal theta) {
@@ -39,8 +37,6 @@ void Viewport::rotateLaterally(hpreal theta) {
      auto distance = glm::length(forward);
      auto right = distance * glm::normalize(glm::cross(m_up, forward));
      m_eyePosition = m_center - std::cos(theta) * forward + std::sin(theta) * right;
-     updateViewDirection();
-     updateViewMatrix();
 }
 
 void Viewport::rotateLongitudinally(hpreal theta) {
@@ -51,16 +47,12 @@ void Viewport::rotateLongitudinally(hpreal theta) {
      auto delta = std::sin(theta) * up - std::cos(theta) * forward;
      m_eyePosition = m_center + delta;
      m_up = glm::normalize(glm::cross(-delta, right));
-     updateViewDirection();
-     updateViewMatrix();
 }
 
 void Viewport::setEye(const Point3D& center, const Point3D& eyePosition, const Vector3D& up) {
      m_center = center;
      m_eyePosition = eyePosition;
      m_up = glm::normalize(up);
-     updateViewDirection();
-     updateViewMatrix();
 }
 
 void Viewport::setSize(hpuint width, hpuint height) {
@@ -72,8 +64,6 @@ void Viewport::setSize(hpuint width, hpuint height) {
 void Viewport::translate(const Vector3D& delta) {
      m_center += delta;
      m_eyePosition += delta;
-     updateViewDirection();
-     updateViewMatrix();
 }
 
 void Viewport::translate(const Vector2D& delta) {
@@ -87,8 +77,6 @@ void Viewport::zoom(hpreal delta) {
      auto forward = m_center - m_eyePosition;
      m_eyePosition += delta * forward;
      //TODO: make sure eye is never center
-     updateViewDirection();
-     updateViewMatrix();
 }
 
 }//namespace happah

@@ -14,26 +14,42 @@
 
 namespace happah {
 
+//DECLARATIONS
+
+class Viewport;
+
+template<class Vertex>
+void look_at(Viewport& viewport, const std::vector<Vertex>& vertices);
+
+inline hpmat4x4 make_projection_matrix(const Viewport& viewport);
+
+inline Vector3D make_view_direction(const Viewport& viewport);
+
+inline hpmat4x4 make_view_matrix(const Viewport& viewport);
+
+//DEFINITIONS
+
 //TODO: move viewport to core?
 class Viewport {
 public:
      Viewport() : Viewport(0, 0) {}
 
      Viewport(hpuint width, hpuint height)
-     : m_center(0.0), m_eyePosition(0.0,0.0,1.0), m_farZ(1000.0), m_fieldOfViewAngleY(45.0), m_height(height), m_nearZ(0.1), m_offsetX(0), m_offsetY(0), m_up(0.0,1.0,0.0), m_viewDirection(glm::normalize(m_center-m_eyePosition)), m_viewMatrix(glm::lookAt(m_eyePosition, m_center, m_up)), m_width(width) { updateProjectionMatrix(); }
-     const Point3D& getEyePosition() const;
+          : m_center(0.0), m_eyePosition(0.0, 0.0, 1.0), m_farZ(1000.0), m_fieldOfViewAngleY(45.0), m_height(height), m_nearZ(0.1), m_offsetX(0), m_offsetY(0), m_up(0.0, 1.0, 0.0), m_width(width) { updateProjectionMatrix(); }
+
+     const Point3D& getCenter() const { return m_center; }
+
+     const Point3D& getEyePosition() const { return m_eyePosition; }
 
      hpuint getHeight() const { return m_height; }
+
+     const hpmat4x4& getProjectionMatrix() const { return m_projectionMatrix; }
 
      hpuint getOffsetX() const { return m_offsetX; }
 
      hpuint getOffsetY() const { return m_offsetY; }
 
-     const hpmat4x4& getProjectionMatrix() const { return m_projectionMatrix; }
-
-     const Point3D& getViewDirection() const { return m_viewDirection; }
-
-     const hpmat4x4& getViewMatrix() const { return m_viewMatrix; }
+     const Vector3D& getUp() const { return m_up; }
 
      hpuint getWidth() const { return m_width; }
 
@@ -66,15 +82,10 @@ private:
      hpuint m_offsetY;
      hpmat4x4 m_projectionMatrix;
      Vector3D m_up;
-     Vector3D m_viewDirection;
      hpmat4x4 m_viewMatrix;
      hpuint m_width;
 
      void updateProjectionMatrix() { m_projectionMatrix = glm::perspective(m_fieldOfViewAngleY, (hpreal) m_width / (hpreal) m_height, m_nearZ, m_farZ); }
-
-     void updateViewDirection() { m_viewDirection = glm::normalize(m_center - m_eyePosition); }
-
-     void updateViewMatrix() { m_viewMatrix = glm::lookAt(m_eyePosition, m_center, m_up); }
 
 };
 
@@ -93,6 +104,12 @@ void look_at(Viewport& viewport, const std::vector<Vertex>& vertices) {
      eyePosition.z -= 2 * glm::length(max - min);
      viewport.setEye(center, eyePosition, Vector3D(0, 1, 0));
 }
+
+inline hpmat4x4 make_projection_matrix(const Viewport& viewport);
+
+inline Vector3D make_view_direction(const Viewport& viewport) { return viewport.getCenter() - viewport.getEyePosition(); }
+
+inline hpmat4x4 make_view_matrix(const Viewport& viewport) { return glm::lookAt(viewport.getEyePosition(), viewport.getCenter(), viewport.getUp()); }
 
 }//namespace happah
 

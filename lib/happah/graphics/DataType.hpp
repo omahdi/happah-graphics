@@ -28,7 +28,7 @@ private:
      GLenum m_id;
      GLuint m_size;
 
-};//Type
+};//DataType
 
 }//namespace happah
 

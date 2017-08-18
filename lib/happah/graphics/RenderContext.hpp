@@ -11,7 +11,7 @@
 
 namespace happah {
 
-//DECLARATIONS
+//DEFINITIONS
 
 enum class GeometryType { ARRAY, MESH };
 

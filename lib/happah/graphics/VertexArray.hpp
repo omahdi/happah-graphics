@@ -14,7 +14,7 @@
 
 namespace happah {
 
-//DECLARATIONS
+//DEFINITIONS
 
 class Attribute {
 public:
