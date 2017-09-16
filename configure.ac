@@ -15,6 +15,15 @@ LT_INIT
 
 AC_PROG_CXX
 AM_PROG_LIBTOOL
+PKG_PROG_PKG_CONFIG
+
+AC_LANG_PUSH([C++])
+AC_CHECK_HEADER([happah/Happah.hpp], [], [AC_MSG_ERROR([Could not find happah/Happah.hpp])])
+AC_LANG_POP([C++])
+AX_BOOST_BASE([1.64])
+AX_BOOST_IOSTREAMS
+AX_BOOST_PROGRAM_OPTIONS
+#PKG_CHECK_MODULES([happah], [happah])
 
 AC_CONFIG_FILES(Makefile lib/Makefile)
 AC_OUTPUT

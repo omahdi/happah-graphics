@@ -25,6 +25,10 @@ nobase_include_HEADERS = \
      happah/graphics/Uniform.hpp \
      happah/graphics/VertexArray.hpp \
      happah/graphics/Viewport.hpp
-libhappah_graphics_la_CPPFLAGS = -std=c++1y -I/usr/include/eigen3 -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable
-libhappah_graphics_la_LDFLAGS = -version-info 0:0:0 -lhappah
+AM_CFLAGS = -g -O2
+AM_CXXFLAGS = -g -O2
+libhappah_graphics_la_CPPFLAGS = $(happah_CPPFLAGS)
+libhappah_graphics_la_CXXFLAGS = -std=c++1z -Wno-unused-label -Wno-unused-parameter
+libhappah_graphics_la_LDFLAGS = -version-info 0:0:0
+libhappah_graphics_la_LIBADD = -lhappah
 
