@@ -44,7 +44,10 @@ void main() {
      vec4 vc1 = triangle_in.vertexColor1;
      vec4 vc2 = triangle_in.vertexColor2;
      
-     color = paint_edges(edgeWidth, vertex_in.dis, triangle_in.maxheights, modelColor, ec0, ec1, ec2, vc0, vc1, vc2);
-     color = illuminate(light, vertex_in.normal.xyz, color);
+     vec4 mc = vec4(modelColor.rgb, 0.0);
+     color = paint_edges(edgeWidth, vertex_in.dis, triangle_in.maxheights, mc, ec0, ec1, ec2, vc0, vc1, vc2);
+     float alpha = color.a;
+     color.a = 1.0;
+     color = alpha*color + (1-alpha)*illuminate(light, vertex_in.normal.xyz, color);
 }
 
