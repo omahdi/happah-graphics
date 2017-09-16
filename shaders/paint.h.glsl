@@ -63,5 +63,6 @@ vec4 paint_edges(float edgeWidth, vec3 dis, vec3 maxHeights, vec4 bgColor, vec4 
      vec4 color = (dis.y < dis.z) ? ((dis.x < dis.y) ? eColor0 : eColor1) : ((dis.x < dis.z) ? eColor0 : eColor2);
 
      color = paint_wf(edgeWidth, dis, bgColor, color);
-     return paint_vertex(edgeWidth, dis, maxHeights, color, vColor0, vColor1, vColor2);
+     return color;
+     //return paint_vertex(edgeWidth, dis, maxHeights, color, vColor0, vColor1, vColor2);
 }
