@@ -80,7 +80,7 @@ private:
      hpreal m_farZ = hpreal(1000);
      hpreal m_fieldOfViewAngleY = hpreal(45);
      hpuint m_height = hpuint(0);
-     hpreal m_nearZ = hpreal(0.1);
+     hpreal m_nearZ = hpreal(0.01);
      hpuint m_offsetX = hpuint(0);
      hpuint m_offsetY = hpuint(0);
      Vector3D m_up = { hpreal(0), hpreal(1), hpreal(0) };
