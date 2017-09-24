@@ -51,7 +51,7 @@ public:
      inline static void setOuterTessellationLevel(const std::array<float, 4>& level) { glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, level.data()); }
 
 };//TessellationControlShader
-     
+
 class EdgeFragmentShader : public Shader {
 public:
      EdgeFragmentShader()
@@ -69,7 +69,7 @@ private:
      Uniform<hpcolor> m_modelColor;
 
 };//EdgeFragmentShader
-     
+
 class EdgeVertexShader : public Shader {
 public:
      EdgeVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/edge.v.glsl", slurp("shaders/edge.v.glsl")), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
@@ -83,6 +83,42 @@ private:
      Uniform<hpmat4x4> m_projectionMatrix;
 
 };//EdgeVertexShader
+
+class HighlightEdgeFragmentShader : public Shader {
+public:
+     HighlightEdgeFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/hiedge.f.glsl", slurp("shaders/hiedge.f.glsl")) {}
+
+     void setEdgeWidth(hpreal width)  { m_edgeWidth = width; }
+
+     void setLight(const Point3D& light) { m_light = light; }
+
+     void setModelColor(const hpcolor& color)  { m_modelColor = color; }
+
+     void setSqueezeScale(hpreal v)  { m_squeezeScale = v; }
+
+     void setSqueezeMin(hpreal v)  { m_squeezeMin = v; }
+
+private:
+     Uniform<hpreal> m_edgeWidth {5000};
+     Uniform<Point3D> m_light {5001};
+     Uniform<hpcolor> m_modelColor {5002};
+     Uniform<hpreal> m_squeezeScale {5003};
+     Uniform<hpreal> m_squeezeMin {5004};
+};//HighlightEdgeFragmentShader
+
+class HighlightEdgeVertexShader : public Shader {
+public:
+     HighlightEdgeVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/hiedge.v.glsl", slurp("shaders/hiedge.v.glsl")) {}
+
+     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
+
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix {1000};
+     Uniform<hpmat4x4> m_projectionMatrix {1001};
+};//HighlightEdgeVertexShader
 
 class HighlightLinesFragmentShader : public Shader {
 public:
@@ -122,7 +158,7 @@ private:
      Uniform<Point3D> m_light;
 
 };//PatchesFragmentShader
-     
+
 class PatchesVertexShader : public Shader {
 public:
       PatchesVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/patches.v.glsl", slurp("shaders/patches.v.glsl")), m_modelViewMatrix(1000), m_projectionMatrix(1001) {}
@@ -136,7 +172,7 @@ private:
      Uniform<hpmat4x4> m_projectionMatrix;
 
 };//PatchesVertexShader
-     
+
 class SimpleFragmentShader : public Shader {
 public:
      SimpleFragmentShader()
@@ -214,7 +250,7 @@ private:
      Uniform<Point3D> m_light;
 
 };//TrianglesFragmentShader
-     
+
 class TrianglesVertexShader : public Shader {
 public:
      TrianglesVertexShader()
@@ -270,6 +306,10 @@ inline Shader make_geometry_shader(std::string name, std::string source) { retur
 inline Shader make_geometry_shader(const std::experimental::filesystem::path& path) { return { GL_GEOMETRY_SHADER, path.string(), slurp(path) }; }
 
 inline HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
+
+inline HighlightEdgeVertexShader make_highlight_edge_vertex_shader() { return {}; }
+
+inline HighlightEdgeFragmentShader make_highlight_edge_fragment_shader() { return {}; }
 
 inline PatchesFragmentShader make_patches_fragment_shader() { return {}; }
 
