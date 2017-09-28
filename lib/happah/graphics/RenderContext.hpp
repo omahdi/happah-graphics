@@ -18,6 +18,7 @@ enum class GeometryType { ARRAY, MESH };
 class PatchType {
 public:
      static const PatchType LOOP_BOX_SPLINE;
+     static const PatchType QUARTIC;
      static const PatchType QUINTIC;
      static const PatchType POINT;
      static const PatchType TRIANGLE;

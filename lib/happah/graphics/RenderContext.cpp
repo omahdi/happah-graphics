@@ -8,6 +8,7 @@
 namespace happah {
 
 const PatchType PatchType::LOOP_BOX_SPLINE = { GL_PATCHES, 12 };
+const PatchType PatchType::QUARTIC = { GL_PATCHES, 15};
 const PatchType PatchType::QUINTIC = { GL_PATCHES, 21 };
 const PatchType PatchType::POINT = { GL_POINTS, 1 };
 const PatchType PatchType::TRIANGLE = { GL_TRIANGLES, 3 };
