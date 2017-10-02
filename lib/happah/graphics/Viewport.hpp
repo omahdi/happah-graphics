@@ -100,7 +100,7 @@ void look_at(Viewport& viewport, const std::vector<Vertex>& vertices) {
      }
      center /= vertices.size();
      auto eyePosition = center;
-     eyePosition.z -= 2 * glm::length(max - min);
+     eyePosition.z += 2 * glm::length(max - min);
      viewport.setEye(center, eyePosition, Vector3D(0, 1, 0));
 }
 
