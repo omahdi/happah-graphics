@@ -19,18 +19,17 @@ void execute(const Program& program, hpuint nx, hpuint ny, hpuint nz) {
      assert(glGetError() == GL_NO_ERROR);
 }
 
-void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset) {
-     auto mode = context.getType().getId();
-     auto patchSize = context.getType().getSize();
-     glDrawArrays(mode, patchSize * offset, patchSize * n);
+void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context) {
+     auto& vertices = context.getVertices();
+     glDrawArrays(context.getMode(), vertices.getOffset(), vertices.getSize());
      assert(glGetError() == GL_NO_ERROR);
 }
 
-void execute(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
-     auto mode = context.getType().getId();
-     auto patchSize = context.getType().getSize();
-     offset *= patchSize * DataType::UNSIGNED_INT.getSize();
-     glDrawElements(mode, patchSize * n, DataType::UNSIGNED_INT.getId(), reinterpret_cast<void*>(offset));
+void execute(const Program& program, const RenderContext<GeometryType::MESH>& context) {
+     auto& indices = context.getIndices();
+     auto& type = indices.getBuffer().getType();
+     auto offset = hpuint(indices.getOffset() * type.getSize());
+     glDrawElements(context.getMode(), indices.getSize(), type.getId(), reinterpret_cast<void*>(offset));
      assert(glGetError() == GL_NO_ERROR);
 }
 
@@ -56,11 +55,6 @@ std::string make_log(const Program& program) {
      auto log = std::string(length, ' ');
      glGetProgramInfoLog(program.getId(), length, &length, &log[0]);
      return log;
-}
-
-void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset) {
-     activate(context.getIndices(), context.getVertexArray());
-     execute(program, context, n, offset);
 }
 
 }//namespace happah

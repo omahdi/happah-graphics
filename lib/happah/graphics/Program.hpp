@@ -11,7 +11,6 @@
 #include "happah/graphics/RenderContext.hpp"
 #include "happah/graphics/Shader.hpp"
 #include "happah/graphics/Uniform.hpp"
-#include "happah/graphics/VertexArray.hpp"
 
 namespace happah {
 
@@ -22,9 +21,9 @@ public:
 
      virtual ~Program() { glDeleteProgram(m_id); }
 
-     GLuint getId() const { return m_id; }
+     auto& getId() const { return m_id; }
 
-     const std::string& getName() const { return m_name; }
+     auto& getName() const { return m_name; }
 
 private:
      GLuint m_id;
@@ -51,9 +50,9 @@ void detach(const Program& program, const Shader& shader, const Shaders&... shad
 
 void execute(const Program& program, hpuint nx, hpuint ny = 1, hpuint nz = 1);
 
-void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0);
+void execute(const Program& program, const RenderContext<GeometryType::ARRAY>& context);
 
-void execute(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
+void execute(const Program& program, const RenderContext<GeometryType::MESH>& context);
 
 void link(const Program& program);
 
@@ -69,11 +68,9 @@ Program make_program(std::string name, const Shaders&... shaders);
 template<typename T>
 Uniform<T> make_uniform(const Program& program, std::string name);
 
-inline void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context, hpuint n, hpuint offset = 0) { execute(program, context, n, offset); }
+inline void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context);
 
-void render(const Program& program, const RenderContext<GeometryType::MESH>& context, hpuint n, hpuint offset = 0);
-
-inline void render(const Program& program, const RenderContext<GeometryType::MESH>& context) { render(program, context, context.getIndices().getSize() / context.getType().getSize()); }
+inline void render(const Program& program, const RenderContext<GeometryType::MESH>& context);
 
 //DEFINITIONS
 
@@ -109,6 +106,10 @@ Uniform<T> make_uniform(const Program& program, std::string name) {
      if(location < 0) throw std::logic_error(std::string("Failed to find uniform ") + name + ".");
      return { location };
 }
+
+inline void render(const Program& program, const RenderContext<GeometryType::ARRAY>& context) { execute(program, context); }
+
+inline void render(const Program& program, const RenderContext<GeometryType::MESH>& context) { execute(program, context); }
 
 }//namespace happah
 

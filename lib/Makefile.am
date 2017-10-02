@@ -19,6 +19,7 @@ nobase_include_HEADERS = \
      happah/graphics/Buffer.hpp \
      happah/graphics/DataType.hpp \
      happah/graphics/glad.h \
+     happah/graphics/Memory.hpp \
      happah/graphics/Program.hpp \
      happah/graphics/RenderContext.hpp \
      happah/graphics/Shader.hpp \

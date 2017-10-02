@@ -7,6 +7,7 @@
 
 #include "happah/graphics/Buffer.hpp"
 #include "happah/graphics/glad.h"
+#include "happah/graphics/Memory.hpp"
 #include "happah/graphics/VertexArray.hpp"
 
 namespace happah {
@@ -26,9 +27,9 @@ public:
      PatchType(GLenum id, GLuint size)
           : m_id(id), m_size(size) {}
 
-     GLenum getId() const { return m_id; }
+     auto getId() const { return m_id; }
 
-     GLuint getSize() const { return m_size; }
+     auto getSize() const { return m_size; }
 
 private:
      GLenum m_id;
@@ -42,41 +43,77 @@ class RenderContext;
 template<>
 class RenderContext<GeometryType::ARRAY> {
 public:
-     RenderContext(const VertexArray& array, const PatchType& type)
-          : m_array(array), m_type(type) {}
+     RenderContext(BufferSegment vertices, GLenum mode)
+          : m_mode(mode), m_vertices(std::move(vertices)) {}
 
-     const PatchType& getType() const { return m_type; }
-
-     const VertexArray& getVertexArray() const { return m_array; }
+     auto& getMode() const { return m_mode; }
+     
+     auto& getVertices() const { return m_vertices; }
 
 private:
-     const VertexArray& m_array;
-     const PatchType& m_type;
+     GLenum m_mode;
+     BufferSegment m_vertices;
 
 };//RenderContext<GeometryType::ARRAY>
 
 template<>
 class RenderContext<GeometryType::MESH> {
 public:
-     RenderContext(const VertexArray& array, const Buffer& indices, const PatchType& type)
-          : m_array(array), m_indices(indices), m_type(type) {}
+     RenderContext(BufferSegment vertices, BufferSegment indices, GLenum mode)
+          : m_indices(std::move(indices)), m_mode(mode), m_vertices(std::move(vertices)) {}
 
-     const Buffer& getIndices() const { return m_indices; }
+     auto& getIndices() const { return m_indices; }
 
-     const PatchType& getType() const { return m_type; }
+     auto& getMode() const { return m_mode; }
 
-     const VertexArray& getVertexArray() const { return m_array; }
+     auto& getVertices() const { return m_vertices; }
 
 private:
-     const VertexArray& m_array;
-     const Buffer& m_indices;
-     const PatchType& m_type;
+     BufferSegment m_indices;
+     GLenum m_mode;
+     BufferSegment m_vertices;
 
 };//RenderContext<GeometryType::MESH>
 
-inline RenderContext<GeometryType::ARRAY> make_render_context(const VertexArray& array, const PatchType& type) { return { array, type }; }
+inline void activate(const RenderContext<GeometryType::ARRAY>& context, const VertexArray& array, GLuint target) { activate(context.getVertices(), array, target); }
 
-inline RenderContext<GeometryType::MESH> make_render_context(const VertexArray& array, const Buffer& indices, const PatchType& type) { return { array, indices, type }; }
+inline void activate(const RenderContext<GeometryType::ARRAY>& context, const VertexArray& array) { activate(context, array, 0); }
+
+inline void activate(const RenderContext<GeometryType::MESH>& context, const VertexArray& array, GLuint target) {
+     activate(context.getVertices(), array, target);
+     activate(context.getIndices(), array);
+}
+
+inline void activate(const RenderContext<GeometryType::MESH>& context, const VertexArray& array) { activate(context, array, 0); }
+
+inline RenderContext<GeometryType::ARRAY> make_render_context(BufferSegment vertices, GLenum mode) { return { std::move(vertices), mode }; }
+
+inline RenderContext<GeometryType::ARRAY> make_render_context(const Buffer& vertices, GLenum mode) { return { make_buffer_segment(vertices), mode }; }
+
+inline RenderContext<GeometryType::MESH> make_render_context(BufferSegment vertices, BufferSegment indices, GLenum mode) { return { std::move(vertices), std::move(indices), mode }; }
+
+inline RenderContext<GeometryType::MESH> make_render_context(const Buffer& vertices, const Buffer& indices, GLenum mode) { return { make_buffer_segment(vertices), make_buffer_segment(indices), mode }; }
+
+template<class Space, hpuint degree>
+RenderContext<GeometryType::MESH> make_render_context(Memory& memory, const BezierTriangleMesh<Space, degree>& mesh) {
+     auto temp = write(memory, mesh);
+     return make_render_context(std::get<0>(temp), std::get<1>(temp), GL_PATCHES);
+}
+
+template<class Vertex>
+RenderContext<GeometryType::MESH> make_render_context(Memory& memory, const LoopBoxSplineMesh<Vertex>& mesh) {
+     auto temp = write(memory, mesh);
+     return make_render_context(std::get<0>(temp), std::get<1>(temp), GL_PATCHES);
+}
+
+template<class Vertex>
+RenderContext<GeometryType::ARRAY> make_render_context(Memory& memory, const TriangleArray<Vertex>& array) { return make_render_context(write(memory, array), GL_TRIANGLES); }
+
+template<class Vertex>
+RenderContext<GeometryType::MESH> make_render_context(Memory& memory, const TriangleMesh<Vertex>& mesh) {
+     auto temp = write(memory, mesh);
+     return make_render_context(std::get<0>(temp), std::get<1>(temp), GL_TRIANGLES);
+}
 
 }//namespace happah
 

@@ -34,16 +34,16 @@ void main() {
      float w3 = w2 * w ;
      float w4 = w2 * w2;
 
-     float B300 =     u3          ;
-     float B301 = 3 * u2 * v      ;
-     float B302 = 3 * u  * v2     ;
-     float B303 =          v3     ;
-     float B304 = 3 * u2 *      w ;
-     float B305 = 6 * u  * v  * w ;
-     float B306 = 3 *      v2 * w ;
-     float B307 = 3 * u *       w2;
-     float B308 = 3 *      v  * w2;
-     float B309 =               w3;
+     float B30 =     u3          ;
+     float B31 = 3 * u2 * v      ;
+     float B32 = 3 * u  * v2     ;
+     float B33 =          v3     ;
+     float B34 = 3 * u2 *      w ;
+     float B35 = 6 * u  * v  * w ;
+     float B36 = 3 *      v2 * w ;
+     float B37 = 3 * u *       w2;
+     float B38 = 3 *      v  * w2;
+     float B39 =               w3;
 
      float B400 =      u4          ;
      float B401 =  4 * u3 * v      ;
@@ -78,28 +78,28 @@ void main() {
      vertex_out.position += vertex_in[14].position * B414;
 
      vec4 t0 = vec4(0.0);
-     t0 += (vertex_in[ 1].position - vertex_in[ 0].position) * B300;
-     t0 += (vertex_in[ 2].position - vertex_in[ 1].position) * B301;
-     t0 += (vertex_in[ 3].position - vertex_in[ 2].position) * B302;
-     t0 += (vertex_in[ 4].position - vertex_in[ 3].position) * B303;
-     t0 += (vertex_in[ 6].position - vertex_in[ 5].position) * B304;
-     t0 += (vertex_in[ 7].position - vertex_in[ 6].position) * B305;
-     t0 += (vertex_in[ 8].position - vertex_in[ 7].position) * B306;
-     t0 += (vertex_in[10].position - vertex_in[ 9].position) * B307;
-     t0 += (vertex_in[11].position - vertex_in[10].position) * B308;
-     t0 += (vertex_in[13].position - vertex_in[12].position) * B309;
+     t0 += (vertex_in[ 1].position - vertex_in[ 0].position) * B30;
+     t0 += (vertex_in[ 2].position - vertex_in[ 1].position) * B31;
+     t0 += (vertex_in[ 3].position - vertex_in[ 2].position) * B32;
+     t0 += (vertex_in[ 4].position - vertex_in[ 3].position) * B33;
+     t0 += (vertex_in[ 6].position - vertex_in[ 5].position) * B34;
+     t0 += (vertex_in[ 7].position - vertex_in[ 6].position) * B35;
+     t0 += (vertex_in[ 8].position - vertex_in[ 7].position) * B36;
+     t0 += (vertex_in[10].position - vertex_in[ 9].position) * B37;
+     t0 += (vertex_in[11].position - vertex_in[10].position) * B38;
+     t0 += (vertex_in[13].position - vertex_in[12].position) * B39;
 
      vec4 t1 = vec4(0.0);
-     t1 += (vertex_in[ 5].position - vertex_in[ 0].position) * B300;
-     t1 += (vertex_in[ 6].position - vertex_in[ 1].position) * B301;
-     t1 += (vertex_in[ 7].position - vertex_in[ 2].position) * B302;
-     t1 += (vertex_in[ 8].position - vertex_in[ 3].position) * B303;
-     t1 += (vertex_in[ 9].position - vertex_in[ 5].position) * B304;
-     t1 += (vertex_in[10].position - vertex_in[ 6].position) * B305;
-     t1 += (vertex_in[11].position - vertex_in[ 7].position) * B306;
-     t1 += (vertex_in[12].position - vertex_in[ 9].position) * B307;
-     t1 += (vertex_in[13].position - vertex_in[10].position) * B308;
-     t1 += (vertex_in[14].position - vertex_in[12].position) * B309;
+     t1 += (vertex_in[ 5].position - vertex_in[ 0].position) * B30;
+     t1 += (vertex_in[ 6].position - vertex_in[ 1].position) * B31;
+     t1 += (vertex_in[ 7].position - vertex_in[ 2].position) * B32;
+     t1 += (vertex_in[ 8].position - vertex_in[ 3].position) * B33;
+     t1 += (vertex_in[ 9].position - vertex_in[ 5].position) * B34;
+     t1 += (vertex_in[10].position - vertex_in[ 6].position) * B35;
+     t1 += (vertex_in[11].position - vertex_in[ 7].position) * B36;
+     t1 += (vertex_in[12].position - vertex_in[ 9].position) * B37;
+     t1 += (vertex_in[13].position - vertex_in[10].position) * B38;
+     t1 += (vertex_in[14].position - vertex_in[12].position) * B39;
 
      vertex_out.normal = vec4(normalize(cross(t0.xyz, t1.xyz)), 0.0);
      gl_Position = projectionMatrix * vertex_out.position;
