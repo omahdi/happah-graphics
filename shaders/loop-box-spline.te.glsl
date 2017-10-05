@@ -52,6 +52,7 @@ void main() {
      vertex_out.position += vertex_in[ 9].position * B09;
      vertex_out.position += vertex_in[10].position * B10;
      vertex_out.position += vertex_in[11].position * B11;
+     vertex_out.position *= 1.0 / 12.0;
      
      gl_Position = projectionMatrix * vertex_out.position;
 }
