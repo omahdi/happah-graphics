@@ -44,7 +44,9 @@ void main() {
      //thickness = step(fract(8.0*thickness), vec3(0.5));
      vec3 w = fwidth(dis);    // gl_FragCoord.w*fwidth(dis);
      vec3 range = edgeWidth*w*max(max(vec3(squeezeMin), squeezeScale*thickness), hl);
-     vec3 shade = smoothstep(0.5*range, 1.5*range, dis);
+     //float alphax = 1.0 - min(min(range.x, range.y), range.z);
+     //float shadex = smoothstep(0.5*alphax, 1.0*alphax, dis);
+     vec3 shade = smoothstep(0.0*range, 3.0*range, dis);
      float alpha = min(min(shade.x, shade.y), shade.z);
      //float gamma = min(min(max(shade.y, shade.z), max(shade.x, shade.z)), max(shade.x, shade.y));
      //float alpha = min(gamma, min(min(shade.x, shade.y), shade.z));
@@ -55,6 +57,7 @@ void main() {
      ec.a = 1.0;
      vec4 lmc = illuminate(vertex_in.normal.xyz, light, vec4(mix(ec.rgb, modelColor.rgb, alpha), 1.0));
      color = mix(ec, lmc, alpha);
+     //color = vec4(alpha, alpha, alpha, 1.0); //mix(ec, lmc, alpha);
      //color = mix(mix(lmc, modelColor, 0.7), ec, 1.0-alpha);
      //color = mix(mix(lmc, modelColor, 0.7), ec, 1.0 - alpha);
      //color = vec4(alpha, alpha, alpha, 1.0);
