@@ -42,7 +42,8 @@ void main() {
      vec3 hl = vec3(ec0.a, ec1.a, ec2.a);
      vec3 thickness = vec3(max(dis.y, dis.z), max(dis.x, dis.z), max(dis.x, dis.y));
      //thickness = step(fract(8.0*thickness), vec3(0.5));
-     vec3 w = fwidth(dis);    // gl_FragCoord.w*fwidth(dis);
+     //vec3 w = fwidth(dis);    // gl_FragCoord.w*fwidth(dis);
+     vec3 w = max(0.5, pow(gl_FragCoord.w, 0.3))*fwidth(dis);
      vec3 range = edgeWidth*w*max(max(vec3(squeezeMin), squeezeScale*thickness), hl);
      //float alphax = 1.0 - min(min(range.x, range.y), range.z);
      //float shadex = smoothstep(0.5*alphax, 1.0*alphax, dis);
