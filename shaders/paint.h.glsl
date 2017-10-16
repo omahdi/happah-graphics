@@ -58,12 +58,11 @@ vec4 paint_vertex(float edgeWidth, vec3 dis, vec3 maxHeights, vec4 bgColor, vec4
 }
 
 vec4 paint_edges(float edgeWidth, vec3 dis, vec3 maxHeights, vec4 bgColor, vec4 eColor0, vec4 eColor1, vec4 eColor2, vec4 vColor0, vec4 vColor1, vec4 vColor2) {
-     const float w = 0.1*edgeWidth;
-     float a = edgeWidth-w, b = edgeWidth+w;
-     vec3 xshade = 1.0 - vec3(smoothstep(a, b, dis.x), smoothstep(a, b, dis.y), smoothstep(a, b, dis.z));
-     float maxshade = max(xshade.x, max(xshade.y, xshade.z));
-     vec3 shade = normalize(step(maxshade, xshade));
-     vec4 color = shade.x*eColor0 + shade.y*eColor1 + shade.z*eColor2 + (1-length(shade))*bgColor;
+
+     //determine nearest edge
+     vec4 color = (dis.y < dis.z) ? ((dis.x < dis.y) ? eColor0 : eColor1) : ((dis.x < dis.z) ? eColor0 : eColor2);
+
+     color = paint_wf(edgeWidth, dis, bgColor, color);
      return color;
      //return paint_vertex(edgeWidth, dis, maxHeights, color, vColor0, vColor1, vColor2);
 }
