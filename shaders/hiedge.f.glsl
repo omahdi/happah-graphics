@@ -55,8 +55,12 @@ void main() {
      //vec3 filt = sign(1.0-shade);
      float beta = (filt.x + filt.y + filt.z);
      vec4 ec = (filt.x*ec0 + filt.y*ec1 + filt.z*ec2) / beta;
-     ec.a = 1.0;
-     vec4 lmc = illuminate(vertex_in.normal.xyz, light, vec4(mix(ec.rgb, modelColor.rgb, alpha), 1.0));
+     vec4 mc = modelColor;
+     mc.a = 0.2;
+     ec.a = max(0.5, step(0.5, ec.a));
+     //ec.a = 1.0;
+     //vec4 lmc = illuminate(vertex_in.normal.xyz, light, vec4(mix(ec.rgb, modelColor.rgb, alpha), 1.0));
+     vec4 lmc = illuminate(vertex_in.normal.xyz, light, mix(ec, mc, alpha));
      color = mix(ec, lmc, alpha);
      //color = vec4(alpha, alpha, alpha, 1.0); //mix(ec, lmc, alpha);
      //color = mix(mix(lmc, modelColor, 0.7), ec, 1.0-alpha);
