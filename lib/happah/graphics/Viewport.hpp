@@ -5,11 +5,13 @@
 
 #pragma once
 
+#include <utility>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include <happah/Happah.hpp>
+#include <happah/math/Space.hpp>
 
 namespace happah {
 
@@ -63,6 +65,10 @@ public:
      void rotateLaterally(hpreal theta);
 
      void rotateLongitudinally(hpreal theta);
+
+     std::tuple<Point3D, Point3D, Point3D> getEye() const {
+          return std::make_tuple(m_center, m_eyePosition, m_up);
+     }
 
      void setEye(Point3D center, Point3D eyePosition, Vector3D up);
 
