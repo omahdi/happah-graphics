@@ -18,7 +18,7 @@ in Vertex {
 
 out Vertex {
      vec4 position;
-     noperspective vec2 hyp_uv;
+     vec2 hyp_uv;
 } vertex_out;
 
 out Triangle {
