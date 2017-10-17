@@ -7,7 +7,7 @@
 
 in Vertex {
      vec4 position;
-     noperspective vec2 hyp_uv;
+     vec2 hyp_uv;
 };
 
 in Triangle {
@@ -25,7 +25,7 @@ out vec4 color;
 const float c_tr = 0.05;
 
 void main() {
-     const float ambientCoefficient = 0.4;
+     const float ambientCoefficient = 0.8;
      float diffuseCoefficient = max(0.0, dot(normalize(normal.xyz), u_light));
      vec2 co = 2.0*fract(hyp_uv/u_period);
      float alpha = smoothstep(0.5-c_tr, 0.5+c_tr, co.x)*(1.0-smoothstep(1.5-c_tr, 1.5+c_tr, co.x))-0.5;
