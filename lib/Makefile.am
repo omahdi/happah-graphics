@@ -28,7 +28,7 @@ nobase_include_HEADERS = \
      happah/graphics/Viewport.hpp
 AM_CFLAGS = -g -O2
 AM_CXXFLAGS = -g -O2
-libhappah_graphics_la_CPPFLAGS = $(happah_CPPFLAGS)
+libhappah_graphics_la_CPPFLAGS = $(happah_CPPFLAGS) -I/usr/include/eigen3
 libhappah_graphics_la_CXXFLAGS = -std=c++1z -Wno-unused-label -Wno-unused-parameter
 libhappah_graphics_la_LDFLAGS = -version-info 0:0:0
 libhappah_graphics_la_LIBADD = -lhappah

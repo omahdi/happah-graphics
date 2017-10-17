@@ -333,5 +333,53 @@ inline TrianglesFragmentShader make_triangles_fragment_shader() { return {}; }
 
 inline WireframeFragmentShader make_wireframe_fragment_shader() { return {}; }
 
+// Checkerboard shaders
+class EuclideanCheckerboardFragmentShader : public Shader {
+public:
+     EuclideanCheckerboardFragmentShader() : Shader(GL_FRAGMENT_SHADER, "shaders/euclidean-checkerboard.f.glsl", slurp("shaders/euclidean-checkerboard.f.glsl")) { }
+
+     void setColors(hpcolor a, hpcolor b) {
+          m_color0 = a;
+          m_color1 = b;
+     }
+
+     void setPeriod(hpvec2 d) { m_period = d; }
+
+     void setLight(const Point3D& light) { m_light = light; }
+
+private:
+     Uniform<hpcolor> m_color0    {5000};
+     Uniform<hpcolor> m_color1    {5001};
+     Uniform<hpvec2> m_period     {5002};
+     Uniform<Point3D> m_light     {5003};
+};//EuclideanCheckerboardFragmentShader
+
+class EuclideanCheckerboardGeometryShader : public Shader {
+public:
+     EuclideanCheckerboardGeometryShader() : Shader(GL_GEOMETRY_SHADER, "shaders/euclidean-checkerboard.g.glsl", slurp("shaders/euclidean-checkerboard.g.glsl")) { }
+
+     void set_values() const { }
+};//EuclideanCheckerboardGeometryShader
+
+class EuclideanCheckerboardVertexShader : public Shader {
+public:
+     EuclideanCheckerboardVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/checkerboard.v.glsl", slurp("shaders/checkerboard.v.glsl")) { }
+
+     void setModelViewMatrix(hpmat4x4 matrix) { m_modelViewMatrix = matrix; }
+
+     void setProjectionMatrix(hpmat4x4 matrix) { m_projectionMatrix = matrix; }
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix  {1000};
+     Uniform<hpmat4x4> m_projectionMatrix {1001};
+};//EuclideanCheckerboardVertexShader
+
+inline EuclideanCheckerboardFragmentShader make_euclidean_checkerboard_fragment_shader() { return {}; }
+
+inline EuclideanCheckerboardGeometryShader make_euclidean_checkerboard_geometry_shader() { return {}; }
+
+inline EuclideanCheckerboardVertexShader make_euclidean_checkerboard_vertex_shader() { return {}; }
+
+
 }//namespace happah
 
