@@ -27,6 +27,7 @@ layout(location = 5001) uniform vec3 light;
 layout(location = 5002) uniform vec4 modelColor;
 layout(location = 5003) uniform float squeezeScale;
 layout(location = 5004) uniform float squeezeMin;
+layout(location = 5005) uniform float depthScale;
 
 out vec4 color;
 
@@ -42,16 +43,16 @@ void main() {
      vec3 hl = vec3(ec0.a, ec1.a, ec2.a);
      vec3 thickness = vec3(max(dis.y, dis.z), max(dis.x, dis.z), max(dis.x, dis.y));
      //thickness = step(fract(8.0*thickness), vec3(0.5));
-     //vec3 w = fwidth(dis);    // gl_FragCoord.w*fwidth(dis);
-     vec3 w = max(0.5, pow(gl_FragCoord.w, 0.3))*fwidth(dis);
+     vec3 w;
+     w = max(depthScale, pow(gl_FragCoord.w, 0.3))*fwidth(dis);
      vec3 range = edgeWidth*w*max(max(vec3(squeezeMin), squeezeScale*thickness), hl);
      //float alphax = 1.0 - min(min(range.x, range.y), range.z);
      //float shadex = smoothstep(0.5*alphax, 1.0*alphax, dis);
-     vec3 shade = smoothstep(0.0*range, 3.0*range, dis);
+     vec3 shade = smoothstep(0.0*range, 1.5*range, dis);
      float alpha = min(min(shade.x, shade.y), shade.z);
      //float gamma = min(min(max(shade.y, shade.z), max(shade.x, shade.z)), max(shade.x, shade.y));
      //float alpha = min(gamma, min(min(shade.x, shade.y), shade.z));
-     vec3 filt = 1.0 - sign(shade-vec3(alpha));
+     vec3 filt = 1.0 - smoothstep(0.4, 0.6, 0.5*(1.0+sign(shade-vec3(alpha))));
      //vec3 filt = sign(1.0-shade);
      float beta = (filt.x + filt.y + filt.z);
      vec4 ec = (filt.x*ec0 + filt.y*ec1 + filt.z*ec2) / beta;

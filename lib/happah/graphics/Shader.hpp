@@ -84,42 +84,6 @@ private:
 
 };//EdgeVertexShader
 
-class HighlightEdgeFragmentShader : public Shader {
-public:
-     HighlightEdgeFragmentShader()
-          : Shader(GL_FRAGMENT_SHADER, "shaders/hiedge.f.glsl", slurp("shaders/hiedge.f.glsl")) {}
-
-     void setEdgeWidth(hpreal width)  { m_edgeWidth = width; }
-
-     void setLight(const Point3D& light) { m_light = light; }
-
-     void setModelColor(const hpcolor& color)  { m_modelColor = color; }
-
-     void setSqueezeScale(hpreal v)  { m_squeezeScale = v; }
-
-     void setSqueezeMin(hpreal v)  { m_squeezeMin = v; }
-
-private:
-     Uniform<hpreal> m_edgeWidth {5000};
-     Uniform<Point3D> m_light {5001};
-     Uniform<hpcolor> m_modelColor {5002};
-     Uniform<hpreal> m_squeezeScale {5003};
-     Uniform<hpreal> m_squeezeMin {5004};
-};//HighlightEdgeFragmentShader
-
-class HighlightEdgeVertexShader : public Shader {
-public:
-     HighlightEdgeVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/hiedge.v.glsl", slurp("shaders/hiedge.v.glsl")) {}
-
-     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
-
-     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
-
-private:
-     Uniform<hpmat4x4> m_modelViewMatrix {1000};
-     Uniform<hpmat4x4> m_projectionMatrix {1001};
-};//HighlightEdgeVertexShader
-
 class HighlightLinesFragmentShader : public Shader {
 public:
      HighlightLinesFragmentShader()
@@ -307,10 +271,6 @@ inline Shader make_geometry_shader(const std::experimental::filesystem::path& pa
 
 inline HighlightLinesFragmentShader make_highlight_lines_fragment_shader() { return {}; }
 
-inline HighlightEdgeVertexShader make_highlight_edge_vertex_shader() { return {}; }
-
-inline HighlightEdgeFragmentShader make_highlight_edge_fragment_shader() { return {}; }
-
 inline PatchesFragmentShader make_patches_fragment_shader() { return {}; }
 
 inline PatchesVertexShader make_patches_vertex_shader() { return {}; }
@@ -380,6 +340,48 @@ inline EuclideanCheckerboardGeometryShader make_euclidean_checkerboard_geometry_
 
 inline EuclideanCheckerboardVertexShader make_euclidean_checkerboard_vertex_shader() { return {}; }
 
+class HighlightEdgeFragmentShader : public Shader {
+public:
+     HighlightEdgeFragmentShader()
+          : Shader(GL_FRAGMENT_SHADER, "shaders/hiedge.f.glsl", slurp("shaders/hiedge.f.glsl")) {}
+
+     void setEdgeWidth(hpreal width)  { m_edgeWidth = width; }
+
+     void setLight(const Point3D& light) { m_light = light; }
+
+     void setModelColor(const hpcolor& color)  { m_modelColor = color; }
+
+     void setSqueezeScale(hpreal v)  { m_squeezeScale = v; }
+
+     void setSqueezeMin(hpreal v)  { m_squeezeMin = v; }
+
+     void setDepthScale(hpreal v)  { m_depthScale = v; }
+
+private:
+     Uniform<hpreal> m_edgeWidth {5000};
+     Uniform<Point3D> m_light {5001};
+     Uniform<hpcolor> m_modelColor {5002};
+     Uniform<hpreal> m_squeezeScale {5003};
+     Uniform<hpreal> m_squeezeMin {5004};
+     Uniform<hpreal> m_depthScale {5005};
+};//HighlightEdgeFragmentShader
+
+class HighlightEdgeVertexShader : public Shader {
+public:
+     HighlightEdgeVertexShader() : Shader(GL_VERTEX_SHADER, "shaders/hiedge.v.glsl", slurp("shaders/hiedge.v.glsl")) {}
+
+     void setModelViewMatrix(const hpmat4x4& matrix) { m_modelViewMatrix = matrix; }
+
+     void setProjectionMatrix(const hpmat4x4& matrix) { m_projectionMatrix = matrix; }
+
+private:
+     Uniform<hpmat4x4> m_modelViewMatrix {1000};
+     Uniform<hpmat4x4> m_projectionMatrix {1001};
+};//HighlightEdgeVertexShader
+
+inline HighlightEdgeVertexShader make_highlight_edge_vertex_shader() { return {}; }
+
+inline HighlightEdgeFragmentShader make_highlight_edge_fragment_shader() { return {}; }
 
 }//namespace happah
 
