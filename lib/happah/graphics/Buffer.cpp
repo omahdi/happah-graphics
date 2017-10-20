@@ -19,6 +19,38 @@ Buffer make_buffer(const Indices& indices, GLenum usage) {
      return buffer;
 }
 
+Buffer make_buffer(const std::vector<glm::highp_vec2>& vecs, GLenum usage) {
+     //TODO: write directly into buffer instead of temporary?
+     auto temp = std::vector<glm::highp_vec4>();
+     temp.reserve(vecs.size());
+     for(auto& vec : vecs) temp.emplace_back(vec, 0.f, 1.f);
+     return make_buffer(temp, usage);
+}
+
+Buffer make_buffer(const std::vector<glm::lowp_vec2>& vecs, GLenum usage) {
+     //TODO: write directly into buffer instead of temporary?
+     auto temp = std::vector<glm::lowp_vec4>();
+     temp.reserve(vecs.size());
+     for(auto& vec : vecs) temp.emplace_back(vec, 0.f, 1.f);
+     return make_buffer(temp, usage);
+}
+
+Buffer make_buffer(const std::vector<glm::mediump_vec2>& vecs, GLenum usage) {
+     //TODO: write directly into buffer instead of temporary?
+     auto temp = std::vector<glm::mediump_vec4>();
+     temp.reserve(vecs.size());
+     for(auto& vec : vecs) temp.emplace_back(vec, 0.f, 1.f);
+     return make_buffer(temp, usage);
+}
+
+Buffer make_buffer(const std::vector<glm::highp_dvec2>& vecs, GLenum usage) {
+     //TODO: write directly into buffer instead of temporary?
+     auto temp = std::vector<glm::highp_dvec4>();
+     temp.reserve(vecs.size());
+     for(auto& vec : vecs) temp.emplace_back(vec, 0.f, 1.f);
+     return make_buffer(temp, usage);
+}
+
 Buffer make_buffer(const std::vector<glm::highp_vec3>& vecs, GLenum usage) {
      //TODO: write directly into buffer instead of temporary?
      auto temp = std::vector<glm::highp_vec4>();

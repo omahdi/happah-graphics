@@ -36,6 +36,14 @@ inline Buffer make_buffer(hpuint n, const DataType& type, GLsizei stride = 0, GL
 
 Buffer make_buffer(const Indices& indices, GLenum usage = GL_STATIC_DRAW);
 
+Buffer make_buffer(const std::vector<glm::highp_dvec2>& vecs, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<glm::highp_vec2>& vecs, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<glm::lowp_vec2>& vecs, GLenum usage = GL_STATIC_DRAW);
+
+Buffer make_buffer(const std::vector<glm::mediump_vec2>& vecs, GLenum usage = GL_STATIC_DRAW);
+
 Buffer make_buffer(const std::vector<glm::highp_dvec3>& vecs, GLenum usage = GL_STATIC_DRAW);
 
 Buffer make_buffer(const std::vector<glm::highp_vec3>& vecs, GLenum usage = GL_STATIC_DRAW);
